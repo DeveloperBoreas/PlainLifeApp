@@ -40,6 +40,7 @@ public class MusicService extends Service  implements
     private static final String TAG = MusicService.class.getSimpleName();
 
     /******************************************************************/
+    public static final int MUSIC_ACTION_INIT = 253;
     public static final int MUSIC_ACTION_PLAY = 255;
     public static final int MUSIC_ACTION_PREVIOUS = 256;
     public static final int MUSIC_ACTION_NEXT = 257;
@@ -107,7 +108,9 @@ public class MusicService extends Service  implements
         @Override
         public Message getCurrentSongInfo() throws RemoteException {
             Message msg = Message.obtain();
-
+            if (mSong_list != null && mSong_list.size() > 0) {
+                msg.obj = mSong_list.get(currentPosition);
+            }
             return msg;
         }
     };
@@ -126,7 +129,9 @@ public class MusicService extends Service  implements
     }
     private void abloutPlay(int action, String datum) {
         switch (action) {
-
+            case MUSIC_ACTION_INIT://数据只能通过init来传输
+                initSongData(datum);
+                break;
             ///*******************about play***********************************************/
             case MUSIC_ACTION_PAUSE:
                 pauseSong();
@@ -138,15 +143,15 @@ public class MusicService extends Service  implements
                 seekPlaySong(Integer.parseInt(datum));
                 break;
             case MUSIC_ACTION_PLAY:
-                onActionPlay(datum);
+                onActionPlay(datum);//原来的初始化位置
                 break;
-            case MUSIC_ACTION_CONTINUE_PLAY:
+            case MUSIC_ACTION_CONTINUE_PLAY: //暂停位置继续播放
                 continuePlaySong();
                 break;
-            case MUSIC_ACTION_PREVIOUS:
+            case MUSIC_ACTION_PREVIOUS://上一首
                 previousSong();
                 break;
-            case MUSIC_ACTION_NEXT:
+            case MUSIC_ACTION_NEXT://下一首
                 modePlay();
                 break;
             case MUSIC_ACTION_MUTE:
@@ -158,6 +163,18 @@ public class MusicService extends Service  implements
                 break;
         }
     }
+    /**传入音乐数据**/
+    private void initSongData(String datum) {
+        if (TextUtils.isEmpty(datum)) {
+            return;
+        }
+        Logger.d("--------MusicService initSongData------- "+datum);
+        MusicEntity musicEntity = GsonHelper.getGson().fromJson(datum, MusicEntity.class);
+        currentPosition = 0;
+        mSong_list.clear();
+        mSong_list.addAll(musicEntity.getMusicList());
+    }
+
     /******************************************************************/
     private void modePlay() {
         switch (MUSIC_CURRENT_MODE) {
@@ -174,8 +191,10 @@ public class MusicService extends Service  implements
             case MUSIC_PLAY_MODE_SINGLE:
                 play();
                 break;
+            default:break;
         }
     }
+
     private void nextSong() {
         if (++currentPosition >= mSong_list.size()) {
             currentPosition = 0;
@@ -190,6 +209,8 @@ public class MusicService extends Service  implements
         }
         play();
     }
+
+    /**  播放音乐  */
     public void playSong(String path) {
         try {
             stopSong();
@@ -249,7 +270,6 @@ public class MusicService extends Service  implements
                 mTimer = null;
             }
         }
-
     }
 
     public void seekPlaySong(int progress) {
@@ -258,15 +278,20 @@ public class MusicService extends Service  implements
         }
     }
 
-    private void onActionPlay(String datum) {
-        if (TextUtils.isEmpty(datum)) {
+    private void onActionPlay(String itemBean) {
+        if (TextUtils.isEmpty(itemBean)) {
             play();
             return;
         }
-        MusicEntity musicEntity = GsonHelper.getGson().fromJson(datum, MusicEntity.class);
-        currentPosition = 1;
-        mSong_list.clear();
-        mSong_list.addAll(musicEntity.getMusicList());
+        Logger.d("--------MusicService initSongData------- "+itemBean);
+        MusicEntity.MusicBean bean = GsonHelper.getGson().fromJson(itemBean,MusicEntity.MusicBean.class);
+        for (int i = 0; i < mSong_list.size(); i++) {
+            MusicEntity.MusicBean tempBean = mSong_list.get(i);
+            if(tempBean.getSongid() == bean.getSongid()){
+                currentPosition = mSong_list.indexOf(bean);
+                break;
+            }
+        }
         play();
     }
 
@@ -274,21 +299,21 @@ public class MusicService extends Service  implements
      * 待修改
      */
     private void play() {
-//        MusicEntity.MusicBean musicBean = mSong_list.get(currentPosition);
-//        String song_id = songListBean.song_id;
-//        NetManager.getInstance().getPaySongData(song_id, new NetCallBack<PaySongBean>() {
-//            @Override
-//            public void onSuccess(PaySongBean paySongBean) {
-//                if (paySongBean != null && paySongBean.bitrate != null) {
-//                    onStartPlay();
-//                    playSong(paySongBean.bitrate.file_link);
-//                } else {
-//                    Toast.makeText(MusicService.this, "Music playback error", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
-
+        MusicEntity.MusicBean musicBean = mSong_list.get(currentPosition);
+        if(musicBean == null){
+            MusicEntity.MusicBean lastMusicBean = mSong_list.get(mSong_list.size()-1);
+            currentPosition = mSong_list.size()-1;
+            onStartPlay();
+            playSong(lastMusicBean.getUrl());
+            return;
+        }else if (musicBean != null && musicBean.getUrl() != null){
+            onStartPlay();
+            playSong(musicBean.getUrl());
+        }else {
+            Toast.makeText(MusicService.this, "Music playback error", Toast.LENGTH_LONG).show();
+        }
     }
+
     private void onPaying() {
         int currentPosition = mMediaPlayer.getCurrentPosition();
         int totalDuration = mMediaPlayer.getDuration();
@@ -300,7 +325,7 @@ public class MusicService extends Service  implements
     }
 
 
-
+    /** 发送通知到注册  IMusicPlayerListener 的回调中**/
     private void sendMessage(int action, Message msg) {
         try {
             final int N = remoteCallbackList.beginBroadcast();
@@ -328,17 +353,44 @@ public class MusicService extends Service  implements
 
     @Override
     public void onAudioFocusChange(int focusChange) {
-
+        switch (focusChange) {
+            case AudioManager.AUDIOFOCUS_GAIN:
+                // resume playback
+                mMediaPlayer.start();
+                mMediaPlayer.setVolume(1.0f, 1.0f);
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS:
+                // Lost focus for an unbounded amount of time: stopSong playback and release media player
+                if (mMediaPlayer.isPlaying())
+                    mMediaPlayer.stop();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                // Lost focus for a short time, but we have to stopSong
+                // playback. We don't release the media player because playback
+                // is likely to resume
+                if (mMediaPlayer.isPlaying())
+                    mMediaPlayer.pause();
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                // Lost focus for a short time, but it's ok to keep playing
+                // at an attenuated level
+                if (mMediaPlayer.isPlaying())
+                    mMediaPlayer.setVolume(0.1f, 0.1f);
+                break;
+        }
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-
+        modePlay();
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        return false;
+        Toast.makeText(this, "播放失败", Toast.LENGTH_LONG).show();
+        return true;
     }
 
     @Override

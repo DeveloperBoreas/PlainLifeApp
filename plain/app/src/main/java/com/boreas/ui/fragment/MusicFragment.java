@@ -6,12 +6,14 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.boreas.App;
 import com.boreas.IMusicPlayer;
 import com.boreas.IMusicPlayerListener;
 import com.boreas.R;
@@ -28,13 +30,17 @@ import com.boreas.presenter.PresenterContract;
 import com.boreas.service.MusicService;
 import com.boreas.ui.activity.MainActivity;
 import com.boreas.ui.recycle.OffsetDecoration;
+import com.boreas.utils.GsonHelper;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.boreas.service.MusicService.MUSIC_ACTION_INIT;
+import static com.boreas.service.MusicService.MUSIC_ACTION_NEXT;
 import static com.boreas.service.MusicService.MUSIC_ACTION_PLAY;
+import static com.boreas.service.MusicService.MUSIC_ACTION_PREVIOUS;
 
 /**
  * 作者 boreas
@@ -45,7 +51,8 @@ import static com.boreas.service.MusicService.MUSIC_ACTION_PLAY;
  */
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class MusicFragment extends BaseFragment implements PresenterContract.MusicView,ClickListener<MusicEntity> {
+public class MusicFragment extends BaseFragment implements PresenterContract.MusicView, ClickListener<MusicEntity.MusicBean>,
+        View.OnClickListener {
 
     private FragmentMusicBinding binding = null;
     protected OffsetDecoration decoration = new OffsetDecoration();
@@ -54,6 +61,13 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
     MusicPresenter presenter;
 
     private IMusicPlayer iMusicPlayerService;
+    IMusicPlayerListener musicPlayerListener = new IMusicPlayerListener.Stub() {
+        @Override
+        public void action(int action, Message msg) throws RemoteException {
+            mHandler.sendMessage(msg);
+        }
+    };
+
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_music, container, false);
@@ -63,16 +77,34 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         binding.fragmentMusicRecycle.removeItemDecoration(decoration);
         binding.fragmentMusicRecycle.addItemDecoration(decoration);
 
-        try {
-            iMusicPlayerService = MainActivity.context.getMusicPlayer();
-            binding.musicmsgSeekbar.setOnSeekBarChangeListener(new SeekBarChangeListener(iMusicPlayerService));
-            iMusicPlayerService.registerListener(musicPlayerListener);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        binding.per.setOnClickListener(this);
+        binding.next.setOnClickListener(this);
+        binding.startandpause.setOnClickListener(this);
+        binding.musicmsgSeekbar.setOnSeekBarChangeListener(new SeekBarChangeListener(iMusicPlayerService));
+
         initDagger();
         initPresenter();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                while (!App.linkSuccess) {
+                    SystemClock.sleep(300);
+                }
+                try {
+                    iMusicPlayerService = App.app.getMusicPlayerService();
+                    iMusicPlayerService.registerListener(musicPlayerListener);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @Override
@@ -100,42 +132,48 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
     }
 
     @Override
-    public void getData(List list) {
-        MusicAdapter adapter = new MusicAdapter(list);
-        adapter.setOnClickListener(this);
-        binding.fragmentMusicRecycle.setAdapter(adapter);
+    public void getData(MusicEntity musicEntity) {
+        if (musicEntity == null) {
+            return;
+        }
+        try {
+            iMusicPlayerService.action(MUSIC_ACTION_INIT, GsonHelper.getGson().toJson(musicEntity));
+            MusicAdapter adapter = new MusicAdapter(musicEntity);
+            adapter.setOnClickListener(this);
+            binding.fragmentMusicRecycle.setAdapter(adapter);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
     @Override
-    public void onItemClick(View itemView, int position, MusicEntity musicEntity) {
-        //将歌曲信息展示到bottom栏
+    public void onItemClick(View itemView, int position, MusicEntity.MusicBean bean) {
+        MusicEntity.MusicBean musicBean = bean;
+        Glide.with(getActivity())
+                .load(musicBean.getAlbumpic_small())
+                .into(binding.musicmsgIcon);
+        binding.musicmsgName.setText(musicBean.getSongname());
 
         //并且1秒播放歌曲
         try {
-            iMusicPlayerService.action(MUSIC_ACTION_PLAY,"");
+            iMusicPlayerService.action(MUSIC_ACTION_PLAY, GsonHelper.getGson().toJson(bean));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
         //点击bottom栏  跳转到歌词界面
-        binding.musicBottom.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(),null);
-            startActivity(intent);
+        binding.musicmsgBottom.setOnClickListener(v -> {
+//            Intent intent = new Intent(getContext(),null);
+//            startActivity(intent);
         });
     }
 
     @Override
-    public void onItemLongClick(View itemView, int position, MusicEntity musicEntity) {
-
+    public void onItemLongClick(View itemView, int position, MusicEntity.MusicBean musicBean) {
     }
 
-    IMusicPlayerListener musicPlayerListener = new IMusicPlayerListener.Stub(){
 
-        @Override
-        public void action(int action, Message msg) throws RemoteException {
-            mHandler.sendMessage(msg);
-        }
-    };
     private final int UPDATE_UI = 23;
     Handler mHandler = new Handler() {
         @Override
@@ -155,17 +193,17 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
         }
     };
+
     private void updateSeek(Message msg) {
         int currentPosition = msg.arg1;
         int totalDuration = msg.arg2;
         binding.musicmsgSeekbar.setMax(totalDuration);
         binding.musicmsgSeekbar.setProgress(currentPosition);
     }
+
     private void onPlay() {
         try {
-            MusicEntity.MusicBean musicBean =
-                    (MusicEntity.MusicBean) iMusicPlayerService.getCurrentSongInfo().obj;
-
+            MusicEntity.MusicBean musicBean = (MusicEntity.MusicBean) iMusicPlayerService.getCurrentSongInfo().obj;
             if (musicBean == null) {
                 return;
             }
@@ -173,9 +211,55 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
             Glide.with(getContext()).load(musicBean.getAlbumpic_small())
                     .into(binding.musicmsgIcon);
             binding.musicmsgName.setText(musicBean.getSongname());
-//            mPlayBarSinger.setText(musicBean.author);
+            binding.musicmsgSingername.setText(musicBean.getSingername());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        try {
+            switch (v.getId()) {
+                case R.id.per: //上一首
+                    if (iMusicPlayerService != null) {
+                        iMusicPlayerService.action(MUSIC_ACTION_PREVIOUS, "");
+                    }
+                    break;
+                case R.id.next: //下一首
+                    if (iMusicPlayerService != null) {
+                        iMusicPlayerService.action(MUSIC_ACTION_NEXT, "");
+                    }
+                    break;
+                case R.id.startandpause: //开始或者暂停
+                    onPayBtnPress();
+                    break;
+                default:
+                    break;
+            }
+        } catch (RemoteException e) {
+
+        }
+    }
+
+    private void onPayBtnPress() {
+        try {
+            switch (MusicService.MUSIC_CURRENT_ACTION) {
+                case MusicService.MUSIC_ACTION_PLAY:
+                    iMusicPlayerService.action(MusicService.MUSIC_ACTION_PAUSE, "");
+                    binding.startandpause.setImageResource(R.mipmap.playbar_btn_pause);
+                    break;
+                case MusicService.MUSIC_ACTION_STOP:
+                    binding.startandpause.setImageResource(R.mipmap.playbar_btn_play);
+                    break;
+                case MusicService.MUSIC_ACTION_PAUSE:
+                    iMusicPlayerService.action(MusicService.MUSIC_ACTION_CONTINUE_PLAY, "");
+                    binding.startandpause.setImageResource(R.mipmap.playbar_btn_play);
+                    break;
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
     }
 }

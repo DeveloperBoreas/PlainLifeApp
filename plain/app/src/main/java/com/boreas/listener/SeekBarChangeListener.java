@@ -5,6 +5,7 @@ import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
 import android.widget.SeekBar;
 
+import com.boreas.App;
 import com.boreas.IMusicPlayer;
 import com.boreas.service.MusicService;
 import com.boreas.ui.activity.MainActivity;
@@ -38,7 +39,7 @@ public class SeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
             if (musicPlayerService!=null) {
                 musicPlayerService.action(MusicService.MUSIC_ACTION_SEEK_PLAY, String.valueOf(seekBar.getProgress()));
             }else{
-                musicPlayerService = MainActivity.context.getMusicPlayer();
+                musicPlayerService = App.app.getMusicPlayerService();
                 musicPlayerService.action(MusicService.MUSIC_ACTION_SEEK_PLAY, String.valueOf(seekBar.getProgress()));
             }
         } catch (RemoteException e) {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.boreas.App;
 import com.boreas.service.MusicService;
 import com.boreas.ui.activity.MainActivity;
 
@@ -23,7 +24,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(MainActivity.context.getMusicPlayer() == null){
+        if(App.app.getMusicPlayerService() == null){
             return;
         }
         String action = intent.getAction();
@@ -31,15 +32,15 @@ public class NotificationReceiver extends BroadcastReceiver {
             switch (action){
                 case ACTION_MUSIC_PLAY:
                     if(MusicService.MUSIC_CURRENT_ACTION == MUSIC_ACTION_PLAY){
-                        MainActivity.context.getMusicPlayer().action(MusicService.MUSIC_ACTION_PAUSE,"");
+                        App.app.getMusicPlayerService().action(MusicService.MUSIC_ACTION_PAUSE,"");
                     }else{
-                        MainActivity.context.getMusicPlayer().action(MusicService.MUSIC_ACTION_CONTINUE_PLAY,"");
+                        App.app.getMusicPlayerService().action(MusicService.MUSIC_ACTION_CONTINUE_PLAY,"");
                     }
                     break;
                 case ACTION_MUSIC_NEXT:
-                    MainActivity.context.getMusicPlayer().action(MusicService.MUSIC_ACTION_NEXT,"");
+                    App.app.getMusicPlayerService().action(MusicService.MUSIC_ACTION_NEXT,"");
                     break;
-                    default:break;
+                default:break;
             }
         } catch (Exception e) {
             e.printStackTrace();

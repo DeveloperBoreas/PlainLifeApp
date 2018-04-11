@@ -38,6 +38,7 @@ import com.boreas.service.MusicService;
 import com.boreas.ui.fragment.MusicFragment;
 import com.boreas.ui.fragment.PicFragment;
 import com.boreas.ui.notification.MusicNotification;
+import com.orhanobut.logger.Logger;
 
 import javax.inject.Inject;
 
@@ -49,8 +50,6 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         PresenterContract.MainView {
 
-    public static MainActivity context;
-
     private ActivityMainBinding binding;
     private NavHeaderMainBinding navHeadBinding;
     private String currentFragmentTag = null;
@@ -59,15 +58,9 @@ public class MainActivity extends BaseActivity
     @Inject
     MainPresenter presenter;
 
-    public static boolean linkSuccess;
-    private MusicNotification mMusicNotification;
-    private IMusicPlayer musicPlayer;
-    private int isCurrentRunningForeground;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
-        bindService();
         fragmentManager = getSupportFragmentManager();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initComponent();
@@ -103,12 +96,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if (isCurrentRunningForeground == 0) {// front
-            if (mMusicNotification != null) {
-                mMusicNotification.unregisterListener();
-            }
-        }
-        isCurrentRunningForeground++;
     }
 
     @Override
@@ -126,21 +113,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onStop() {
         super.onStop();
-        isCurrentRunningForeground--;
-        if (isCurrentRunningForeground == 0) { // back
-            try {
-                showNotification();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    private void showNotification() throws RemoteException {
-        if (mMusicNotification == null) {
-            mMusicNotification = new MusicNotification(this, musicPlayer);
-        }
-        mMusicNotification.registerListener();
-        mMusicNotification.notifyMusic();
     }
     @Override
     protected void onDestroy() {
@@ -207,7 +179,6 @@ public class MainActivity extends BaseActivity
         }
 
         Fragment foundFragment = fragmentManager.findFragmentByTag(name);
-
         if (foundFragment == null) {
             if (name.equals(Constants.MUSIC)) {
                 foundFragment = new MusicFragment();
@@ -216,7 +187,6 @@ public class MainActivity extends BaseActivity
             } else {
             }
         }
-
         if (foundFragment == null) {
 
         } else if (foundFragment.isAdded()) {
@@ -227,27 +197,5 @@ public class MainActivity extends BaseActivity
         ft.commit();
         currentFragmentTag = name;
     }
-    /**  Service  **/
 
-    public IMusicPlayer getMusicPlayer(){
-        return musicPlayer;
-    }
-    private void bindService() {
-        Intent intent = new Intent(this, MusicService.class);
-        bindService(intent, connection, Service.BIND_AUTO_CREATE);
-    }
-
-    ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            musicPlayer = IMusicPlayer.Stub.asInterface(service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bindService();
-        }
-    };
-
-    /**  Service  **/
 }

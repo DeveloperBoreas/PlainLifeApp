@@ -26,11 +26,11 @@ import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
 
-    private ClickListener<MusicEntity> clickListener = null;
-    private List<MusicEntity>  listData = null;
+    private ClickListener<MusicEntity.MusicBean> clickListener = null;
+    private List<MusicEntity.MusicBean>  listData = null;
 
-    public MusicAdapter(List<MusicEntity> list) {
-        this.listData = list;
+    public MusicAdapter(MusicEntity musicEntity) {
+        this.listData = musicEntity.getMusicList();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
 
     @Override
     public void onBindViewHolder(MusicViewHolder holder, int position) {
-        MusicEntity t = listData.get(position);
+        MusicEntity.MusicBean t = listData.get(position);
         if(clickListener != null){
             holder.cardView.setOnClickListener(
                     v -> clickListener.onItemClick(holder.cardView,position,t));
@@ -76,7 +76,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     }
 
 
-    public MusicAdapter setOnClickListener(ClickListener<MusicEntity> clickListener){
+    public MusicAdapter setOnClickListener(ClickListener<MusicEntity.MusicBean> clickListener){
         this.clickListener = clickListener;
         return this;
     }

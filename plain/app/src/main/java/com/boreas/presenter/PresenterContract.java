@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import com.boreas.interactor.Music;
+import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.PicEntity;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public interface PresenterContract {
 
     }
     interface MusicView{
-        void getData(List list);
+        void getData(MusicEntity musicEntity);
     }
     interface PicView{
         void getPicList(List<PicEntity.Pic> list);

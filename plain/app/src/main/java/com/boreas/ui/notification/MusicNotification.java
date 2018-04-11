@@ -31,7 +31,9 @@ import static com.boreas.service.MusicService.MUSIC_ACTION_PLAY;
  * email：agxxxx@126.com
  * blog: http://www.jianshu.com/u/c1a3c4c943e5
  * github: https://github.com/agxxxx
- * Created by Administrator on 2017/3/6.
+ *
+ * @author Administrator
+ * @date 2017/3/6
  */
 
 public class MusicNotification {
@@ -47,7 +49,6 @@ public class MusicNotification {
         this.mMusicPlayerService = mMusicPlayerService;
         mContext = context;
         mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-
     }
 
 

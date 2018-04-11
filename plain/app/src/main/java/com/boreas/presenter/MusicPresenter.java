@@ -61,8 +61,7 @@ public class MusicPresenter implements PresenterContract.Presenter {
 
         @Override
         public void onNext(MusicEntity musicEntity) {
-            List list = (List) musicEntity;
-            musicView.getData(list);
+            musicView.getData(musicEntity);
         }
     }
 }
