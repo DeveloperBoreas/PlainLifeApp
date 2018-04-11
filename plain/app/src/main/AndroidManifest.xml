@@ -33,6 +33,15 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <service android:name=".service.MusicService" android:exported="true" android:enabled="true">
+
+        </service>
+        <receiver android:name=".receiver.NotificationReceiver" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="com.aidlmusicplayer.www.action.music.play"/>
+                <action android:name="com.aidlmusicplayer.www.action.music.next"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

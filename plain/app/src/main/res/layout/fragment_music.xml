@@ -19,6 +19,7 @@
                 android:layout_weight="9"></android.support.v7.widget.RecyclerView>
 
             <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/music_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:background="#00FA0A"

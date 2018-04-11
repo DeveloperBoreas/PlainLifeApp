@@ -1,7 +1,13 @@
 package com.boreas.ui.activity;
 
 
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +25,7 @@ import android.view.View;
 
 import com.boreas.App;
 import com.boreas.Constants;
+import com.boreas.IMusicPlayer;
 import com.boreas.R;
 import com.boreas.base.BaseActivity;
 import com.boreas.databinding.ActivityMainBinding;
@@ -27,8 +34,10 @@ import com.boreas.di.componects.DaggerMainComponent;
 import com.boreas.di.modules.MainModule;
 import com.boreas.presenter.MainPresenter;
 import com.boreas.presenter.PresenterContract;
+import com.boreas.service.MusicService;
 import com.boreas.ui.fragment.MusicFragment;
 import com.boreas.ui.fragment.PicFragment;
+import com.boreas.ui.notification.MusicNotification;
 
 import javax.inject.Inject;
 
@@ -39,18 +48,26 @@ import javax.inject.Inject;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         PresenterContract.MainView {
-    private Context context;
+
+    public static MainActivity context;
+
     private ActivityMainBinding binding;
     private NavHeaderMainBinding navHeadBinding;
     private String currentFragmentTag = null;
     private FragmentManager fragmentManager = null;
+
     @Inject
     MainPresenter presenter;
 
+    public static boolean linkSuccess;
+    private MusicNotification mMusicNotification;
+    private IMusicPlayer musicPlayer;
+    private int isCurrentRunningForeground;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.context = this;
+        context = this;
+        bindService();
         fragmentManager = getSupportFragmentManager();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initComponent();
@@ -84,6 +101,17 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (isCurrentRunningForeground == 0) {// front
+            if (mMusicNotification != null) {
+                mMusicNotification.unregisterListener();
+            }
+        }
+        isCurrentRunningForeground++;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         presenter.resume();
@@ -96,6 +124,25 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        isCurrentRunningForeground--;
+        if (isCurrentRunningForeground == 0) { // back
+            try {
+                showNotification();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void showNotification() throws RemoteException {
+        if (mMusicNotification == null) {
+            mMusicNotification = new MusicNotification(this, musicPlayer);
+        }
+        mMusicNotification.registerListener();
+        mMusicNotification.notifyMusic();
+    }
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
@@ -106,7 +153,11 @@ public class MainActivity extends BaseActivity
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
         }
     }
 
@@ -176,5 +227,27 @@ public class MainActivity extends BaseActivity
         ft.commit();
         currentFragmentTag = name;
     }
+    /**  Service  **/
 
+    public IMusicPlayer getMusicPlayer(){
+        return musicPlayer;
+    }
+    private void bindService() {
+        Intent intent = new Intent(this, MusicService.class);
+        bindService(intent, connection, Service.BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            musicPlayer = IMusicPlayer.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bindService();
+        }
+    };
+
+    /**  Service  **/
 }
