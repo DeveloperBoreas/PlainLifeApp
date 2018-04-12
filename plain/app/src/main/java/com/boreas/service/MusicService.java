@@ -354,26 +354,26 @@ public class MusicService extends Service  implements
     @Override
     public void onAudioFocusChange(int focusChange) {
         switch (focusChange) {
-            case AudioManager.AUDIOFOCUS_GAIN:
+            case AudioManager.AUDIOFOCUS_GAIN://获得了Audio Focus；
                 // resume playback
                 mMediaPlayer.start();
                 mMediaPlayer.setVolume(1.0f, 1.0f);
                 break;
-            case AudioManager.AUDIOFOCUS_LOSS:
+            case AudioManager.AUDIOFOCUS_LOSS:  //失去了Audio Focus，并将会持续很长的时间。
                 // Lost focus for an unbounded amount of time: stopSong playback and release media player
                 if (mMediaPlayer.isPlaying())
                     mMediaPlayer.stop();
                 mMediaPlayer.release();
                 mMediaPlayer = null;
                 break;
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT://暂时失去Audio Focus，并会很快再次获得。
                 // Lost focus for a short time, but we have to stopSong
                 // playback. We don't release the media player because playback
                 // is likely to resume
                 if (mMediaPlayer.isPlaying())
                     mMediaPlayer.pause();
                 break;
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK://暂时失去AudioFocus，但是可以继续播放，不过要在降低音量。
                 // Lost focus for a short time, but it's ok to keep playing
                 // at an attenuated level
                 if (mMediaPlayer.isPlaying())
