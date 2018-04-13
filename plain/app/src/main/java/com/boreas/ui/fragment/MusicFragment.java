@@ -9,11 +9,12 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.boreas.App;
+import com.boreas.Constants;
 import com.boreas.IMusicPlayer;
 import com.boreas.IMusicPlayerListener;
 import com.boreas.R;
@@ -32,8 +33,7 @@ import com.boreas.ui.activity.MainActivity;
 import com.boreas.ui.recycle.OffsetDecoration;
 import com.boreas.utils.GsonHelper;
 import com.bumptech.glide.Glide;
-
-import java.util.List;
+import com.orhanobut.logger.Logger;
 
 import javax.inject.Inject;
 
@@ -94,15 +94,21 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
             @Override
             public void run() {
                 super.run();
-                while (!App.linkSuccess) {
+                while (!MainActivity.linkSuccess) {
                     SystemClock.sleep(300);
                 }
-                try {
-                    iMusicPlayerService = App.app.getMusicPlayerService();
-                    iMusicPlayerService.registerListener(musicPlayerListener);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+                getActivity().runOnUiThread(() -> {
+                    iMusicPlayerService = MainActivity.main.getMusicPlayerService();
+                    if (iMusicPlayerService == null) {
+                        Logger.d("iMusicPlayerService", "iMusicPlayerService 对象：" + iMusicPlayerService);
+                    } else {
+                        try {
+                            iMusicPlayerService.registerListener(musicPlayerListener);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         }.start();
     }
@@ -128,7 +134,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     @Override
     public void lazyFetchData() {
-        presenter.getMusicList();
+        presenter.getMusicList(Constants.MusicType.NEI_DI);
     }
 
     @Override

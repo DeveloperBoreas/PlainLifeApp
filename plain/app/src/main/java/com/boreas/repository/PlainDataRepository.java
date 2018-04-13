@@ -30,8 +30,8 @@ public class PlainDataRepository implements PlainRepository {
     }
     /**获取音乐**/
     @Override
-    public Observable<MusicEntity> getMusicInfo() {
-        return iPlainRestApi.getMusicInfo();
+    public Observable<MusicEntity> getMusicInfo(int type) {
+        return iPlainRestApi.getMusicInfo(type);
     }
 
     /**

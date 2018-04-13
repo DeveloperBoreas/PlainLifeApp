@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -55,12 +56,18 @@ public class MainActivity extends BaseActivity
     private String currentFragmentTag = null;
     private FragmentManager fragmentManager = null;
 
+    public static boolean linkSuccess;
+    int isCurrentRunningForeground;
+    private IMusicPlayer mMusicPlayerService;
+    private MusicNotification mMusicNotification;
+    public static MainActivity main;
     @Inject
     MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        main = this;
         fragmentManager = getSupportFragmentManager();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initComponent();
@@ -90,12 +97,46 @@ public class MainActivity extends BaseActivity
         binding.navView.setNavigationItemSelectedListener(this);
         switchFragment(Constants.MUSIC);
         View headView = binding.navView.getHeaderView(0);
-        navHeadBinding =  DataBindingUtil.bind(headView);
+        navHeadBinding = DataBindingUtil.bind(headView);
+        bindService();
     }
+
+    /**Service**/
+
+    public IMusicPlayer getMusicPlayerService() {
+        return mMusicPlayerService;
+    }
+
+    private void bindService() {
+        Intent intent = new Intent(App.app, MusicService.class);
+        bindService(intent, mServiceConnection, Service.BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mMusicPlayerService = IMusicPlayer.Stub.asInterface(service);
+            linkSuccess = true;
+            Logger.d("onServiceConnected   Service 连接成功！");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bindService();
+            Logger.d("onServiceConnected   Service 连接失败！");
+        }
+    };
+    /**Service**/
 
     @Override
     protected void onStart() {
         super.onStart();
+        if (isCurrentRunningForeground == 0) {// front
+            if (mMusicNotification != null) {
+                mMusicNotification.unregisterListener();
+            }
+        }
+        isCurrentRunningForeground++;
     }
 
     @Override
@@ -113,11 +154,35 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onStop() {
         super.onStop();
+        isCurrentRunningForeground--;
+        if (isCurrentRunningForeground == 0) { // back
+            try {
+                showNotification();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    private void showNotification() throws RemoteException {
+        if (mMusicNotification == null) {
+            mMusicNotification = new MusicNotification(this, mMusicPlayerService);
+        }
+        mMusicNotification.registerListener();
+        mMusicNotification.notifyMusic();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        if(mServiceConnection != null){
+            unbindService(mServiceConnection);
+            mServiceConnection = null;
+            linkSuccess = false;
+        }
+
+
     }
 
     @Override

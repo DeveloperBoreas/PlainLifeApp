@@ -24,7 +24,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(App.app.getMusicPlayerService() == null){
+        if(MainActivity.main.getMusicPlayerService() == null){
             return;
         }
         String action = intent.getAction();
@@ -32,13 +32,13 @@ public class NotificationReceiver extends BroadcastReceiver {
             switch (action){
                 case ACTION_MUSIC_PLAY:
                     if(MusicService.MUSIC_CURRENT_ACTION == MUSIC_ACTION_PLAY){
-                        App.app.getMusicPlayerService().action(MusicService.MUSIC_ACTION_PAUSE,"");
+                        MainActivity.main.getMusicPlayerService().action(MusicService.MUSIC_ACTION_PAUSE,"");
                     }else{
-                        App.app.getMusicPlayerService().action(MusicService.MUSIC_ACTION_CONTINUE_PLAY,"");
+                        MainActivity.main.getMusicPlayerService().action(MusicService.MUSIC_ACTION_CONTINUE_PLAY,"");
                     }
                     break;
                 case ACTION_MUSIC_NEXT:
-                    App.app.getMusicPlayerService().action(MusicService.MUSIC_ACTION_NEXT,"");
+                    MainActivity.main.getMusicPlayerService().action(MusicService.MUSIC_ACTION_NEXT,"");
                     break;
                 default:break;
             }

@@ -99,15 +99,16 @@ public class MusicNotification {
     private Notification createNotification(Context context, IMusicPlayer mMusicPlayerService) {
         try {
             MusicEntity.MusicBean musicBean = (MusicEntity.MusicBean) mMusicPlayerService.getCurrentSongInfo().obj;
-            if (musicBean == null) {
-                return null;
-            }
+//            if (musicBean == null) {
+//                return null;
+//            }
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent openPendingIntent =PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             RemoteViews remoteView = createRemoteView(context);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContent(remoteView);
-            builder.setContentTitle(musicBean.getSongname());
+//            builder.setContentTitle(musicBean.getSongname());
+            builder.setContentTitle("你看看哇");
             builder.setTicker("音乐已移到后台");
             builder.setSmallIcon(R.mipmap.ic_launcher);
             builder.setContentIntent(openPendingIntent);
@@ -122,7 +123,8 @@ public class MusicNotification {
             NotificationTarget notificationTarget = new NotificationTarget
                     (context, remoteView, R.id.iv_icon, notification, 0);
             Glide.with(context).
-                    load(musicBean.getAlbumpic_small()).
+//                    load(musicBean.getAlbumpic_small()).
+                    load("http://i.gtimg.cn/music/photo/mid_album_90/X/p/002Z4QxC1mBPXp.jpg").
                     asBitmap().
                     error(R.mipmap.placeholder_disk_210).
                     into(notificationTarget);
@@ -141,13 +143,14 @@ public class MusicNotification {
 
     public RemoteViews createRemoteView(Context context) throws RemoteException {
         final MusicEntity.MusicBean musicBean = (MusicEntity.MusicBean) mMusicPlayerService.getCurrentSongInfo().obj;
-        if (musicBean == null) {
-            return null;
-        }
+//        if (musicBean == null) {
+//            return null;
+//        }
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_music);
-        remoteViews.setTextViewText(R.id.tv_title, musicBean.getSongname());
-        remoteViews.setTextViewText(R.id.tv_content, musicBean.getSingername() + "-" + musicBean.getSongname());
-
+//        remoteViews.setTextViewText(R.id.tv_title, musicBean.getSongname());
+//        remoteViews.setTextViewText(R.id.tv_content, musicBean.getSingername());
+        remoteViews.setTextViewText(R.id.tv_title,"光明");
+        remoteViews.setTextViewText(R.id.tv_content,"汪峰");
 
 //        1. 2. play and pause
         if (MusicService.MUSIC_CURRENT_ACTION == MUSIC_ACTION_PLAY) {

@@ -1,7 +1,10 @@
 package com.boreas.presenter;
 
+import com.boreas.api.ApiService;
 import com.boreas.interactor.Music;
 import com.boreas.model.entity.MusicEntity;
+import com.boreas.utils.GsonHelper;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -19,7 +22,6 @@ public class MusicPresenter implements PresenterContract.Presenter {
 
     private Music music = null;
     private PresenterContract.MusicView musicView = null;
-
     @Inject
     public MusicPresenter(Music music, PresenterContract.MusicView musicView){
         this.music = music;
@@ -41,7 +43,8 @@ public class MusicPresenter implements PresenterContract.Presenter {
 
     }
 
-    public void getMusicList(){
+    public void getMusicList(int type){
+        music.setType(type);
         music.execute(new MusicSubcriber());
     }
 
@@ -61,7 +64,8 @@ public class MusicPresenter implements PresenterContract.Presenter {
 
         @Override
         public void onNext(MusicEntity musicEntity) {
-            musicView.getData(musicEntity);
+            Logger.d("音乐数据 musicEntity : " + GsonHelper.getGson().toJson(musicEntity));
+            //musicView.getData(musicEntity);
         }
     }
 }

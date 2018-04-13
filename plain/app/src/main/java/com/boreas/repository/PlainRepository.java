@@ -23,7 +23,7 @@ public interface PlainRepository {
     /**
      * 获取音乐列表
      */
-    Observable<MusicEntity> getMusicInfo();
+    Observable<MusicEntity> getMusicInfo(int type);
 
     /**
      * 获取图片

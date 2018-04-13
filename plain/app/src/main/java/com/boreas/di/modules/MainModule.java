@@ -2,6 +2,7 @@ package com.boreas.di.modules;
 
 import android.content.Context;
 
+import com.boreas.di.PerActivity;
 import com.boreas.interactor.Music;
 import com.boreas.repository.PlainDataRepository;
 
@@ -14,6 +15,7 @@ import dagger.Provides;
  * 邮箱 13051089921@163.com
  */
 @Module
+@PerActivity
 public class MainModule {
 
     private Context context = null;
@@ -25,11 +27,6 @@ public class MainModule {
     public Context providesContext(){
         return this.context;
     }
-
-//    @Provides
-//    public Music providesMusicUseCase(PlainDataRepository repository){
-//        return new Music(repository);
-//    }
 
 
 }

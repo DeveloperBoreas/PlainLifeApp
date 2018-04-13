@@ -14,9 +14,10 @@ import retrofit2.Retrofit;
  * @author admin
  * @date 2018/2/23
  */
+@Singleton
 @Component(modules = {NetModule.class})
 public interface NetComponent {
-//    ApiService getApiService();
-//    OkHttpClient getOkHttp();
-//    Retrofit getRetrofit();
+    ApiService getApiService();
+    OkHttpClient getOkHttp();
+    Retrofit getRetrofit();
 }

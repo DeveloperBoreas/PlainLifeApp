@@ -39,7 +39,7 @@ public class SeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
             if (musicPlayerService!=null) {
                 musicPlayerService.action(MusicService.MUSIC_ACTION_SEEK_PLAY, String.valueOf(seekBar.getProgress()));
             }else{
-                musicPlayerService = App.app.getMusicPlayerService();
+                musicPlayerService = MainActivity.main.getMusicPlayerService();
                 musicPlayerService.action(MusicService.MUSIC_ACTION_SEEK_PLAY, String.valueOf(seekBar.getProgress()));
             }
         } catch (RemoteException e) {

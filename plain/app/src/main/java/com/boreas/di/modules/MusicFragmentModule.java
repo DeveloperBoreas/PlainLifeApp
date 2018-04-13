@@ -1,5 +1,6 @@
 package com.boreas.di.modules;
 
+import com.boreas.di.PerFragment;
 import com.boreas.interactor.Music;
 import com.boreas.presenter.PresenterContract;
 import com.boreas.repository.PlainDataRepository;
@@ -14,6 +15,7 @@ import dagger.Provides;
  * @author boreas
  */
 @Module
+@PerFragment
 public class MusicFragmentModule {
     private PresenterContract.MusicView musicView = null;
     public MusicFragmentModule(PresenterContract.MusicView musicView){
@@ -26,7 +28,7 @@ public class MusicFragmentModule {
     }
 
     @Provides
-    public Music providesMusicUseCase(PlainDataRepository repository){
+    public Music providesMusic(PlainDataRepository repository){
         return new Music(repository);
     }
 }

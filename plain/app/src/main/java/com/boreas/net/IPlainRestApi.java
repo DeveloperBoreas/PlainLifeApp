@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 
 import com.boreas.App;
+import com.boreas.api.ApiService;
 import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.PicEntity;
 import com.boreas.utils.NetWorkUtil;
@@ -27,10 +28,11 @@ import rx.Subscriber;
 public class IPlainRestApi implements PlainRestApi {
 
     private Context context = null;
-
+    private ApiService apiService = null;
     @Inject
     public IPlainRestApi(){
         this.context = App.getContext();
+        this.apiService = App.app.getNetComponent().getApiService();
     }
 
     @Override
@@ -48,7 +50,8 @@ public class IPlainRestApi implements PlainRestApi {
      * @return 音乐列表
      */
     @Override
-    public Observable<MusicEntity> getMusicInfo() {
+    public Observable<MusicEntity> getMusicInfo(int type) {
+//        return apiService.getMusicList(type);
         return Observable.create((subscriber -> {
             if(NetWorkUtil.isNetWorkEnable(context)){
 

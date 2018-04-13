@@ -24,5 +24,5 @@ public interface PlainRestApi {
      * 音乐列表信息
      * @return
      */
-    Observable<MusicEntity> getMusicInfo();
+    Observable<MusicEntity> getMusicInfo(int type);
 }

@@ -15,6 +15,7 @@ import dagger.Component;
  * @author boreas
  */
 @Component(modules = AppModule.class)
+@Singleton
 public interface AppComponent {
 //    Context getContext();
 }
