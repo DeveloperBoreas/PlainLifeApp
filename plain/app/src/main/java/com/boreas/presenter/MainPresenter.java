@@ -14,6 +14,7 @@ import rx.Subscriber;
 public class MainPresenter implements PresenterContract.Presenter {
 
     private Music music = null;
+
     @Inject
     public MainPresenter(Music music){
         this.music = music;

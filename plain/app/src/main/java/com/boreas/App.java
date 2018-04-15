@@ -1,15 +1,7 @@
 package com.boreas;
 
-import android.app.Activity;
 import android.app.Application;
-import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
 
 import com.boreas.di.componects.AppComponent;
 import com.boreas.di.componects.DaggerAppComponent;
