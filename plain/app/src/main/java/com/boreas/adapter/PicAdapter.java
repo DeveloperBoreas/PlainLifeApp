@@ -1,5 +1,6 @@
 package com.boreas.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.boreas.R;
 import com.boreas.listener.ClickListener;
 import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.PicEntity;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -27,9 +29,10 @@ public class PicAdapter extends RecyclerView.Adapter<PicAdapter.MusicViewHolder>
 
     private ClickListener<PicEntity.Pic> clickListener = null;
     private List<PicEntity.Pic>  listData = null;
-
-    public PicAdapter(List<PicEntity.Pic> list) {
+    private Context context;
+    public PicAdapter(Context context, List<PicEntity.Pic> list) {
         this.listData = list;
+        this.context = context;
     }
 
     @Override
@@ -41,13 +44,14 @@ public class PicAdapter extends RecyclerView.Adapter<PicAdapter.MusicViewHolder>
 
     @Override
     public void onBindViewHolder(MusicViewHolder holder, int position) {
-        PicEntity.Pic t = listData.get(position);
+        PicEntity.Pic pic = listData.get(position);
+        Glide.with(context).load(pic.getPicUrl()).asBitmap().into(holder.imagePic);
         if(clickListener != null){
             holder.cardView.setOnClickListener(
-                    v -> clickListener.onItemClick(holder.cardView,position,t));
+                    v -> clickListener.onItemClick(holder.cardView,position,pic));
             holder.cardView.setOnLongClickListener(v -> {
-                clickListener.onItemLongClick(holder.cardView,position,t);
-                return false;
+                clickListener.onItemLongClick(holder.cardView,position,pic);
+                return true;
             });
         }
     }

@@ -16,12 +16,13 @@ public class HttpRequest {
         client= okHttpClient;
     }
 
-    public String doGet(OkHttpClient client, String url) {
+    public static void doGet(String url,CallBack cb) {
         Request.Builder builder = new Request.Builder()
                 .get()
                 .url(url);
         Request request = builder.build();
-        return executeRequest(request);
+        enqueueRequest(request,cb);
+//        return executeRequest(request);
     }
 
     public void doPost() {
@@ -67,23 +68,22 @@ public class HttpRequest {
      * @param request
      * @param cb
      */
-    private void enqueueRequest(Request request, CallBack cb) {
+    private static void enqueueRequest(Request request, CallBack cb) {
         Call call = client.newCall(request);
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Request request, IOException e) {
-//                System.out.print("onFailure:" + e.getMessage());
-//                e.printStackTrace();
-//                cb.onFail(e);
-//            }
-//
-//            @Override
-//            public void onResponse(Response response) throws IOException {
-//                final String res = response.body().string();
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.print("onFailure:" + e.getMessage());
+                e.printStackTrace();
+                cb.onFail(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
 //                System.out.println("-------------- onResponse res : " + res);
-//                cb.onSuccess(res + "");
-//            }
-//
-//        });
+                cb.onSuccess(res);
+            }
+        });
     }
 }

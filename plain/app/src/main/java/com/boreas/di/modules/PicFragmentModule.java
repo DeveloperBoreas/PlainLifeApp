@@ -1,5 +1,6 @@
 package com.boreas.di.modules;
 
+import com.boreas.di.PerFragment;
 import com.boreas.interactor.Music;
 import com.boreas.interactor.Pic;
 import com.boreas.presenter.PresenterContract;
@@ -15,6 +16,7 @@ import dagger.Provides;
  * @author boreas
  */
 @Module
+@PerFragment
 public class PicFragmentModule {
     private PresenterContract.PicView picView = null;
     public PicFragmentModule(PresenterContract.PicView picView){

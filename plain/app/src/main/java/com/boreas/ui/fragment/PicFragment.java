@@ -69,7 +69,7 @@ public class PicFragment extends BaseFragment implements PresenterContract.PicVi
     public void getPicList(List<PicEntity.Pic> list) {
         Logger.d("-------pic -------------- :" +list.size());
         Log.e("-----------","pic list:" + list.size());
-        PicAdapter adapter = new PicAdapter(list);
+        PicAdapter adapter = new PicAdapter(getContext(),list);
         adapter.setOnClickListener(this);
         binding.fragmentPicRecycle.setAdapter(adapter);
     }

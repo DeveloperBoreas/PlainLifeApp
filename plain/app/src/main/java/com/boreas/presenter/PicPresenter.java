@@ -52,13 +52,13 @@ public class PicPresenter implements PresenterContract.Presenter {
 
         @Override
         public void onError(Throwable e) {
-            Logger.d("PicSubcriber onError");
+            Logger.d("PicSubcriber onError :" + e.getMessage());
         }
 
         @Override
         public void onNext(PicEntity picEntity) {
             Logger.d("PicSubcriber onNext");
-            List<PicEntity.Pic> list = picEntity.getPicList();
+            List<PicEntity.Pic> list = picEntity.getData();
             picView.getPicList(list);
         }
     }
