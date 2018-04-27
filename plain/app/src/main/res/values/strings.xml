@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">plain</string>
+    <string name="app_name">简单生活</string>
+
+    <string name="theme">主题</string>
+    <string name="cancel">取消</string>
+    <string name="done">完成</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

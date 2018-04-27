@@ -28,10 +28,10 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/servicer"
                 android:title="联系我" />
-            <item
-                android:id="@+id/nav_them"
-                android:icon="@drawable/ic_menu_send"
-                android:title="主题" />
+            <!--<item-->
+                <!--android:id="@+id/nav_them"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="主题" />-->
         </menu>
     </item>
 

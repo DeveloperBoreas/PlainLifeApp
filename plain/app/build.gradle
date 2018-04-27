@@ -61,4 +61,6 @@ dependencies {
     compile 'com.github.recruit-lifestyle:WaveSwipeRefreshLayout:1.6'
 
     compile 'com.orhanobut:logger:1.15'
+    //圆形图片
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

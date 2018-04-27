@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-        <com.boreas.ui.widget.CircleImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/nav_head_imageView"
             android:layout_width="70dp"
             android:layout_height="70dp"

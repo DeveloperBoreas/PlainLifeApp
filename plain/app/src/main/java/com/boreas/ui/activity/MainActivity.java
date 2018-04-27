@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,6 +24,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 
 import com.boreas.App;
 import com.boreas.Constants;
@@ -50,7 +52,8 @@ import javax.inject.Inject;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         PresenterContract.MainView {
-
+    
+    private static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
     private NavHeaderMainBinding navHeadBinding;
     private String currentFragmentTag = null;
@@ -99,6 +102,7 @@ public class MainActivity extends BaseActivity
         View headView = binding.navView.getHeaderView(0);
         navHeadBinding = DataBindingUtil.bind(headView);
         bindService();
+        binding.fab.setVisibility(View.INVISIBLE);
     }
 
     /**Service**/
@@ -226,8 +230,9 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_share) {
             this.switchFragment(Constants.SHARE);
         } else if (id == R.id.nav_send) {
-        } else if (id == R.id.nav_them) {
         }
+//        else if (id == R.id.nav_them) {
+//        }
         binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
