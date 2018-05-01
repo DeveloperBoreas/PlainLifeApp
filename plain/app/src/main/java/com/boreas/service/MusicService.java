@@ -12,8 +12,13 @@ import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.boreas.IMusicPlayer;
 import com.boreas.IMusicPlayerListener;
 import com.boreas.model.entity.MusicEntity;
@@ -68,6 +73,10 @@ public class MusicService extends Service  implements
     private Timer mTimer;
     private ArrayList<MusicEntity.MusicBean> mSong_list = new ArrayList<>();
     private int currentPosition;
+
+    //地图定位
+    public AMapLocationClient mLocationClient = null;
+    public AMapLocationClientOption mLocationOption = null;
     @Override
     public void onCreate() {
         mMediaPlayer = new MediaPlayer();
@@ -76,7 +85,50 @@ public class MusicService extends Service  implements
         mMediaPlayer.setOnCompletionListener(this);
         ((AudioManager) getSystemService(Context.AUDIO_SERVICE)).
                 requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        initMapLocation();
         super.onCreate();
+    }
+
+    private void initMapLocation() {
+        mLocationOption = new AMapLocationClientOption();
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Device_Sensors);
+        mLocationOption.setOnceLocation(false);
+        mLocationOption.setOnceLocationLatest(true);
+        mLocationOption.setInterval(5000);
+        mLocationOption.setNeedAddress(true);
+        mLocationOption.setMockEnable(true);
+        mLocationOption.setHttpTimeOut(10000);
+        mLocationOption.setLocationCacheEnable(false);
+
+
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        mLocationClient.setLocationListener(new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                if (aMapLocation != null) {
+                    if (aMapLocation.getErrorCode() == 0) {
+                        Logger.d("定位:" + aMapLocation.getAddress());
+//可在其中解析amapLocation获取相应内容。
+                    }else {
+                        //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                        Log.e("AmapError","location Error, ErrCode:"
+                                + aMapLocation.getErrorCode() + ", errInfo:"
+                                + aMapLocation.getErrorInfo());
+                    }
+                }
+
+            }
+        });
+
+        if(null != mLocationClient){
+            mLocationClient.setLocationOption(mLocationOption);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+        }
     }
 
     @Nullable
@@ -404,5 +456,15 @@ public class MusicService extends Service  implements
                 onPaying();
             }
         }, 0, 1000);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mLocationClient != null){
+            mLocationClient.onDestroy();
+            mLocationClient = null;
+
+        }
     }
 }

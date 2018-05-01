@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 repositories {
     maven {
         url "https://jitpack.io"
+        jcenter()
     }
 }
 android {
@@ -13,6 +14,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"
+        }
     }
     buildTypes {
         release {
@@ -63,4 +68,12 @@ dependencies {
     compile 'com.orhanobut:logger:1.15'
     //圆形图片
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //高德地图
+//    compile 'com.amap.api:3dmap:latest.integration'
+//    compile 'com.amap.api:navi-3dmap:latest.integration'
+//    compile 'com.amap.api:search:latest.integration'
+    compile 'com.amap.api:location:latest.integration'
+
+
 }
