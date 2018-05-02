@@ -1,16 +1,13 @@
 package com.boreas.ui.activity;
 
 
+import android.Manifest;
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,12 +19,16 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.boreas.App;
 import com.boreas.Constants;
 import com.boreas.IMusicPlayer;
@@ -43,9 +44,13 @@ import com.boreas.service.MusicService;
 import com.boreas.ui.fragment.MusicFragment;
 import com.boreas.ui.fragment.PicFragment;
 import com.boreas.ui.notification.MusicNotification;
+import com.example.lyf.yflibrary.Permission;
+import com.example.lyf.yflibrary.PermissionResult;
 import com.orhanobut.logger.Logger;
 
 import javax.inject.Inject;
+
+import static com.boreas.Constants.REQUEST_PERMISSIONS;
 
 /**
  * @author boreas
@@ -68,6 +73,10 @@ public class MainActivity extends BaseActivity
     public static MainActivity main;
     @Inject
     MainPresenter presenter;
+    //地图定位
+    public AMapLocationClient mLocationClient = null;
+    public AMapLocationClientOption mLocationOption = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +87,66 @@ public class MainActivity extends BaseActivity
         initComponent();
         initPresenter();
         initView();
+        checkPermissions();
     }
+
+    private void checkPermissions() {
+        Permission.checkPermisson(this, REQUEST_PERMISSIONS, new PermissionResult() {
+            @Override
+            public void success() {
+                System.out.printf("成功");
+                Log.d(TAG,"成功");
+                    mLocationOption = new AMapLocationClientOption();
+                    mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+                    mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+                    mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+                    mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Device_Sensors);
+                    mLocationOption.setOnceLocation(false);
+                    mLocationOption.setOnceLocationLatest(true);
+                    mLocationOption.setInterval(5000);
+                    mLocationOption.setNeedAddress(true);
+                    mLocationOption.setMockEnable(true);
+                    mLocationOption.setHttpTimeOut(10000);
+                    mLocationOption.setLocationCacheEnable(false);
+
+
+                    mLocationClient = new AMapLocationClient(getApplicationContext());
+                    mLocationClient.setLocationListener(new AMapLocationListener() {
+                        @Override
+                        public void onLocationChanged(AMapLocation aMapLocation) {
+                            if (aMapLocation != null) {
+                                if (aMapLocation.getErrorCode() == 0) {
+                                    Logger.d("定位:" + aMapLocation.getAddress());
+//可在其中解析amapLocation获取相应内容。
+                                }else {
+                                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                                    Log.e("AmapError","location Error, ErrCode:"
+                                            + aMapLocation.getErrorCode() + ", errInfo:"
+                                            + aMapLocation.getErrorInfo());
+                                }
+                            }
+
+                        }
+                    });
+
+                    if(null != mLocationClient){
+                        mLocationClient.setLocationOption(mLocationOption);
+                        //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+                        mLocationClient.stopLocation();
+                        mLocationClient.startLocation();
+                    }
+
+            }
+
+            @Override
+            public void fail() {
+                //失败
+                System.out.printf("失败");
+                Log.d(TAG,"失败");
+            }
+        });
+    }
+
 
     private void initPresenter() {
 
@@ -169,6 +237,7 @@ public class MainActivity extends BaseActivity
             }
         }
     }
+
 
     private void showNotification() throws RemoteException {
         if (mMusicNotification == null) {

@@ -75,5 +75,5 @@ dependencies {
 //    compile 'com.amap.api:search:latest.integration'
     compile 'com.amap.api:location:latest.integration'
 
-
+    compile'com.lyf:yflibrary:1.0.2'
 }

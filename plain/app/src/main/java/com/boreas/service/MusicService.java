@@ -86,7 +86,7 @@ public class MusicService extends Service  implements
         mMediaPlayer.setOnCompletionListener(this);
         ((AudioManager) getSystemService(Context.AUDIO_SERVICE)).
                 requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        initMapLocation();
+        //initMapLocation();
         super.onCreate();
     }
 
