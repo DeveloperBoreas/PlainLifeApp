@@ -1,6 +1,7 @@
 package com.boreas.ui.fragment;
 
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,7 +40,7 @@ public class PicFragment extends BaseFragment implements PresenterContract.PicVi
     @Inject
     PicPresenter presenter;
     @Override
-    public View initView(LayoutInflater inflater, ViewGroup container) {
+    public View initView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic,container,false);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         binding.fragmentPicRecycle.setLayoutManager(layoutManager);

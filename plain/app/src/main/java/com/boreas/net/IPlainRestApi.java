@@ -1,6 +1,7 @@
 package com.boreas.net;
 
 import android.accounts.NetworkErrorException;
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
@@ -62,20 +63,22 @@ public class IPlainRestApi implements PlainRestApi {
     // offset = 0 //获取偏移
      */
     @Override
-    public Observable<MusicEntityList> getMusicInfo(int type) {
+    public Observable<MusicEntityList> getMusicInfo(Activity activity,int type) {
         return Observable.create((subscriber -> {
             if(NetWorkUtil.isNetWorkEnable(context)){
                 String MUSIC_LIST = "http://tingapi.ting.baidu.com/v1/restserver/ting?format=json&callback=&from=webapp_music&method=baidu.ting.billboard.billList&type=@&size=100&offset=0";
                 String url = MUSIC_LIST.replace("@",String.valueOf(type));
                 Log.d(" url :",url);
-                HttpRequest.doGet(url, new CallBack() {
+                NetUtil.requestForGet(activity,url,null, new NetUtil.NetCallBack() {
                     @Override
                     public void onSuccess(String result) {
-                        Logger.d("getMusicInfo : ",result);
+//                        Log.d("getMusicInfo1:",result);
                         if(!TextUtils.isEmpty(result)){
                             try {
                                 MusicEntityList musicEntityList = GsonHelper.getGson().fromJson(result,MusicEntityList.class);
+//                                Log.d("getMusicInfo2:",musicEntityList+"");
                                 if(musicEntityList != null && musicEntityList.getSong_list().size()!= 0){
+//                                    Log.d("getMusicInfo3:",musicEntityList.getSong_list().size() +"");
                                     subscriber.onNext(musicEntityList);
                                     subscriber.onCompleted();
                                 }else{
@@ -90,7 +93,7 @@ public class IPlainRestApi implements PlainRestApi {
                         }
                     }
                     @Override
-                    public void onFail(Exception e) {
+                    public void onError(Throwable e) {
                         subscriber.onError(e);
                     }
                 });

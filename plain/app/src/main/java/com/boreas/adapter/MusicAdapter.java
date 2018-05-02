@@ -14,6 +14,7 @@ import com.boreas.base.BaseAdapter;
 import com.boreas.listener.ClickListener;
 import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.MusicEntityList;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -29,9 +30,10 @@ public class MusicAdapter<T> extends RecyclerView.Adapter<MusicAdapter.MusicView
 
     private ClickListener<T> clickListener = null;
     private List<T>  listData = null;
-
-    public MusicAdapter(MusicEntityList musicEntityList) {
+    private Context context;
+    public MusicAdapter(Context context,MusicEntityList musicEntityList) {
         this.listData = (List<T>) musicEntityList.getSong_list();
+        this.context = context;
     }
 
     @Override
@@ -43,13 +45,19 @@ public class MusicAdapter<T> extends RecyclerView.Adapter<MusicAdapter.MusicView
 
     @Override
     public void onBindViewHolder(MusicAdapter.MusicViewHolder holder, int position) {
-
-        T t = listData.get(position);
+        MusicEntityList.SongListBean bean = (MusicEntityList.SongListBean) listData.get(position);
+        holder.cardView.setBackgroundColor(0);
+        Glide.with(context)
+                .load(bean.getPic_small())
+                .asBitmap()
+                .into(holder.imageIcon);
+        holder.musicName.setText(bean.getAuthor()+"");
+        holder.soundName.setText(bean.getAlbum_title());
         if(clickListener != null){
             holder.cardView.setOnClickListener(
-                    v -> clickListener.onItemClick(holder.cardView,position,t));
+                    v -> clickListener.onItemClick(holder.cardView,position,listData.get(position)));
             holder.cardView.setOnLongClickListener(v -> {
-                clickListener.onItemLongClick(holder.cardView,position,t);
+                clickListener.onItemLongClick(holder.cardView,position,listData.get(position));
                 return false;
             });
         }

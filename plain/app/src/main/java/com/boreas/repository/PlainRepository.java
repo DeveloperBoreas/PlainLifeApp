@@ -1,5 +1,7 @@
 package com.boreas.repository;
 
+import android.app.Activity;
+
 import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.MusicEntityList;
 import com.boreas.model.entity.PicEntity;
@@ -24,7 +26,7 @@ public interface PlainRepository {
     /**
      * 获取音乐列表
      */
-    Observable<MusicEntityList> getMusicInfo(int type);
+    Observable<MusicEntityList> getMusicInfo(Activity activity,int type);
 
     /**
      * 获取图片

@@ -3,6 +3,7 @@ package com.boreas.ui.fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
@@ -35,6 +36,7 @@ import com.boreas.ui.recycle.OffsetDecoration;
 import com.boreas.utils.GsonHelper;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+import com.yalantis.taurus.PullToRefreshView;
 
 import javax.inject.Inject;
 
@@ -70,8 +72,10 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
     };
 
     @Override
-    public View initView(LayoutInflater inflater, ViewGroup container) {
+    public View initView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_music, container, false);
+        binding.pullToRefresh.setOnRefreshListener(onRefreshListener);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
         binding.fragmentMusicRecycle.setLayoutManager(linearLayoutManager);
         binding.fragmentMusicRecycle.setHasFixedSize(false);
@@ -87,6 +91,9 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         initPresenter();
         return binding.getRoot();
     }
+    private PullToRefreshView.OnRefreshListener onRefreshListener = () -> {
+        presenter.getMusicList(this,Constants.MusicType.HOT_MUSIC_LIST);
+    };
 
     @Override
     public void onResume() {
@@ -135,17 +142,18 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     @Override
     public void lazyFetchData() {
-        presenter.getMusicList(Constants.MusicType.HOT_MUSIC_LIST);
+        presenter.getMusicList(this,Constants.MusicType.HOT_MUSIC_LIST);
     }
 
     @Override
     public void getData(MusicEntityList musicEntityList) {
+        binding.pullToRefresh.setRefreshing(false);
         if (musicEntityList == null) {
             return;
         }
         try {
             iMusicPlayerService.action(MUSIC_ACTION_INIT, GsonHelper.getGson().toJson(musicEntityList));
-            MusicAdapter adapter = new MusicAdapter<MusicEntityList.SongListBean>(musicEntityList);
+            MusicAdapter adapter = new MusicAdapter<MusicEntityList.SongListBean>(getContext(),musicEntityList);
             adapter.setOnClickListener(this);
             binding.fragmentMusicRecycle.setAdapter(adapter);
         } catch (RemoteException e) {
@@ -160,14 +168,14 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         Glide.with(getActivity())
                 .load(musicBean.getPic_small())
                 .into(binding.musicmsgIcon);
-        binding.musicmsgName.setText(musicBean.getAlbum_title());
-
+        binding.musicmsgName.setText(musicBean.getAlbum_title()+"");
+        binding.musicmsgSingername.setText(musicBean.getAuthor()+"");
         //并且1秒播放歌曲
-//        try {
-//            iMusicPlayerService.action(MUSIC_ACTION_PLAY, GsonHelper.getGson().toJson(bean));
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            iMusicPlayerService.action(MUSIC_ACTION_PLAY, GsonHelper.getGson().toJson(bean));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         //点击bottom栏  跳转到歌词界面
         binding.musicmsgBottom.setOnClickListener(v -> {
 //            Intent intent = new Intent(getContext(),null);

@@ -17,6 +17,10 @@
             android:icon="@drawable/weather"
             android:title="天气" />
         <item
+            android:id="@+id/nav_amap"
+            android:icon="@drawable/weather"
+            android:title="地图" />
+        <item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_menu_share"
             android:title="Share" />

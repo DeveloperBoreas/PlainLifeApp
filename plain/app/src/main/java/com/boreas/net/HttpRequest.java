@@ -81,7 +81,7 @@ public class HttpRequest {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String res = response.body().string();
-                System.out.println("-------------- onResponse res : " + res);
+                System.out.println("-------------- onResponse : " + res);
                 cb.onSuccess(res);
             }
         });

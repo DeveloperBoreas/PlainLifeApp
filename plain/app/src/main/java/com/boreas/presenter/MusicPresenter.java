@@ -1,8 +1,13 @@
 package com.boreas.presenter;
 
+import android.support.v4.app.Fragment;
+import android.util.Log;
+
 import com.boreas.api.ApiService;
 import com.boreas.interactor.Music;
 import com.boreas.model.entity.MusicEntity;
+import com.boreas.model.entity.MusicEntityList;
+import com.boreas.net.NetUtil;
 import com.boreas.utils.GsonHelper;
 import com.orhanobut.logger.Logger;
 
@@ -43,14 +48,15 @@ public class MusicPresenter implements PresenterContract.Presenter {
 
     }
 
-    public void getMusicList(int type){
+    public void getMusicList(Fragment fragment, int type){
         music.setType(type);
+        music.setActivity(fragment);
         music.execute(new MusicSubcriber());
     }
 
 
 
-    private class MusicSubcriber extends Subscriber<MusicEntity>{
+    private class MusicSubcriber extends Subscriber<MusicEntityList>{
 
         @Override
         public void onCompleted() {
@@ -63,9 +69,9 @@ public class MusicPresenter implements PresenterContract.Presenter {
         }
 
         @Override
-        public void onNext(MusicEntity musicEntity) {
-            Logger.d("音乐数据 musicEntity : " + GsonHelper.getGson().toJson(musicEntity));
-            //musicView.getData(musicEntity);
+        public void onNext(MusicEntityList musicEntityList) {
+//            Logger.d("音乐数据 musicEntity : " + GsonHelper.getGson().toJson(musicEntityList));
+            musicView.getData(musicEntityList);
         }
     }
 }

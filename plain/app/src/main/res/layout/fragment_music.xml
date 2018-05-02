@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
-        android:id="@+id/music_refresh_layout"
+    <com.yalantis.taurus.PullToRefreshView
+        android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -33,13 +34,13 @@
                     android:layout_weight="1.8">
 
                     <ImageView
-                        android:src="@mipmap/placeholder_disk_210"
                         android:id="@+id/musicmsg_icon"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_marginLeft="3dp"
                         android:layout_gravity="center"
-                        android:elevation="5dp" />
+                        android:layout_marginLeft="3dp"
+                        android:elevation="5dp"
+                        android:src="@mipmap/placeholder_disk_210" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -51,39 +52,42 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
                         android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:orientation="vertical"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center"
+                            android:layout_weight="1"
                             android:gravity="center"
-                            android:layout_height="match_parent">
+                            android:orientation="vertical">
+
                             <TextView
-                                android:layout_marginTop="3dp"
                                 android:id="@+id/musicmsg_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
+                                android:layout_marginTop="3dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="20dp"
-                                android:textSize="14sp"
-                                android:text="自由飞翔" />
+                                android:text="自由飞翔"
+                                android:textSize="14sp" />
+
                             <TextView
-                                android:layout_marginTop="3dp"
                                 android:id="@+id/musicmsg_singername"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
+                                android:layout_marginTop="3dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="20dp"
-                                android:textSize="14sp"
-                                android:text="王秀清" />
+                                android:text="王秀清"
+                                android:textSize="14sp" />
                         </LinearLayout>
+
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -125,17 +129,17 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
+                        android:layout_weight="1"
                         android:maxHeight="3dp"
                         android:minHeight="2dp"
-                        android:layout_weight="1"
+                        android:progressDrawable="@drawable/player_seekbar"
                         android:thumb="@null"
                         android:thumbOffset="0dp"
-                        android:progressDrawable="@drawable/player_seekbar"
                         android:visibility="visible" />
 
                 </LinearLayout>
             </android.support.v7.widget.LinearLayoutCompat>
         </LinearLayout>
 
-    </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
+    </com.yalantis.taurus.PullToRefreshView>
 </layout>

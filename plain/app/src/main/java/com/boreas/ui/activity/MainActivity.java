@@ -41,6 +41,7 @@ import com.boreas.di.modules.MainModule;
 import com.boreas.presenter.MainPresenter;
 import com.boreas.presenter.PresenterContract;
 import com.boreas.service.MusicService;
+import com.boreas.ui.fragment.AMapFragment;
 import com.boreas.ui.fragment.MusicFragment;
 import com.boreas.ui.fragment.PicFragment;
 import com.boreas.ui.notification.MusicNotification;
@@ -59,7 +60,7 @@ import static com.boreas.Constants.REQUEST_PERMISSIONS;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         PresenterContract.MainView {
-    
+
     private static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
     private NavHeaderMainBinding navHeadBinding;
@@ -95,57 +96,18 @@ public class MainActivity extends BaseActivity
             @Override
             public void success() {
                 System.out.printf("成功");
-                Log.d(TAG,"成功");
-                    mLocationOption = new AMapLocationClientOption();
-                    mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-                    mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-                    mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
-                    mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Device_Sensors);
-                    mLocationOption.setOnceLocation(false);
-                    mLocationOption.setOnceLocationLatest(true);
-                    mLocationOption.setInterval(5000);
-                    mLocationOption.setNeedAddress(true);
-                    mLocationOption.setMockEnable(true);
-                    mLocationOption.setHttpTimeOut(10000);
-                    mLocationOption.setLocationCacheEnable(false);
-
-
-                    mLocationClient = new AMapLocationClient(getApplicationContext());
-                    mLocationClient.setLocationListener(new AMapLocationListener() {
-                        @Override
-                        public void onLocationChanged(AMapLocation aMapLocation) {
-                            if (aMapLocation != null) {
-                                if (aMapLocation.getErrorCode() == 0) {
-                                    Logger.d("定位:" + aMapLocation.getAddress());
-//可在其中解析amapLocation获取相应内容。
-                                }else {
-                                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                                    Log.e("AmapError","location Error, ErrCode:"
-                                            + aMapLocation.getErrorCode() + ", errInfo:"
-                                            + aMapLocation.getErrorInfo());
-                                }
-                            }
-
-                        }
-                    });
-
-                    if(null != mLocationClient){
-                        mLocationClient.setLocationOption(mLocationOption);
-                        //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-                        mLocationClient.stopLocation();
-                        mLocationClient.startLocation();
-                    }
-
+                initLocation();
             }
 
             @Override
             public void fail() {
                 //失败
                 System.out.printf("失败");
-                Log.d(TAG,"失败");
+                Log.d(TAG, "失败");
             }
         });
     }
+
 
 
     private void initPresenter() {
@@ -175,7 +137,9 @@ public class MainActivity extends BaseActivity
         binding.fab.setVisibility(View.INVISIBLE);
     }
 
-    /**Service**/
+    /**
+     * Service
+     **/
 
     public IMusicPlayer getMusicPlayerService() {
         return mMusicPlayerService;
@@ -200,7 +164,10 @@ public class MainActivity extends BaseActivity
             Logger.d("onServiceConnected   Service 连接失败！");
         }
     };
-    /**Service**/
+
+    /**
+     * Service
+     **/
 
     @Override
     protected void onStart() {
@@ -251,7 +218,7 @@ public class MainActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
-        if(mServiceConnection != null){
+        if (mServiceConnection != null) {
             unbindService(mServiceConnection);
             mServiceConnection = null;
             linkSuccess = false;
@@ -298,7 +265,9 @@ public class MainActivity extends BaseActivity
             this.switchFragment(Constants.PIC);
         } else if (id == R.id.nav_weather) {
             this.switchFragment(Constants.WEATHER);
-        } else if (id == R.id.nav_share) {
+        }else if(id == R.id.nav_amap){
+            this.switchFragment(Constants.AMAP);
+        }else if (id == R.id.nav_share) {
             this.switchFragment(Constants.SHARE);
         } else if (id == R.id.nav_send) {
         }
@@ -325,7 +294,10 @@ public class MainActivity extends BaseActivity
                 foundFragment = new MusicFragment();
             } else if (name.equals(Constants.PIC)) {
                 foundFragment = new PicFragment();
-            } else {
+            } else if(name.equals(Constants.WEATHER)){
+
+            }else if(name.equals(Constants.AMAP)){
+                foundFragment = new AMapFragment();
             }
         }
         if (foundFragment == null) {
@@ -339,4 +311,42 @@ public class MainActivity extends BaseActivity
         currentFragmentTag = name;
     }
 
+    private void initLocation(){
+        mLocationOption = new AMapLocationClientOption();
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Device_Sensors);
+        mLocationOption.setOnceLocation(true);
+        mLocationOption.setOnceLocationLatest(true);
+        mLocationOption.setInterval(5000);
+        mLocationOption.setNeedAddress(true);
+        mLocationOption.setMockEnable(true);
+        mLocationOption.setHttpTimeOut(10000);
+        mLocationOption.setLocationCacheEnable(false);
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        mLocationClient.setLocationListener(aMapLocationListener);
+
+        if (null != mLocationClient) {
+            mLocationClient.setLocationOption(mLocationOption);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+        }
+    }
+
+    private AMapLocationListener aMapLocationListener = new AMapLocationListener() {
+        @Override
+        public void onLocationChanged(AMapLocation aMapLocation) {
+            if (aMapLocation != null) {
+                if (aMapLocation.getErrorCode() == 0) {
+                    Logger.d("定位:" + aMapLocation.getAddress());
+                } else {
+                    Log.e("AmapError", "location Error, ErrCode:"
+                            + aMapLocation.getErrorCode() + ", errInfo:"
+                            + aMapLocation.getErrorInfo());
+                }
+            }
+        }
+    };
 }

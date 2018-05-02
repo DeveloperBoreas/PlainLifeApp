@@ -31,7 +31,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return initView(inflater,container);
+        return initView(inflater,container,savedInstanceState);
     }
 
     private void lazyFetchDataIfPrepared() {
@@ -68,7 +68,7 @@ public abstract class BaseFragment extends Fragment {
      *  初始化布局
      * @return RootView
      */
-    public abstract View initView(LayoutInflater inflater,ViewGroup container);
+    public abstract View initView(LayoutInflater inflater,ViewGroup container,Bundle bundle);
 
     /**
      *  延迟获取数据

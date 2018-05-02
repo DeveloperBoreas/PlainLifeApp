@@ -59,7 +59,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.4'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
     compile 'org.glassfish:javax.annotation:10.0-b28'// 添加java 注解库
-
+    compile 'com.github.yalantis:taurus:1.0.2'
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'
 
@@ -71,7 +71,7 @@ dependencies {
 
     //高德地图
 //    compile 'com.amap.api:3dmap:latest.integration'
-//    compile 'com.amap.api:navi-3dmap:latest.integration'
+    compile 'com.amap.api:navi-3dmap:latest.integration'
 //    compile 'com.amap.api:search:latest.integration'
     compile 'com.amap.api:location:latest.integration'
 

@@ -1,5 +1,7 @@
 package com.boreas.net;
 
+import android.app.Activity;
+
 import com.boreas.model.entity.MusicEntityList;
 
 import rx.Observable;
@@ -24,5 +26,5 @@ public interface PlainRestApi {
      * 音乐列表信息
      * @return
      */
-    Observable<MusicEntityList> getMusicInfo(int type);
+    Observable<MusicEntityList> getMusicInfo(Activity activity,int type);
 }

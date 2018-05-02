@@ -1,5 +1,7 @@
 package com.boreas.repository;
 
+import android.app.Activity;
+
 import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.MusicEntityList;
 import com.boreas.model.entity.PicEntity;
@@ -31,8 +33,8 @@ public class PlainDataRepository implements PlainRepository {
     }
     /**获取音乐**/
     @Override
-    public Observable<MusicEntityList> getMusicInfo(int type) {
-        return iPlainRestApi.getMusicInfo(type);
+    public Observable<MusicEntityList> getMusicInfo(Activity activity,int type) {
+        return iPlainRestApi.getMusicInfo(activity,type);
     }
 
     /**

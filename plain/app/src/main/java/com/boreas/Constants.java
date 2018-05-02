@@ -16,6 +16,7 @@ public class Constants {
     public static final String MUSIC = "MUSIC";
     public static final String PIC = "PIC";
     public static final String WEATHER = "WEATHER";
+    public static final String AMAP = "AMAP";
     public static final String SHARE = "SHARE";
 
 
