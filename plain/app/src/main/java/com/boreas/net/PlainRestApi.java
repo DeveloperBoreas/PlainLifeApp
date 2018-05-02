@@ -1,6 +1,6 @@
 package com.boreas.net;
 
-import com.boreas.model.entity.MusicEntity;
+import com.boreas.model.entity.MusicEntityList;
 
 import rx.Observable;
 
@@ -24,5 +24,5 @@ public interface PlainRestApi {
      * 音乐列表信息
      * @return
      */
-    Observable<MusicEntity> getMusicInfo(int type);
+    Observable<MusicEntityList> getMusicInfo(int type);
 }

@@ -29,17 +29,16 @@ public class Constants {
 
 
     public static class MusicType{
-        // 3=欧美  5=内地  6=港台  16=韩国  17=日本  18=民谣  19=摇滚  23=销量  26=热歌
-        //中文取名
-        public static final int OUM_EI = 3;
-        public static final int NEI_DI = 5;
-        public static final int GUANG_TAI = 6;
-        public static final int HAN_GUO = 16;
-        public static final int RI_BEN = 17;
-        public static final int MIN_YAO = 18;
-        public static final int YAO_GUN = 19;
-        public static final int XIAO_LIANG = 23;
-        public static final int RE_GE = 26;
+        public static final int  NEW_MUSIC_LIST = 1;//新歌榜
+        public static final int  HOT_MUSIC_LIST = 2;//热歌榜
+        public static final int  YAOGUN_MUSIC_LIST = 11;//摇滚榜
+        public static final int  JUESHI_MUSIC_LIST = 12;//爵士
+        public static final int  LIUXING_MUSIC_LIST = 16;//流行
+        public static final int  OUMEI_MUSIC_LIST = 21;//欧美金曲榜
+        public static final int  JINGDIAN_MUSIC_LIST = 22;//经典老歌榜
+        public static final int  QINGGE_MUSIC_LIST = 23;//情歌对唱榜
+        public static final int  YINGSHI_MUSIC_LIST = 24;//影视金曲榜
+        public static final int  NET_MUSIC_LIST = 25;//网络歌曲榜
 
     }
 }

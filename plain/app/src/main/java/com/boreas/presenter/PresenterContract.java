@@ -33,8 +33,8 @@ public interface PresenterContract {
     interface MainView{
 
     }
-    interface MusicView{
-        void getData(MusicEntity musicEntity);
+    interface MusicView<T>{
+        void getData(T t);
     }
     interface PicView{
         void getPicList(List<PicEntity.Pic> list);

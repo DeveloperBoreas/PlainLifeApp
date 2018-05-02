@@ -13,6 +13,7 @@ import com.boreas.R;
 import com.boreas.base.BaseAdapter;
 import com.boreas.listener.ClickListener;
 import com.boreas.model.entity.MusicEntity;
+import com.boreas.model.entity.MusicEntityList;
 
 import java.util.List;
 
@@ -24,13 +25,13 @@ import java.util.List;
  * @author boreas
  */
 
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
+public class MusicAdapter<T> extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
 
-    private ClickListener<MusicEntity.MusicBean> clickListener = null;
-    private List<MusicEntity.MusicBean>  listData = null;
+    private ClickListener<T> clickListener = null;
+    private List<T>  listData = null;
 
-    public MusicAdapter(MusicEntity musicEntity) {
-        this.listData = musicEntity.getMusicList();
+    public MusicAdapter(MusicEntityList musicEntityList) {
+        this.listData = (List<T>) musicEntityList.getSong_list();
     }
 
     @Override
@@ -41,8 +42,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     }
 
     @Override
-    public void onBindViewHolder(MusicViewHolder holder, int position) {
-        MusicEntity.MusicBean t = listData.get(position);
+    public void onBindViewHolder(MusicAdapter.MusicViewHolder holder, int position) {
+
+        T t = listData.get(position);
         if(clickListener != null){
             holder.cardView.setOnClickListener(
                     v -> clickListener.onItemClick(holder.cardView,position,t));
@@ -76,7 +78,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     }
 
 
-    public MusicAdapter setOnClickListener(ClickListener<MusicEntity.MusicBean> clickListener){
+    public MusicAdapter setOnClickListener(ClickListener<T> clickListener){
         this.clickListener = clickListener;
         return this;
     }

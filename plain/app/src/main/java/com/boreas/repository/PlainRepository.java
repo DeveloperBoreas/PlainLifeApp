@@ -1,6 +1,7 @@
 package com.boreas.repository;
 
 import com.boreas.model.entity.MusicEntity;
+import com.boreas.model.entity.MusicEntityList;
 import com.boreas.model.entity.PicEntity;
 
 import rx.Observable;
@@ -23,7 +24,7 @@ public interface PlainRepository {
     /**
      * 获取音乐列表
      */
-    Observable<MusicEntity> getMusicInfo(int type);
+    Observable<MusicEntityList> getMusicInfo(int type);
 
     /**
      * 获取图片

@@ -59,6 +59,11 @@ public class PicEntity {
         private String picType;
         private String picId;
 
+        public Pic(String picTitle, String picUrl) {
+            this.picTitle = picTitle;
+            this.picUrl = picUrl;
+        }
+
         public int getId() {
             return id;
         }

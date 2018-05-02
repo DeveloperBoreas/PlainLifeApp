@@ -45,7 +45,10 @@ public class PicAdapter extends RecyclerView.Adapter<PicAdapter.MusicViewHolder>
     @Override
     public void onBindViewHolder(MusicViewHolder holder, int position) {
         PicEntity.Pic pic = listData.get(position);
-        Glide.with(context).load(pic.getPicUrl()).asBitmap().into(holder.imagePic);
+        Glide.with(context)
+                .load(pic.getPicUrl())
+                .asBitmap()
+                .into(holder.imagePic);
         if(clickListener != null){
             holder.cardView.setOnClickListener(
                     v -> clickListener.onItemClick(holder.cardView,position,pic));

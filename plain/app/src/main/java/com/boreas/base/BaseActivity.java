@@ -1,6 +1,7 @@
 package com.boreas.base;
 
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;

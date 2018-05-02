@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.boreas.IMusicPlayer;
 import com.boreas.IMusicPlayerListener;
 import com.boreas.model.entity.MusicEntity;
+import com.boreas.model.entity.MusicEntityList;
 import com.boreas.utils.GsonHelper;
 import com.orhanobut.logger.Logger;
 
@@ -66,7 +67,7 @@ public class MusicService extends Service  implements
     private MediaPlayer mMediaPlayer;
     private RemoteCallbackList<IMusicPlayerListener> remoteCallbackList = new RemoteCallbackList<>();
     private Timer mTimer;
-    private ArrayList<MusicEntity.MusicBean> mSong_list = new ArrayList<>();
+    private ArrayList<MusicEntityList.SongListBean> mSong_list = new ArrayList<>();
     private int currentPosition;
     @Override
     public void onCreate() {
@@ -169,10 +170,10 @@ public class MusicService extends Service  implements
             return;
         }
         Logger.d("--------MusicService initSongData------- "+datum);
-        MusicEntity musicEntity = GsonHelper.getGson().fromJson(datum, MusicEntity.class);
+        MusicEntityList musicEntityList = GsonHelper.getGson().fromJson(datum, MusicEntityList.class);
         currentPosition = 0;
         mSong_list.clear();
-        mSong_list.addAll(musicEntity.getMusicList());
+        mSong_list.addAll(musicEntityList.getSong_list());
     }
 
     /******************************************************************/
@@ -284,13 +285,13 @@ public class MusicService extends Service  implements
             return;
         }
         Logger.d("--------MusicService initSongData------- "+itemBean);
-        MusicEntity.MusicBean bean = GsonHelper.getGson().fromJson(itemBean,MusicEntity.MusicBean.class);
+        MusicEntityList.SongListBean bean = GsonHelper.getGson().fromJson(itemBean,MusicEntityList.SongListBean.class);
         for (int i = 0; i < mSong_list.size(); i++) {
-            MusicEntity.MusicBean tempBean = mSong_list.get(i);
-            if(tempBean.getSongid() == bean.getSongid()){
-                currentPosition = mSong_list.indexOf(bean);
-                break;
-            }
+            MusicEntityList.SongListBean tempBean = mSong_list.get(i);
+//            if(tempBean.getSongid() == bean.getSongid()){
+//                currentPosition = mSong_list.indexOf(bean);
+//                break;
+//            }
         }
         play();
     }
@@ -299,16 +300,17 @@ public class MusicService extends Service  implements
      * 待修改
      */
     private void play() {
-        MusicEntity.MusicBean musicBean = mSong_list.get(currentPosition);
+        MusicEntityList.SongListBean musicBean = mSong_list.get(currentPosition);
         if(musicBean == null){
-            MusicEntity.MusicBean lastMusicBean = mSong_list.get(mSong_list.size()-1);
+            MusicEntityList.SongListBean lastMusicBean = mSong_list.get(mSong_list.size()-1);
             currentPosition = mSong_list.size()-1;
             onStartPlay();
-            playSong(lastMusicBean.getUrl());
+            playSong(lastMusicBean.getAlbum_500_500());
             return;
-        }else if (musicBean != null && musicBean.getUrl() != null){
+        }else if (musicBean != null && musicBean.getAlbum_500_500()!= null){
             onStartPlay();
-            playSong(musicBean.getUrl());
+            playSong(musicBean.getAlbum_500_500());
+            // TODO: 2018/4/28   待修改播放地址
         }else {
             Toast.makeText(MusicService.this, "Music playback error", Toast.LENGTH_LONG).show();
         }

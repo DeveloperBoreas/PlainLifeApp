@@ -26,6 +26,7 @@ import com.boreas.di.modules.MusicFragmentModule;
 import com.boreas.listener.ClickListener;
 import com.boreas.listener.SeekBarChangeListener;
 import com.boreas.model.entity.MusicEntity;
+import com.boreas.model.entity.MusicEntityList;
 import com.boreas.presenter.MusicPresenter;
 import com.boreas.presenter.PresenterContract;
 import com.boreas.service.MusicService;
@@ -51,7 +52,7 @@ import static com.boreas.service.MusicService.MUSIC_ACTION_PREVIOUS;
  */
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class MusicFragment extends BaseFragment implements PresenterContract.MusicView, ClickListener<MusicEntity.MusicBean>,
+public class MusicFragment extends BaseFragment implements PresenterContract.MusicView<MusicEntityList>, ClickListener<MusicEntityList.SongListBean>,
         View.OnClickListener {
 
     private FragmentMusicBinding binding = null;
@@ -134,40 +135,39 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     @Override
     public void lazyFetchData() {
-        presenter.getMusicList(Constants.MusicType.NEI_DI);
+        presenter.getMusicList(Constants.MusicType.HOT_MUSIC_LIST);
     }
 
     @Override
-    public void getData(MusicEntity musicEntity) {
-        if (musicEntity == null) {
+    public void getData(MusicEntityList musicEntityList) {
+        if (musicEntityList == null) {
             return;
         }
         try {
-            iMusicPlayerService.action(MUSIC_ACTION_INIT, GsonHelper.getGson().toJson(musicEntity));
-            MusicAdapter adapter = new MusicAdapter(musicEntity);
+            iMusicPlayerService.action(MUSIC_ACTION_INIT, GsonHelper.getGson().toJson(musicEntityList));
+            MusicAdapter adapter = new MusicAdapter<MusicEntityList.SongListBean>(musicEntityList);
             adapter.setOnClickListener(this);
             binding.fragmentMusicRecycle.setAdapter(adapter);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
     }
 
 
     @Override
-    public void onItemClick(View itemView, int position, MusicEntity.MusicBean bean) {
-        MusicEntity.MusicBean musicBean = bean;
+    public void onItemClick(View itemView, int position, MusicEntityList.SongListBean bean) {
+        MusicEntityList.SongListBean musicBean = bean;
         Glide.with(getActivity())
-                .load(musicBean.getAlbumpic_small())
+                .load(musicBean.getPic_small())
                 .into(binding.musicmsgIcon);
-        binding.musicmsgName.setText(musicBean.getSongname());
+        binding.musicmsgName.setText(musicBean.getAlbum_title());
 
         //并且1秒播放歌曲
-        try {
-            iMusicPlayerService.action(MUSIC_ACTION_PLAY, GsonHelper.getGson().toJson(bean));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            iMusicPlayerService.action(MUSIC_ACTION_PLAY, GsonHelper.getGson().toJson(bean));
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
         //点击bottom栏  跳转到歌词界面
         binding.musicmsgBottom.setOnClickListener(v -> {
 //            Intent intent = new Intent(getContext(),null);
@@ -176,7 +176,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
     }
 
     @Override
-    public void onItemLongClick(View itemView, int position, MusicEntity.MusicBean musicBean) {
+    public void onItemLongClick(View itemView, int position, MusicEntityList.SongListBean musicBean) {
     }
 
 
