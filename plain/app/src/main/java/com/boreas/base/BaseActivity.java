@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.android.tu.loadingdialog.LoadingDailog;
 import com.boreas.presenter.PresenterContract;
 
 /**
@@ -25,6 +26,8 @@ public class BaseActivity extends AppCompatActivity implements PresenterContract
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
+
+    private LoadingDailog dialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -44,11 +47,18 @@ public class BaseActivity extends AppCompatActivity implements PresenterContract
 
     @Override
     public void showLoading() {
-
+        LoadingDailog.Builder loadBuilder=new LoadingDailog.Builder(this)
+                .setMessage("加载中...")
+                .setCancelable(true)
+                .setCancelOutside(true);
+        dialog = loadBuilder.create();
+        dialog.show();
     }
 
     @Override
     public void dismissLoading() {
-
+        if(dialog != null){
+            dialog.dismiss();
+        }
     }
 }

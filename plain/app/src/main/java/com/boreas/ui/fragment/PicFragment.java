@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.boreas.R;
 import com.boreas.adapter.PicAdapter;
+import com.boreas.base.BaseActivity;
 import com.boreas.base.BaseFragment;
 import com.boreas.databinding.FragmentPicBinding;
 import com.boreas.di.componects.DaggerPicFragmentComponent;
@@ -63,11 +64,13 @@ public class PicFragment extends BaseFragment implements PresenterContract.PicVi
 
     @Override
     public void lazyFetchData() {
+        ((BaseActivity)getActivity()).showLoading();
         presenter.getPicList();
     }
 
     @Override
     public void getPicList(List<PicEntity.Pic> list) {
+        ((BaseActivity)getActivity()).dismissLoading();
         Logger.d("-------pic -------------- :" +list.size());
         Log.e("-----------","pic list:" + list.size());
         PicAdapter adapter = new PicAdapter(getContext(),list);

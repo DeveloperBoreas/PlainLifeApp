@@ -1,7 +1,6 @@
 package com.boreas.ui.activity;
 
 
-import android.Manifest;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -41,7 +40,6 @@ import com.boreas.di.modules.MainModule;
 import com.boreas.presenter.MainPresenter;
 import com.boreas.presenter.PresenterContract;
 import com.boreas.service.MusicService;
-import com.boreas.ui.fragment.AMapFragment;
 import com.boreas.ui.fragment.MusicFragment;
 import com.boreas.ui.fragment.PicFragment;
 import com.boreas.ui.notification.MusicNotification;
@@ -265,8 +263,6 @@ public class MainActivity extends BaseActivity
             this.switchFragment(Constants.PIC);
         } else if (id == R.id.nav_weather) {
             this.switchFragment(Constants.WEATHER);
-        }else if(id == R.id.nav_amap){
-            this.switchFragment(Constants.AMAP);
         }else if (id == R.id.nav_share) {
             this.switchFragment(Constants.SHARE);
         } else if (id == R.id.nav_send) {
@@ -296,8 +292,6 @@ public class MainActivity extends BaseActivity
                 foundFragment = new PicFragment();
             } else if(name.equals(Constants.WEATHER)){
 
-            }else if(name.equals(Constants.AMAP)){
-                foundFragment = new AMapFragment();
             }
         }
         if (foundFragment == null) {

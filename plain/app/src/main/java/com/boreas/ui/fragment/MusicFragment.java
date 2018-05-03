@@ -20,6 +20,7 @@ import com.boreas.IMusicPlayer;
 import com.boreas.IMusicPlayerListener;
 import com.boreas.R;
 import com.boreas.adapter.MusicAdapter;
+import com.boreas.base.BaseActivity;
 import com.boreas.base.BaseFragment;
 import com.boreas.databinding.FragmentMusicBinding;
 import com.boreas.di.componects.DaggerMusicFragmentComponent;
@@ -142,11 +143,13 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     @Override
     public void lazyFetchData() {
+        ((BaseActivity)getActivity()).showLoading();
         presenter.getMusicList(this,Constants.MusicType.HOT_MUSIC_LIST);
     }
 
     @Override
     public void getData(MusicEntityList musicEntityList) {
+        ((BaseActivity)getActivity()).dismissLoading();
         binding.pullToRefresh.setRefreshing(false);
         if (musicEntityList == null) {
             return;

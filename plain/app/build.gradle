@@ -71,9 +71,11 @@ dependencies {
 
     //高德地图
 //    compile 'com.amap.api:3dmap:latest.integration'
-    compile 'com.amap.api:navi-3dmap:latest.integration'
+//    compile 'com.amap.api:navi-3dmap:latest.integration'
 //    compile 'com.amap.api:search:latest.integration'
     compile 'com.amap.api:location:latest.integration'
-
+    //6.0 权限
     compile'com.lyf:yflibrary:1.0.2'
+    //loading Dialog
+    compile 'com.github.gittjy:LoadingDialog:1.0.2'
 }
