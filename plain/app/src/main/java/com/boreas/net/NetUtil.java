@@ -75,6 +75,10 @@ public class NetUtil {
         mcall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
+                if(context == null){
+                    netCallBack.onError(e);
+                    return;
+                }
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -87,13 +91,12 @@ public class NetUtil {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String str = response.body().string();
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("aaaa",str+"");
-                        netCallBack.onSuccess(str);
-                        Toast.makeText(context, "请求成功", Toast.LENGTH_SHORT).show();
-                    }
+                if(context == null){
+                    netCallBack.onSuccess(str);
+                    return;
+                }
+                context.runOnUiThread(() -> {
+                    netCallBack.onSuccess(str);
                 });
             }
         });

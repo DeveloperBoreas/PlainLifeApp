@@ -1,6 +1,5 @@
 package com.boreas.ui.fragment;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import com.boreas.di.componects.DaggerMusicFragmentComponent;
 import com.boreas.di.modules.MusicFragmentModule;
 import com.boreas.listener.ClickListener;
 import com.boreas.listener.SeekBarChangeListener;
-import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.MusicEntityList;
 import com.boreas.presenter.MusicPresenter;
 import com.boreas.presenter.PresenterContract;
@@ -93,6 +91,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         return binding.getRoot();
     }
     private PullToRefreshView.OnRefreshListener onRefreshListener = () -> {
+        ((BaseActivity)getActivity()).showLoading();
         presenter.getMusicList(this,Constants.MusicType.HOT_MUSIC_LIST);
     };
 
@@ -163,17 +162,16 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
             e.printStackTrace();
         }
     }
-
+    private void setViewData(MusicEntityList.SongListBean bean){
+        Glide.with(getActivity())
+                .load(bean.getPic_small())
+                .into(binding.musicmsgIcon);
+        binding.musicmsgName.setText(bean.getAlbum_title()+"");
+        binding.musicmsgSingername.setText(bean.getAuthor()+"");
+    }
 
     @Override
     public void onItemClick(View itemView, int position, MusicEntityList.SongListBean bean) {
-        MusicEntityList.SongListBean musicBean = bean;
-        Glide.with(getActivity())
-                .load(musicBean.getPic_small())
-                .into(binding.musicmsgIcon);
-        binding.musicmsgName.setText(musicBean.getAlbum_title()+"");
-        binding.musicmsgSingername.setText(musicBean.getAuthor()+"");
-        //并且1秒播放歌曲
         try {
             iMusicPlayerService.action(MUSIC_ACTION_PLAY, GsonHelper.getGson().toJson(bean));
         } catch (RemoteException e) {
@@ -185,6 +183,8 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 //            startActivity(intent);
         });
     }
+
+
 
     @Override
     public void onItemLongClick(View itemView, int position, MusicEntityList.SongListBean musicBean) {
@@ -216,19 +216,22 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         int totalDuration = msg.arg2;
         binding.musicmsgSeekbar.setMax(totalDuration);
         binding.musicmsgSeekbar.setProgress(currentPosition);
+        try{
+            MusicEntityList.SongListBean musicBean = (MusicEntityList.SongListBean) iMusicPlayerService.getCurrentSongInfo().obj;
+            this.setViewData(musicBean);
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
     }
 
     private void onPlay() {
         try {
-            MusicEntity.MusicBean musicBean = (MusicEntity.MusicBean) iMusicPlayerService.getCurrentSongInfo().obj;
+            MusicEntityList.SongListBean musicBean = (MusicEntityList.SongListBean) iMusicPlayerService.getCurrentSongInfo().obj;
             if (musicBean == null) {
                 return;
             }
+            this.setViewData(musicBean);
             binding.startandpause.setImageResource(R.mipmap.playbar_btn_pause);
-            Glide.with(getContext()).load(musicBean.getAlbumpic_small())
-                    .into(binding.musicmsgIcon);
-            binding.musicmsgName.setText(musicBean.getSongname());
-            binding.musicmsgSingername.setText(musicBean.getSingername());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -261,6 +264,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     private void onPayBtnPress() {
         try {
+            Logger.d("MusicService.MUSIC_CURRENT_ACTION : "+MusicService.MUSIC_CURRENT_ACTION);
             switch (MusicService.MUSIC_CURRENT_ACTION) {
                 case MusicService.MUSIC_ACTION_PLAY:
                     iMusicPlayerService.action(MusicService.MUSIC_ACTION_PAUSE, "");
@@ -279,4 +283,6 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         }
 
     }
+
+
 }

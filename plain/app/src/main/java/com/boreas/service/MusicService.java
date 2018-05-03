@@ -23,10 +23,14 @@ import com.boreas.IMusicPlayer;
 import com.boreas.IMusicPlayerListener;
 import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.MusicEntityList;
+import com.boreas.model.entity.MusicInfo;
+import com.boreas.net.NetUtil;
 import com.boreas.utils.GsonHelper;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -73,11 +77,9 @@ public class MusicService extends Service  implements
     private RemoteCallbackList<IMusicPlayerListener> remoteCallbackList = new RemoteCallbackList<>();
     private Timer mTimer;
     private ArrayList<MusicEntityList.SongListBean> mSong_list = new ArrayList<>();
-    private int currentPosition;
+    private int currentPosition = 0;
+    private String play_url = null;
 
-    //地图定位
-    public AMapLocationClient mLocationClient = null;
-    public AMapLocationClientOption mLocationOption = null;
     @Override
     public void onCreate() {
         mMediaPlayer = new MediaPlayer();
@@ -119,6 +121,7 @@ public class MusicService extends Service  implements
         public Message getCurrentSongInfo() throws RemoteException {
             Message msg = Message.obtain();
             if (mSong_list != null && mSong_list.size() > 0) {
+                Logger.d("getCurrentSongInfo :", currentPosition);
                 msg.obj = mSong_list.get(currentPosition);
             }
             return msg;
@@ -153,7 +156,7 @@ public class MusicService extends Service  implements
                 seekPlaySong(Integer.parseInt(datum));
                 break;
             case MUSIC_ACTION_PLAY:
-                onActionPlay(datum);//原来的初始化位置
+                onActionPlay(datum);
                 break;
             case MUSIC_ACTION_CONTINUE_PLAY: //暂停位置继续播放
                 continuePlaySong();
@@ -178,7 +181,6 @@ public class MusicService extends Service  implements
         if (TextUtils.isEmpty(datum)) {
             return;
         }
-        Logger.d("--------MusicService initSongData------- "+datum);
         MusicEntityList musicEntityList = GsonHelper.getGson().fromJson(datum, MusicEntityList.class);
         currentPosition = 0;
         mSong_list.clear();
@@ -293,15 +295,15 @@ public class MusicService extends Service  implements
             play();
             return;
         }
-        Logger.d("--------MusicService initSongData------- "+itemBean);
         MusicEntityList.SongListBean bean = GsonHelper.getGson().fromJson(itemBean,MusicEntityList.SongListBean.class);
         for (int i = 0; i < mSong_list.size(); i++) {
             MusicEntityList.SongListBean tempBean = mSong_list.get(i);
-//            if(tempBean.getSongid() == bean.getSongid()){
-//                currentPosition = mSong_list.indexOf(bean);
-//                break;
-//            }
+            if(tempBean.getSong_id().equals(bean.getSong_id())){
+                currentPosition = mSong_list.indexOf(tempBean);
+                break;
+            }
         }
+//        Logger.d("--------MusicService onActionPlay------- "+itemBean +"\t currentPosition :" + currentPosition);
         play();
     }
 
@@ -309,6 +311,9 @@ public class MusicService extends Service  implements
      * 待修改
      */
     private void play() {
+        if(currentPosition < 0){
+            currentPosition = 0;
+        }
         MusicEntityList.SongListBean musicBean = mSong_list.get(currentPosition);
         if(musicBean == null){
             MusicEntityList.SongListBean lastMusicBean = mSong_list.get(mSong_list.size()-1);
@@ -318,13 +323,40 @@ public class MusicService extends Service  implements
             return;
         }else if (musicBean != null && musicBean.getAlbum_500_500()!= null){
             onStartPlay();
-            playSong(musicBean.getAlbum_500_500());
+            //播放音乐地址
+            this.getCurrentPlayUrlForSongId(musicBean.getSong_id());
             // TODO: 2018/4/28   待修改播放地址
         }else {
             Toast.makeText(MusicService.this, "Music playback error", Toast.LENGTH_LONG).show();
         }
     }
+    /**
+     * 根据歌曲id查询到歌曲播放信息
+     * http://tingapi.ting.baidu.com/v1/restserver/ting?format=json&callback=&from=webapp_music&method=baidu.ting.song.play&songid={0}
+     */
+    private void getCurrentPlayUrlForSongId(String song_id){
+        if(null != song_id && !("".equals(song_id))){
+            String url = "http://tingapi.ting.baidu.com/v1/restserver/ting?format=json&callback=&from=webapp_music&method=baidu.ting.song.play&songid=" + song_id;
+            Log.d(TAG,"单首歌曲的url:" +url);
+            NetUtil.requestForGet(null, url, null, new NetUtil.NetCallBack() {
+                @Override
+                public void onError(Throwable message) {
+                    Logger.d("请求单曲音乐的播放地址错误. 错误原因:" + message.getMessage());
+                }
 
+                @Override
+                public void onSuccess(String str) {
+                    str = str.replace("(","").replace(");","");
+                    Logger.d("getCurrentPlayUrlForSongId :               "+str);
+                    MusicInfo musicInfo = GsonHelper.getGson().fromJson(str,MusicInfo.class);
+                    if(musicInfo != null){
+                        play_url = musicInfo.getBitrate().getShow_link();
+                        playSong(play_url);
+                    }
+                }
+            });
+        }
+    }
     private void onPaying() {
         int currentPosition = mMediaPlayer.getCurrentPosition();
         int totalDuration = mMediaPlayer.getDuration();
@@ -400,7 +432,7 @@ public class MusicService extends Service  implements
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Toast.makeText(this, "播放失败", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "播放失败", Toast.LENGTH_LONG).show();
         return true;
     }
 
@@ -420,10 +452,5 @@ public class MusicService extends Service  implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mLocationClient != null){
-            mLocationClient.onDestroy();
-            mLocationClient = null;
-
-        }
     }
 }

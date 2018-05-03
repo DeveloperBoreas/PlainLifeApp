@@ -5,10 +5,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import com.boreas.Constants;
@@ -16,6 +19,7 @@ import com.boreas.IMusicPlayer;
 import com.boreas.IMusicPlayerListener;
 import com.boreas.R;
 import com.boreas.model.entity.MusicEntity;
+import com.boreas.model.entity.MusicEntityList;
 import com.boreas.receiver.NotificationReceiver;
 import com.boreas.service.MusicService;
 import com.boreas.ui.activity.MainActivity;
@@ -98,10 +102,10 @@ public class MusicNotification {
      */
     private Notification createNotification(Context context, IMusicPlayer mMusicPlayerService) {
         try {
-            MusicEntity.MusicBean musicBean = (MusicEntity.MusicBean) mMusicPlayerService.getCurrentSongInfo().obj;
-//            if (musicBean == null) {
-//                return null;
-//            }
+            MusicEntityList.SongListBean musicBean = (MusicEntityList.SongListBean) mMusicPlayerService.getCurrentSongInfo().obj;
+            if (musicBean == null) {
+                return null;
+            }
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent openPendingIntent =PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             RemoteViews remoteView = createRemoteView(context);
@@ -123,8 +127,8 @@ public class MusicNotification {
             NotificationTarget notificationTarget = new NotificationTarget
                     (context, remoteView, R.id.iv_icon, notification, 0);
             Glide.with(context).
-//                    load(musicBean.getAlbumpic_small()).
-                    load("http://i.gtimg.cn/music/photo/mid_album_90/X/p/002Z4QxC1mBPXp.jpg").
+                    load(musicBean.getPic_small()).
+//                    load("http://i.gtimg.cn/music/photo/mid_album_90/X/p/002Z4QxC1mBPXp.jpg").
                     asBitmap().
                     error(R.mipmap.placeholder_disk_210).
                     into(notificationTarget);
@@ -142,15 +146,14 @@ public class MusicNotification {
 
 
     public RemoteViews createRemoteView(Context context) throws RemoteException {
-        final MusicEntity.MusicBean musicBean = (MusicEntity.MusicBean) mMusicPlayerService.getCurrentSongInfo().obj;
-//        if (musicBean == null) {
-//            return null;
-//        }
+        MusicEntityList.SongListBean musicBean = (MusicEntityList.SongListBean) mMusicPlayerService.getCurrentSongInfo().obj;
+        if (musicBean == null) {
+            return null;
+        }
+
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_music);
-//        remoteViews.setTextViewText(R.id.tv_title, musicBean.getSongname());
-//        remoteViews.setTextViewText(R.id.tv_content, musicBean.getSingername());
-        remoteViews.setTextViewText(R.id.tv_title,"光明");
-        remoteViews.setTextViewText(R.id.tv_content,"汪峰");
+        remoteViews.setTextViewText(R.id.tv_title, musicBean.getTitle());
+        remoteViews.setTextViewText(R.id.tv_content, musicBean.getAuthor());
 
 //        1. 2. play and pause
         if (MusicService.MUSIC_CURRENT_ACTION == MUSIC_ACTION_PLAY) {

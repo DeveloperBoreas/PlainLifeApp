@@ -72,13 +72,10 @@ public class IPlainRestApi implements PlainRestApi {
                 NetUtil.requestForGet(activity,url,null, new NetUtil.NetCallBack() {
                     @Override
                     public void onSuccess(String result) {
-//                        Log.d("getMusicInfo1:",result);
                         if(!TextUtils.isEmpty(result)){
                             try {
                                 MusicEntityList musicEntityList = GsonHelper.getGson().fromJson(result,MusicEntityList.class);
-//                                Log.d("getMusicInfo2:",musicEntityList+"");
                                 if(musicEntityList != null && musicEntityList.getSong_list().size()!= 0){
-//                                    Log.d("getMusicInfo3:",musicEntityList.getSong_list().size() +"");
                                     subscriber.onNext(musicEntityList);
                                     subscriber.onCompleted();
                                 }else{
@@ -127,9 +124,7 @@ public class IPlainRestApi implements PlainRestApi {
         });
     }
 
-    /**
-     * 获取手机图片
-     */
+
     private void getPicList(Subscriber subscriber){
         try {
             Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,null,null,null,null);

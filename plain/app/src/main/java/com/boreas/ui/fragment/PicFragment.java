@@ -43,7 +43,7 @@ public class PicFragment extends BaseFragment implements PresenterContract.PicVi
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic,container,false);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         binding.fragmentPicRecycle.setLayoutManager(layoutManager);
         binding.fragmentPicRecycle.setHasFixedSize(false);
         binding.fragmentPicRecycle.removeItemDecoration(decoration);
