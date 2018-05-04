@@ -1,12 +1,16 @@
 package com.boreas.ui.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,10 +22,12 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 
 import com.amap.api.location.AMapLocation;
@@ -34,6 +40,7 @@ import com.boreas.IMusicPlayer;
 import com.boreas.R;
 import com.boreas.base.BaseActivity;
 import com.boreas.databinding.ActivityMainBinding;
+import com.boreas.databinding.ChooseHeadImgBinding;
 import com.boreas.databinding.NavHeaderMainBinding;
 import com.boreas.di.componects.DaggerMainComponent;
 import com.boreas.di.modules.MainModule;
@@ -57,7 +64,7 @@ import static com.boreas.Constants.REQUEST_PERMISSIONS;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        PresenterContract.MainView {
+        PresenterContract.MainView,View.OnClickListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
@@ -72,11 +79,16 @@ public class MainActivity extends BaseActivity
     public static MainActivity main;
     @Inject
     MainPresenter presenter;
-    //地图定位
+
     public AMapLocationClient mLocationClient = null;
     public AMapLocationClientOption mLocationOption = null;
+    private AlertDialog alertDialog;
 
+    private static final int CHOOSE_PICTURE = 3333;
+    private static final int TAKE_PICTURE = 7777;
+    private static final int CROP_SMALL_PICTURE = 8888;
 
+    private Uri tempImgUri = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,11 +130,7 @@ public class MainActivity extends BaseActivity
 
     private void initView() {
         setSupportActionBar(binding.toolbar);
-        binding.fab.setOnClickListener(
-                view ->
-                        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null)
-                                .show());
+        binding.fab.setOnClickListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         this.binding.drawerLayout.addDrawerListener(toggle);
@@ -131,6 +139,9 @@ public class MainActivity extends BaseActivity
         switchFragment(Constants.MUSIC);
         View headView = binding.navView.getHeaderView(0);
         navHeadBinding = DataBindingUtil.bind(headView);
+        navHeadBinding.navHeadImageView.setOnClickListener(this);
+        navHeadBinding.navHeadAuthor.setOnClickListener(this);
+        navHeadBinding.navHeadMotto.setOnClickListener(this);
         bindService();
         binding.fab.setVisibility(View.INVISIBLE);
     }
@@ -343,4 +354,88 @@ public class MainActivity extends BaseActivity
             }
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab:
+                break;
+            case R.id.nav_head_author:
+                break;
+            case R.id.nav_head_imageView:
+                showChooseHeadImgDialog();
+                break;
+            case R.id.nav_head_motto:
+                break;
+        }
+    }
+
+    private void showChooseHeadImgDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View headImgView = View.inflate(this,R.layout.choose_head_img,null);
+        ChooseHeadImgBinding chooseHeadImgBinding = DataBindingUtil.bind(headImgView);
+        chooseHeadImgBinding.takePicture.setOnClickListener(view->{
+
+        });
+        chooseHeadImgBinding.photoAlbum.setOnClickListener(view->{
+            Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            openAlbumIntent.setType("image/*");
+            startActivityForResult(openAlbumIntent,CHOOSE_PICTURE);
+        });
+        chooseHeadImgBinding.cancel.setOnClickListener(view->{
+            if(alertDialog != null){
+                if(alertDialog.isShowing()){
+                    alertDialog.dismiss();
+                    alertDialog = null;
+                }
+            }
+        });
+        builder.setCancelable(true);
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            switch (requestCode){
+                case CHOOSE_PICTURE:
+                    chooseImaes(tempImgUri);
+                    break;
+                case TAKE_PICTURE:
+                    chooseImaes(data.getData());
+                    break;
+                case CROP_SMALL_PICTURE:
+                    if(data != null) {
+                        setImageToView(data);
+                    }
+                    break;
+            }
+
+        }
+    }
+
+    private void setImageToView(Intent data) {
+        Bundle extras = data.getExtras();
+        if(extras != null){
+            Bitmap bitmap = extras.getParcelable("");
+        }
+    }
+
+    private void chooseImaes(Uri uri) {
+        if(uri == null){
+            Log.d(TAG,"tempImgUri 地址为空");
+        }
+        tempImgUri = uri;
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri,"image/*");
+        intent.putExtra("crop","true");
+        intent.putExtra("aspetX",1);
+        intent.putExtra("aspectY",1);
+        intent.putExtra("outputX",150);
+        intent.putExtra("outputY",150);
+        intent.putExtra("return-data",true);
+        startActivityForResult(intent,CROP_SMALL_PICTURE);
+    }
 }
