@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
         }
     }
     buildTypes {
@@ -75,7 +75,7 @@ dependencies {
 //    compile 'com.amap.api:search:latest.integration'
     compile 'com.amap.api:location:latest.integration'
     //6.0 权限
-    compile'com.lyf:yflibrary:1.0.2'
+    compile 'com.lyf:yflibrary:1.0.2'
     //loading Dialog
     compile 'com.github.gittjy:LoadingDialog:1.0.2'
 }

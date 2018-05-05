@@ -259,6 +259,7 @@ public class MainActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            showChooseHeadImgDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -378,9 +379,9 @@ public class MainActivity extends BaseActivity
 
         });
         chooseHeadImgBinding.photoAlbum.setOnClickListener(view->{
-            Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            openAlbumIntent.setType("image/*");
-            startActivityForResult(openAlbumIntent,CHOOSE_PICTURE);
+            Intent intent = new Intent(this,ChoosePicsActivity.class);
+            startActivityForResult(intent,CHOOSE_PICTURE);
+            this.alertDialog.dismiss();
         });
         chooseHeadImgBinding.cancel.setOnClickListener(view->{
             if(alertDialog != null){
@@ -390,6 +391,7 @@ public class MainActivity extends BaseActivity
                 }
             }
         });
+        builder.setView(headImgView);
         builder.setCancelable(true);
         alertDialog = builder.create();
         alertDialog.show();
@@ -400,8 +402,8 @@ public class MainActivity extends BaseActivity
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
             switch (requestCode){
-                case CHOOSE_PICTURE:
-                    chooseImaes(tempImgUri);
+                case CHOOSE_PICTURE: //选择图片
+
                     break;
                 case TAKE_PICTURE:
                     chooseImaes(data.getData());
@@ -416,10 +418,11 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    private void setImageToView(Intent data) {
+    private void  setImageToView(Intent data) {
         Bundle extras = data.getExtras();
         if(extras != null){
             Bitmap bitmap = extras.getParcelable("");
+            this.navHeadBinding.navHeadImageView.setImageBitmap(bitmap);
         }
     }
 
