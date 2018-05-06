@@ -403,7 +403,7 @@ public class MainActivity extends BaseActivity
         if(resultCode==RESULT_OK){
             switch (requestCode){
                 case CHOOSE_PICTURE: //选择图片
-
+                    
                     break;
                 case TAKE_PICTURE:
                     chooseImaes(data.getData());

@@ -32,4 +32,9 @@ public interface PlainRepository {
      * 获取图片
      */
     Observable<PicEntity> getPicListInfo();
+
+    /**
+     * 获取Local图片
+     */
+    Observable<PicEntity.Pic> getLocalPics();
 }

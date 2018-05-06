@@ -39,4 +39,7 @@ public interface PresenterContract {
     interface PicView{
         void getPicList(List<PicEntity.Pic> list);
     }
+    interface ChooseImgsView{
+        void getLocalImgs(String key);
+    }
 }

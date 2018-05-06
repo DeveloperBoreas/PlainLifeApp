@@ -21,13 +21,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ChoosePicsActivity extends BaseActivity implements PresenterContract.PicView, ClickListener<PicEntity.Pic> {
+/**
+ * @author boreas
+ */
+public class ChoosePicsActivity extends BaseActivity implements ClickListener<PicEntity.Pic> {
+
     private ActivityChoosePicsBinding binding = null;
     protected OffsetDecoration decoration = new OffsetDecoration();
 
     @Inject
-    PicPresenter presenter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,25 +38,22 @@ public class ChoosePicsActivity extends BaseActivity implements PresenterContrac
         initView();
         initData();
     }
-
-    private void initData() {
-        presenter.getPicList();
-    }
-
     private void initView() {
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);
         binding.choosePicRecycle.setLayoutManager(layoutManager);
         binding.choosePicRecycle.setHasFixedSize(false);
         binding.choosePicRecycle.removeItemDecoration(decoration);
         binding.choosePicRecycle.addItemDecoration(decoration);
+        this.initData();
     }
-
-    @Override
-    public void getPicList(List<PicEntity.Pic> list) {
-        PicAdapter adapter = new PicAdapter(this,list);
+    private void initData(){
+        PicAdapter adapter = new PicAdapter(this,null);
         adapter.setOnClickListener(this);
         this.binding.choosePicRecycle.setAdapter(adapter);
     }
+
+
+
 
     @Override
     public void onItemClick(View itemView, int position, PicEntity.Pic pic) {
