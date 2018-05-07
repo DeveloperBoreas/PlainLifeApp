@@ -44,4 +44,14 @@ public class PlainDataRepository implements PlainRepository {
     public Observable<PicEntity> getPicListInfo() {
         return iPlainRestApi.getPicListInfo();
     }
+
+
+    /**
+     * 获取本地图片
+     * @return
+     */
+    @Override
+    public Observable<PicEntity> getLocalPics() {
+        return iPlainRestApi.getLocalPics();
+    }
 }

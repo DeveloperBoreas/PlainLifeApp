@@ -18,4 +18,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="text_19_black_white">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/text_white_black</item>
+    </style>
 </resources>

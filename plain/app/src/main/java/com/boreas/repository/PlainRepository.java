@@ -36,5 +36,5 @@ public interface PlainRepository {
     /**
      * 获取Local图片
      */
-    Observable<PicEntity.Pic> getLocalPics();
+    Observable<PicEntity> getLocalPics();
 }

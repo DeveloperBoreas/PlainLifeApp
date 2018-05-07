@@ -3,6 +3,7 @@ package com.boreas.net;
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.Context;
+import android.database.ContentObservable;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -98,6 +99,20 @@ public class IPlainRestApi implements PlainRestApi {
                 subscriber.onError(new NetworkErrorException());
             }
         }));
+    }
+
+    @Override
+    public Observable<PicEntity> getLocalPics() {
+        return Observable.create(subscriber -> {
+            if(NetWorkUtil.isNetWorkEnable(context)){
+                Cursor imageCursor = context.getContentResolver().query(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        new String[]{MediaStore.Images.Media.DATA,MediaStore.Images.Media._ID},
+                        null,null,MediaStore.Images.Media._ID);
+            }else{
+                subscriber.onError(new NetworkErrorException());
+            }
+        });
     }
 
     public Observable<PicEntity> getPicListInfo(){

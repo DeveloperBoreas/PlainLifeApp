@@ -3,6 +3,7 @@ package com.boreas.net;
 import android.app.Activity;
 
 import com.boreas.model.entity.MusicEntityList;
+import com.boreas.model.entity.PicEntity;
 
 import rx.Observable;
 
@@ -27,4 +28,6 @@ public interface PlainRestApi {
      * @return
      */
     Observable<MusicEntityList> getMusicInfo(Activity activity,int type);
+
+    Observable<PicEntity> getLocalPics();
 }
