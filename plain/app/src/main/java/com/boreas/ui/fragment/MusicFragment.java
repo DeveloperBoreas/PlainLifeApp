@@ -32,10 +32,10 @@ import com.boreas.presenter.PresenterContract;
 import com.boreas.service.MusicService;
 import com.boreas.ui.activity.MainActivity;
 import com.boreas.ui.recycle.OffsetDecoration;
+import com.boreas.ui.widget.PullToRefreshView;
 import com.boreas.utils.GsonHelper;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
-import com.yalantis.taurus.PullToRefreshView;
 
 import javax.inject.Inject;
 
@@ -166,7 +166,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         Glide.with(getActivity())
                 .load(bean.getPic_small())
                 .into(binding.musicmsgIcon);
-        binding.musicmsgName.setText(bean.getAlbum_title()+"");
+        binding.musicmsgName.setText(bean.getTitle()+"");
         binding.musicmsgSingername.setText(bean.getAuthor()+"");
     }
 
