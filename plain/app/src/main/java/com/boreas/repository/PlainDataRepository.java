@@ -7,6 +7,9 @@ import com.boreas.model.entity.MusicEntityList;
 import com.boreas.model.entity.PicEntity;
 import com.boreas.net.IPlainRestApi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -51,7 +54,7 @@ public class PlainDataRepository implements PlainRepository {
      * @return
      */
     @Override
-    public Observable<PicEntity> getLocalPics() {
+    public Observable<HashMap<String,ArrayList<PicEntity.Pic>>> getLocalPics() {
         return iPlainRestApi.getLocalPics();
     }
 }

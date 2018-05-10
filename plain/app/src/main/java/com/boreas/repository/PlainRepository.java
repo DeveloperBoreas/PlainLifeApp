@@ -6,6 +6,9 @@ import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.MusicEntityList;
 import com.boreas.model.entity.PicEntity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import rx.Observable;
 
 /**
@@ -36,5 +39,5 @@ public interface PlainRepository {
     /**
      * 获取Local图片
      */
-    Observable<PicEntity> getLocalPics();
+    Observable<HashMap<String,ArrayList<PicEntity.Pic>>> getLocalPics();
 }

@@ -59,9 +59,12 @@ public class PicEntity {
         private String picType;
         private String picId;
 
-        public Pic(String picTitle, String picUrl) {
+        //处理本地图片需要的文件路径
+        public String picParentPath;
+        public Pic(String picTitle, String picUrl,String picParentPath) {
             this.picTitle = picTitle;
             this.picUrl = picUrl;
+            this.picParentPath = picParentPath;
         }
 
         public int getId() {

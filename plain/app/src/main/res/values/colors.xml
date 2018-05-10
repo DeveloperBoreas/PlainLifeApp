@@ -270,4 +270,6 @@
     <color name="crimson">#dc143c</color><!--暗深红色 -->
     <color name="plum">#dda0dd</color><!--洋李色 -->
     <color name="gainsboro">#dcdcdc</color>
+
+    <color name="content_info_corlor">#979797</color>
 </resources>

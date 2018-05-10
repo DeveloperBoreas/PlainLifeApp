@@ -27,4 +27,5 @@
 
     <string name="take_picture">拍 照</string>
     <string name="photo_album">相 册</string>
+    <string name="all_image">全部图片</string>
 </resources>

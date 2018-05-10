@@ -7,6 +7,7 @@ import com.boreas.interactor.Music;
 import com.boreas.model.entity.MusicEntity;
 import com.boreas.model.entity.PicEntity;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public interface PresenterContract {
     interface PicView{
         void getPicList(List<PicEntity.Pic> list);
     }
-    interface ChooseImgsView{
-        void getLocalImgs(String key);
+    interface ChooseImgsView<T>{
+        void getLocalImgs(T t);
     }
 }

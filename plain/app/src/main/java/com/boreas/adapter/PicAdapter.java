@@ -35,6 +35,11 @@ public class PicAdapter extends RecyclerView.Adapter<PicAdapter.MusicViewHolder>
         this.context = context;
     }
 
+    public PicAdapter setListData(List<PicEntity.Pic> list){
+        this.listData = list;
+        return this;
+    }
+
     @Override
     public MusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MusicViewHolder holder = new MusicViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pic, parent

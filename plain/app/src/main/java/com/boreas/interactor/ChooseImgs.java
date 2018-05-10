@@ -27,6 +27,6 @@ public class ChooseImgs extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return repository.getPicListInfo();
+        return repository.getLocalPics();
     }
 }

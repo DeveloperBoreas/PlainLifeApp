@@ -22,4 +22,20 @@
         <item name="android:textSize">19sp</item>
         <item name="android:textColor">@color/text_white_black</item>
     </style>
+    <style name="text_19_black">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="text_15_gray">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/content_info_corlor</item>
+    </style>
+    <!--popuwindow从底部弹出动画-->
+    <style name="popuwindow_from_bottom">
+        <item name="android:windowEnterAnimation">@anim/popu_show_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/popu_hiden_from_top</item>
+
+    </style>
+
 </resources>
