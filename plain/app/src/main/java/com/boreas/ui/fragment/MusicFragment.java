@@ -1,5 +1,7 @@
 package com.boreas.ui.fragment;
 
+import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 
 import com.boreas.Constants;
 import com.boreas.IMusicPlayer;
@@ -58,7 +61,8 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     private FragmentMusicBinding binding = null;
     protected OffsetDecoration decoration = new OffsetDecoration();
-
+    private boolean isFabOpen = false;
+    private static final int MUSIC_MENU_REQUEST = 210;
     @Inject
     MusicPresenter presenter;
 
@@ -85,7 +89,12 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         binding.next.setOnClickListener(this);
         binding.startandpause.setOnClickListener(this);
         binding.musicmsgSeekbar.setOnSeekBarChangeListener(new SeekBarChangeListener(iMusicPlayerService));
-
+        binding.musicFab.attachToRecyclerView(binding.fragmentMusicRecycle);
+        binding.musicFab.setOnClickListener(this);
+        binding.musicSearchView.setSubmitButtonEnabled(true);//720 183 903 246 1080
+        binding.masking.setOnClickListener(this);
+        binding.fabMenu.setOnClickListener(this);
+        binding.fabSearch.setOnClickListener(this);
         initDagger();
         initPresenter();
         return binding.getRoot();
@@ -254,6 +263,25 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
                 case R.id.startandpause: //开始或者暂停
                     onPayBtnPress();
                     break;
+
+                case R.id.music_fab:
+                    if(!isFabOpen){
+                        openFabMenu(binding.musicFab);
+                    }else{
+                        closeFabMenu(binding.musicFab);
+                    }
+                    break;
+                case R.id.masking:
+                    closeFabMenu(binding.musicFab);
+                    break;
+                case R.id.fab_menu:
+                    closeFabMenu(binding.musicFab);
+                    Intent intent = new Intent();
+                    startActivityForResult(intent,MUSIC_MENU_REQUEST);
+                    break;
+                case R.id.fab_search:
+                    closeFabMenu(binding.musicFab);
+                    break;
                 default:
                     break;
             }
@@ -284,5 +312,30 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     }
 
+    private void openFabMenu(View view){
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view,"rotation",0,-135,-125);
+        objectAnimator.setDuration(500);
+        objectAnimator.start();
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0,0.7f);
+        alphaAnimation.setDuration(500);
+        alphaAnimation.setFillAfter(true);
+        binding.masking.startAnimation(alphaAnimation);
+        binding.masking.setVisibility(View.VISIBLE);
+        isFabOpen = true;
+    }
+    private void closeFabMenu(View view){
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view,"rotation",-135,20,0);
+        objectAnimator.setDuration(500);
+        objectAnimator.start();
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.7f,0);
+        alphaAnimation.setDuration(500);
+        binding.masking.startAnimation(alphaAnimation);
+        binding.masking.setVisibility(View.GONE);
+        isFabOpen =false;
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        
+    }
 }

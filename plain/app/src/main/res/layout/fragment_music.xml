@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools">
 
     <com.boreas.ui.widget.PullToRefreshView
         android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <LinearLayout
             android:id="@+id/fragment_music_content"
@@ -13,11 +15,125 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_music_recycle"
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/music_searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:focusable="false"
+                app:iconifiedByDefault="false"
+                app:queryHint="请输入歌曲名:" />
+
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="9"></android.support.v7.widget.RecyclerView>
+                android:layout_weight="9">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_music_recycle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <FrameLayout
+                    android:id="@+id/masking"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="bottom|right"
+                        android:visibility="gone"
+                        android:layout_marginBottom="160dp"
+                        android:layout_marginRight="11dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="分类"
+                            android:textSize="20sp" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/menu" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fab_menu"
+                        android:layout_width="100dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginBottom="110dp"
+                        android:layout_marginRight="11dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="分类"
+
+                            android:textSize="20sp" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@mipmap/menu" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fab_search"
+                        android:layout_width="100dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginBottom="60dp"
+                        android:layout_marginRight="11dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="搜索"
+
+                            android:textSize="20sp" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@mipmap/search" />
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/music_fab"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="15dp"
+                    android:backgroundTint="@color/colorBlueGreyAccent"
+                    android:src="@android:drawable/ic_input_add"
+                    app:fab_shadow="false"
+                    app:fab_type="mini"
+                    app:rippleColor="#33728dff" />
+            </FrameLayout>
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:id="@+id/musicmsg_bottom"
@@ -139,6 +255,8 @@
 
                 </LinearLayout>
             </android.support.v7.widget.LinearLayoutCompat>
+
+
         </LinearLayout>
 
     </com.boreas.ui.widget.PullToRefreshView>

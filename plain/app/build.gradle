@@ -72,4 +72,6 @@ dependencies {
     compile 'com.lyf:yflibrary:1.0.2'
     //loading Dialog
     compile 'com.github.gittjy:LoadingDialog:1.0.2'
+    //
+    compile 'com.melnykov:floatingactionbutton:1.3.0'
 }

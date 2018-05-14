@@ -259,7 +259,7 @@ public class MainActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            showChooseHeadImgDialog();
+//            showChooseHeadImgDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -362,7 +362,7 @@ public class MainActivity extends BaseActivity
             case R.id.nav_head_author:
                 break;
             case R.id.nav_head_imageView:
-                showChooseHeadImgDialog();
+//                showChooseHeadImgDialog();
                 break;
             case R.id.nav_head_motto:
                 break;

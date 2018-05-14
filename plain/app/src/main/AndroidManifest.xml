@@ -45,7 +45,8 @@
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,7 +57,7 @@
         <service
             android:name=".service.MusicService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <receiver
             android:name=".receiver.NotificationReceiver"
@@ -70,7 +71,8 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".ui.activity.ChoosePicsActivity"></activity>
+        <activity android:name=".ui.activity.ChoosePicsActivity" />
+        <activity android:name=".ui.activity.MusicMenuActivity"></activity>
     </application>
 
 </manifest>
