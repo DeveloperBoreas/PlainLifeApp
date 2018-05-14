@@ -1,6 +1,7 @@
 package com.boreas.ui.fragment;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import com.boreas.presenter.MusicPresenter;
 import com.boreas.presenter.PresenterContract;
 import com.boreas.service.MusicService;
 import com.boreas.ui.activity.MainActivity;
+import com.boreas.ui.activity.MusicMenuActivity;
 import com.boreas.ui.recycle.OffsetDecoration;
 import com.boreas.ui.widget.PullToRefreshView;
 import com.boreas.utils.GsonHelper;
@@ -276,7 +279,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
                     break;
                 case R.id.fab_menu:
                     closeFabMenu(binding.musicFab);
-                    Intent intent = new Intent();
+                    Intent intent = new Intent(getActivity(), MusicMenuActivity.class);
                     startActivityForResult(intent,MUSIC_MENU_REQUEST);
                     break;
                 case R.id.fab_search:
@@ -336,6 +339,11 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        
+        if(requestCode == MUSIC_MENU_REQUEST){
+            if(resultCode == Activity.RESULT_OK){
+                int type = data.getIntExtra("type",2);
+                Logger.d("--------!!!!-------"+ type);
+            }
+        }
     }
 }
