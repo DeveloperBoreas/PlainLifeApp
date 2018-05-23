@@ -74,7 +74,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
     private static final int MUSIC_MENU_REQUEST = 210;
     @Inject
     MusicPresenter presenter;
-    private boolean isSearchMusic = false;
+    private boolean isSearchMusic = true;
     private IMusicPlayer iMusicPlayerService;
     IMusicPlayerListener musicPlayerListener = new IMusicPlayerListener.Stub() {
         @Override
@@ -102,8 +102,9 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         binding.musicmsgSeekbar.setOnSeekBarChangeListener(new SeekBarChangeListener(iMusicPlayerService));
         binding.musicFab.attachToRecyclerView(binding.fragmentMusicRecycle);
         binding.musicFab.setOnClickListener(this);
-        binding.musicSearchView.setSubmitButtonEnabled(true);
+        binding.musicSearchView.setSubmitButtonEnabled(false);
         binding.musicSearchView.setOnQueryTextListener(new OnQueryTextListener());
+        binding.musicSearchView.setOnCloseListener(new OnCloseListener());
         binding.masking.setOnClickListener(this);
         binding.fabMenu.setOnClickListener(this);
         binding.fabSearch.setOnClickListener(this);
@@ -116,17 +117,26 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
         return binding.getRoot();
     }
 
+    private class OnCloseListener implements SearchView.OnCloseListener{
 
+        @Override
+        public boolean onClose() {
+            Logger.d("onClose :");
+            queryLocalList.clear();
+            adapter.setData(songListBeanList);
+            adapter.notifyDataSetChanged();
+            return false;
+        }
+    }
     private class OnQueryTextListener implements SearchView.OnQueryTextListener{
 
         @Override
         public boolean onQueryTextSubmit(String query) {
-            Logger.d("onQueryTextSubmit :" + query);
             if(TextUtils.isEmpty(query)){
                 return true;
             }
             queryLocalList.clear();
-            if(!isSearchMusic){ //搜索本地
+            if(isSearchMusic){
                 for (int i = 0; i < songListBeanList.size(); i++) {
                     String title = songListBeanList.get(i).getTitle();
                     String author = songListBeanList.get(i).getAuthor();
@@ -137,6 +147,7 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
             }else{//搜索网络
 
             }
+
             adapter.setData(queryLocalList);
             adapter.notifyDataSetChanged();
             return true;
@@ -144,23 +155,23 @@ public class MusicFragment extends BaseFragment implements PresenterContract.Mus
 
         @Override
         public boolean onQueryTextChange(String query) {
-            Logger.d("onQueryTextChange :" + query);
 
-            if(TextUtils.isEmpty(query)){
-                return true;
-            }
-            if(!isSearchMusic){//搜索本地
-                songListBeanList.clear();
-                for (int i = 0; i < songListBeanList.size(); i++) {
-                    String title = songListBeanList.get(i).getTitle();
-                    String author = songListBeanList.get(i).getAuthor();
-                    if(title.contains(query) || author.contains(query)){
-                        queryLocalList.add(songListBeanList.get(i));
-                    }
-                }
-            }
-            adapter.setData(queryLocalList);
-            adapter.notifyDataSetChanged();
+//            if(TextUtils.isEmpty(query)){
+//                return true;
+//            }
+//            if(!isSearchMusic){//搜索本地
+//                songListBeanList.clear();
+//                for (int i = 0; i < songListBeanList.size(); i++) {
+//                    String title = songListBeanList.get(i).getTitle();
+//                    String author = songListBeanList.get(i).getAuthor();
+//                    if(title.contains(query) || author.contains(query)){
+//                        queryLocalList.add(songListBeanList.get(i));
+//                    }
+//                }
+//            }
+//            Logger.d("onQueryTextChange :" + queryLocalList.size());
+//            adapter.setData(queryLocalList);
+//            adapter.notifyDataSetChanged();
             return true;
         }
     }
