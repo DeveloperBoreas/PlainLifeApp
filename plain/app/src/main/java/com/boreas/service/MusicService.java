@@ -121,7 +121,7 @@ public class MusicService extends Service  implements
         public Message getCurrentSongInfo() throws RemoteException {
             Message msg = Message.obtain();
             if (mSong_list != null && mSong_list.size() > 0) {
-                Logger.d("getCurrentSongInfo :", currentPosition);
+//                Logger.d("getCurrentSongInfo :", currentPosition);
                 msg.obj = mSong_list.get(currentPosition);
             }
             return msg;

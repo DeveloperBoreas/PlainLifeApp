@@ -31,9 +31,20 @@ public class MusicAdapter<T> extends RecyclerView.Adapter<MusicAdapter.MusicView
     private ClickListener<T> clickListener = null;
     private List<T>  listData = null;
     private Context context;
-    public MusicAdapter(Context context,MusicEntityList musicEntityList) {
-        this.listData = (List<T>) musicEntityList.getSong_list();
+    public MusicAdapter(Context context) {
         this.context = context;
+    }
+    public MusicAdapter<T> setData(MusicEntityList musicEntityList){
+        this.listData = (List<T>) musicEntityList.getSong_list();
+        return this;
+    }
+    public MusicAdapter<T> setData(List<T> songListBeanList){
+        this.listData = songListBeanList;
+        return this;
+    }
+    public MusicAdapter clearData(){
+        this.listData.clear();
+        return this;
     }
 
     @Override
@@ -52,7 +63,7 @@ public class MusicAdapter<T> extends RecyclerView.Adapter<MusicAdapter.MusicView
                 .asBitmap()
                 .into(holder.imageIcon);
         holder.musicName.setText(bean.getAuthor()+"");
-        holder.soundName.setText(bean.getAlbum_title());
+        holder.soundName.setText(bean.getTitle());
         if(clickListener != null){
             holder.cardView.setOnClickListener(
                     v -> clickListener.onItemClick(holder.cardView,position,listData.get(position)));

@@ -2,21 +2,30 @@ package com.boreas.ui.activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.adapters.TextViewBindingAdapter;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.boreas.Constants;
 import com.boreas.R;
 import com.boreas.base.BaseActivity;
 import com.boreas.databinding.ActivityMusicMenuBinding;
+import com.bumptech.glide.Glide;
+
+import java.util.logging.Logger;
 
 public class MusicMenuActivity extends BaseActivity {
 
     private ActivityMusicMenuBinding binding;
     private String[] names = {"新歌", "热歌", "摇滚", "爵士", "流行", "欧美金曲", "经典老歌", "情歌对唱", "影视金曲", "网络歌曲"};
-
+    private Integer[] icons = {R.drawable.airplane};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,15 +35,46 @@ public class MusicMenuActivity extends BaseActivity {
     }
 
     private void initView() {
-        ArrayAdapter<String> simpleAdapter = new ArrayAdapter<String>(this, android.R.layout.activity_list_item,android.R.id.text1,names);
-        this.binding.musicMenuList.setAdapter(simpleAdapter);
+        MusicMenuAdapter dapter = new MusicMenuAdapter();
+        this.binding.musicMenuList.setAdapter(dapter);
         this.binding.musicMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ArrayAdapter<String> adapter = (ArrayAdapter<String>) parent.getAdapter();
-                handlerOnTouch(adapter.getItem(position));
+                BaseAdapter adapter = (BaseAdapter) parent.getAdapter();
+                handlerOnTouch(String.valueOf(adapter.getItem(position)));
             }
         });
+    }
+    private class MusicMenuAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return names.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return names[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = LayoutInflater.from(MusicMenuActivity.this).inflate(R.layout.item_music,parent,false);
+            ImageView  imageView = convertView.findViewById(R.id.music_icon);
+            convertView.findViewById(R.id.music_soundname).setVisibility(View.GONE);
+            TextView name = convertView.findViewById(R.id.music_name);
+            Glide.with(MusicMenuActivity.this)
+                    .load("")
+                    .asBitmap()
+                    .into(imageView);
+            name.setText(names[position]);
+            return convertView;
+        }
     }
 
     private void handlerOnTouch(String item) {
