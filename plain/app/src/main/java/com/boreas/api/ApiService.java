@@ -12,9 +12,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
 
-/**
- * 通过retrofit + RxJava 进行网络封装
- */
 public interface ApiService {
     /**
      * 获取音乐列表json串
