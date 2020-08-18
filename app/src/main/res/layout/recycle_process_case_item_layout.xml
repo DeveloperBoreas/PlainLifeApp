@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="331dp"
+            android:layout_height="105dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="7dp"
+            android:background="@drawable/item_case_item_bg_gradient_shape">
+
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="17dp"
+                android:src="@mipmap/e_jiantou_case_item"
+                app:layout_constraintStart_toEndOf="@id/tv_case_name"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_case_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="14dp"
+                android:text="0310入室抢劫案"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_case_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="7dp"
+                android:text="已领取"
+                android:textColor="@color/light2_blue"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_return_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="4dp"
+                android:text="创建时间：2020.04.08  18:30"
+                android:textColor="#A5D5FF"
+                android:textSize="11sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_case_name" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_case_equip_imglist"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_return_time" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    <data>
+
+    </data>
+</layout>

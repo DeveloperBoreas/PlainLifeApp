@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">装备管理</string>
+    <!--首页底部Tab-->
+    <string name="main_index">首页</string>
+    <string name="main_equip">装备库</string>
+    <string name="main_personal_center">个人中心</string>
+    <!--Login-->
+    <string name="login_title">欢迎进入装备管理</string>
+    <string name="login_userName_hit">登录名</string>
+    <string name="login_userPsd_hit">密码</string>
+    <string name="login_regist">注册</string>
+    <string name="login_guset">忘记密码</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_three_rf_d">三射频设备</string>
+    <string name="login_text">登陆</string>
+    <string name="login_face">刷脸登录</string>
+    <string name="join">进入</string>
+    <string name="login_keeper">库管人员</string>
+    <string name="login_operator">操作人员</string>
+    <string name="main_equip_add">添加</string>
+    <string name="totalText">合计</string>
+    <string name="submit">提交</string>
+    <string name="delete">删除</string>
+    <string name="submitsure">确定提交</string>
+    <string name="applying">申请原因</string>
+    <string name="submitapply">提交申请</string>
+    <string name="switcher">请选择</string>
+    <string name="applyingreason">申请理由</string>
+    <string name="applyingreason_hit">至少30个汉字</string>
+    <string name="maintenance_appling">维修申请</string>
+    <string name="scrap_hit">报废申请</string>
+    <string name="detection_hit">检测申请</string>
+    <string name="stockremoval_hit">出库申请</string>
+    <string name="pan_hit">盘库申请</string>
+    <string name="cancle">取消</string>
+    <string name="submitsuccess">提交成功</string>
+    <string name="backindex">返回首页</string>
+    <string name="lookrecord">查看记录</string>
+    <string name="my_todo">我的待办</string>
+    <string name="my_deal">我的操作</string>
+    <string name="my_appling">我的申请</string>
+    <string name="my_task">我的任务</string>
+    <string name="dispseTodo">处理待办</string>
+    <string name="my_message">我的消息</string>
+    <string name="my_operation">我的操作</string>
+    <string name="my_record">我的记录</string>
+    <string name="turndown">驳回</string>
+    <string name="turndown_cause">驳回原因</string>
+    <string name="agree">同意</string>
+    <string name="sure">确定</string>
+    <string name="join_shopping">加入购物车</string>
+    <string name="appling">立即申请</string>
+    <string name="devicedesc">装备详情</string>
+    <string name="device_num">装备编号</string>
+    <string name="device_location">装备位置</string>
+    <string name="device_category">装备分类</string>
+    <string name="device_statu">装备状态</string>
+    <string name="device_simple_title">设备简介</string>
+    <string name="repeal_appling">撤销申请</string>
+    <string name="press_sb">催办</string>
+    <string name="message">消息</string>
+    <string name="read_all_message">一键已读</string>
+    <string name="login_activity_exiting">再按一次退出程序</string>
+    <string name="press_sb_apply">催办申请</string>
+    <string name="settings">设置</string>
+    <string name="case_name">案件名称</string>
+    <string name="task_name">任务名称</string>
+    <string name="history_case">历史任务</string>
+    <string name="processing_case">在办任务</string>
+
+</resources>

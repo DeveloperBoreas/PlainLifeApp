@@ -1,0 +1,3 @@
+rootProject.name='EquipMent'
+include ':app', ':camera', ':imagepicker'
+include ':commonlib'

@@ -1,0 +1,11 @@
+/.gradle/
+/.idea/
+/EquipMent.iml
+/local.properties
+/gradle/
+commonlib/build
+commonlib/commonlib.iml
+imagepicker/build
+imagepicker/imagepicker.iml
+camera/build
+camera/camera.iml

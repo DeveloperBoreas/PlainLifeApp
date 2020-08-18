@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#44E7FF</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="light_white">#FFF4F4</color>
+    <color name="lightblack">#333333</color>
+    <color name="deep_blue">#E60B3A83</color>
+    <color name="light_blue">#E6355CB4</color>
+
+    <!-- 底部导航栏的选中、未选中的颜色. -->
+    <color name="tab_checked">#ff2a80c0</color>
+    <color name="tab_unchecked">#ff666666</color>
+    <color name="light_gray">#C3C3C5</color>
+    <color name="light1_gray">#E8E8E8</color>
+    <color name="light2_gray">#D1D1D1</color>
+    <color name="light3_gray">#C7C7C7</color>
+
+    <color name="hint_color">#999999</color>
+
+
+    <color name="light_yellow">#E7DE78</color>
+    <color name="light1_yellow">#FFE7DE78</color>
+    <color name="light2_yellow">#80E7DE78</color>
+
+    <color name="light2_blue">#12E4F9</color>
+    <color name="light3_blue">#08F2FB</color>
+    <color name="light4_blue">#26009EF0</color>
+    <color name="light5_blue">#81BDE7</color>
+    <color name="light6_blue">#A2C6DF</color>
+    <color name="light7_blue">#13B4FF</color>
+    <color name="light8_blue">#50ADFF</color>
+    <color name="light9_blue">#45E4FF</color>
+    <color name="light10_blue">#50ABFF</color>
+    <color name="light11_blue">#44E7FF</color>
+    <color name="light12_blue">#A4CCEC</color>
+    <color name="light13_blue">#095277</color>
+    <color name="light14_blue">#4988D7</color>
+    <color name="light15_blue">#AED7F5</color>
+    <color name="light16_blue">#660673CB</color>
+    <color name="light17_blue">#115CA8</color>
+    <color name="light18_blue">#8081BDE7</color>
+    <color name="light19_blue">#477BA8</color>
+    <color name="light20_blue">#80B2CBE2</color>
+    <color name="light21_blue">#FF08F2FB</color>
+    <color name="light22_blue">#DAF0FC</color>
+    <color name="light23_blue">#21FFF7</color>
+    <color name="light24_blue">#A5D5FF</color>
+    <color name="light25_blue">#094870</color>
+    <color name="light26_blue">#3E9DFF</color>
+    <color name="light27_blue">#93C8F0</color>
+    <color name="light28_blue">#538FBC</color>
+    <color name="light29_blue">#8081BDE7</color>
+
+    <color name="purple">#8276DC</color>
+    <color name="light1_purple">#808FFF</color>
+    <color name="light2_purple">#4064D3</color>
+    <color name="light3_purple">#660B408E</color>
+    <color name="light4_purple">#66496BD7</color>
+    <color name="light5_purple">#527CFF</color>
+    <color name="light6_purple">#6094FE</color>
+
+
+
+    <color name="ratingbar_text_color">#A5D5FF</color>
+    <color name="more_blue">#A5D5FF</color>
+    <color name="tablayout_selected_text">#12E4F9</color>
+
+    <color name="light1_white">#E9FBFF</color>
+    <color name="light2_white">#FFFEFE</color>
+
+    <color name="yellow_count">#E5FA58</color>
+    <color name="yellow_counts_2">#FAE958</color>
+    <color name="yellow_counts_3">#F8D42E</color>
+    <color name="yellow_counts_4">#FF9F02</color>
+    <color name="yellow_counts_5">#F6872F</color>
+
+
+
+
+
+    <color name="red">#FF3232</color>
+
+
+
+
+</resources>
+
+

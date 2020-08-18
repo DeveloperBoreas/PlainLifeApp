@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/background"
+        tools:context=".mvp.views.activitys.DisposeTodoActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_margin="14dp"
+            app:layout_constraintTop_toBottomOf="@+id/headLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shopping_parent_item_shape">
+
+            <ImageView
+                android:id="@+id/personIcon"
+                android:layout_width="31.33dp"
+                android:layout_height="31.33dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/statu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:text="2020.02.06"
+                android:textColor="@color/light2_gray"
+                android:textSize="11sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/personIcon" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:text="20200978入室抢劫"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toRightOf="@+id/personIcon"
+                app:layout_constraintTop_toTopOf="@+id/personIcon" />
+
+            <TextView
+                android:id="@+id/proposer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:text="申请人 ： 李国良"
+                android:textColor="@color/light15_blue"
+                android:textSize="11sp"
+                app:layout_constraintLeft_toRightOf="@+id/personIcon"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/proposer" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/headLayout"
+            layout="@layout/head_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="47dp">
+            <Button
+                android:id="@+id/trunDown"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:textSize="16sp"
+                android:text="@string/turndown"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_blue_bg_selected_shape"
+                android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/agree"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:textSize="16sp"
+                android:text="@string/agree"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_yellow_bg_selected_shape"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+    </data>
+
+</layout>

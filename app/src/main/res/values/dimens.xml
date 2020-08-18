@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="main_bottomNavigtion_height">49dp</dimen>
+    <dimen name="main_bottomNavigtion_height_10">59dp</dimen>
+    <dimen name="main_bottomNavigtion_height_20">69dp</dimen>
+    <dimen name="main_bottomNavigtion_height_50">50dp</dimen>
+
+    <dimen name="video_title_textsize">5sp</dimen>
+    <dimen name="video_start_size">25dp</dimen>
+
+</resources>

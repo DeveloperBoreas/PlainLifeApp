@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="57dp">
+
+        <ImageView
+            android:id="@+id/iv_equip_img"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_line" />
+
+        <TextView
+            android:id="@+id/tv_equip_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="20dp"
+            android:text="外带设备"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintStart_toEndOf="@id/iv_equip_img"
+            app:layout_constraintTop_toBottomOf="@id/v_line" />
+
+        <TextView
+            android:id="@+id/tv_equip_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="5dp"
+            android:text="货架位置：一架3列"
+            android:textColor="@color/light15_blue"
+            android:textSize="11sp"
+            app:layout_constraintStart_toEndOf="@id/iv_equip_img"
+            app:layout_constraintTop_toBottomOf="@id/tv_equip_name" />
+
+        <TextView
+            android:id="@+id/deviceStatus"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="19dp"
+            android:background="@drawable/record_status_shape"
+            android:gravity="center"
+            android:text="驳回"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@id/tv_equip_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_return"
+            android:layout_width="78dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/return_btn__shape"
+            android:gravity="center"
+            android:text="立即归还"
+            android:visibility="gone"
+            android:textColor="@color/light27_blue"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@color/light29_blue"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_equip_position">
+
+            <com.xwzx.equipmanager.widget.mIndicator.IndicatorSeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isb_indicator_content_layout="@layout/custom_layout"
+                app:isb_show_indicator="custom"
+                app:isb_show_tick_marks_type="oval"
+                app:isb_show_tick_texts="true"
+                app:isb_show_time_tick_texts="true"
+                app:isb_thumb_drawable="@mipmap/e_step_circle_on"
+                app:isb_tick_marks_drawable="@drawable/selector_tick_custom"
+                app:isb_tick_texts_color="@color/selector_tick_texts_3_color"
+                app:isb_tick_texts_size="7sp"
+                app:isb_ticks_count="6"
+                app:isb_track_background_color="#538FBC"
+                app:isb_track_background_size="2dp"
+                app:isb_track_progress_color="#21FFF7"
+                app:isb_track_progress_size="2dp"
+                app:isb_user_seekable="false" />
+
+        </com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+    </data>
+</layout>

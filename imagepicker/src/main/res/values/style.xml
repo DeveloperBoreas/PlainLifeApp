@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="imageFolderAnimator">
+        <item name="android:windowEnterAnimation">@anim/dialog_slide_show</item>
+        <item name="android:windowExitAnimation">@anim/dialog_slide_dismiss</item>
+    </style>
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+    </style>
+    <style name="activityAnimation" parent="@android:style/Animation">  
+        <item name="android:activityOpenEnterAnimation">@anim/push_right_in</item>  
+        <item name="android:activityOpenExitAnimation">@anim/push_left_out</item>  
+        <item name="android:activityCloseEnterAnimation">@anim/push_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
+    </style>
+</resources>

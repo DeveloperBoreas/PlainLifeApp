@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.xwzx.equipmanager"
+        minSdkVersion 24
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+    }
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+        debug {
+
+        }
+    }
+    buildTypes {
+        release {
+            zipAlignEnabled true
+            shrinkResources true
+            crunchPngs true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    greendao {
+        schemaVersion 1         //数据库升级要+1
+        daoPackage 'com.xwzx.equipmanager.db'
+        targetGenDir 'src/main/java'
+    }
+    dataBinding {
+        enabled true
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation project(path: ':imagepicker')
+    implementation project(path: ':camera')
+    implementation project(path: ':commonlib')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //悬浮球
+    implementation 'com.github.princekin-f:EasyFloat:1.3.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //Dagger
+    implementation 'com.google.dagger:dagger:2.12'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.12'
+}

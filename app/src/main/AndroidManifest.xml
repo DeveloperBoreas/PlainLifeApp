@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    package="com.xwzx.equipmanager">
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/jz_network_security_config"
+        android:requestLegacyExternalStorage="true"
+        android:resizeableActivity="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        tool:ignore="LockedOrientationActivity"
+        android:theme="@style/AppBaseTheme">
+        <activity
+            android:name=".mvp.views.activitys.MainProcessingCaseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".mvp.views.activitys.MainHistoryCaseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.OperatorTaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.OperatorMyRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.OperatorApplyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.OperatorTaskActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".mvp.views.activitys.SlapeActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".mvp.views.activitys.MessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.Show3DActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".mvp.views.activitys.DeviceDescActivity" />
+        <activity
+            android:name=".mvp.views.activitys.DisposeTodoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.KeeperUpComingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.KeeperApplingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.SubmitApplyActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".mvp.views.activitys.SubmitApplyOperationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.SwitchRoleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.ShoppingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.KeeperMyOperationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.views.activitys.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" /> <!-- 适配华为（huawei）刘海屏 -->
+        <!--        <meta-data-->
+        <!--            android:name="notch.config"-->
+        <!--            android:value="portrait|landscape" /> &lt;!&ndash; 适配小米（xiaomi）刘海屏 &ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="android.notch_support"-->
+        <!--            android:value="true" />-->
+    </application>
+
+
+
+</manifest>

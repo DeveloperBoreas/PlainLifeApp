@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/background"
+        android:fitsSystemWindows="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/keeper"
+            android:layout_width="156dp"
+            android:layout_height="243dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="7.5dp"
+            android:layout_weight="1"
+            android:background="@mipmap/switchrole_bg">
+
+            <TextView
+                android:id="@+id/keeper_join"
+                android:layout_width="85dp"
+                android:layout_height="24dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/login_switch_join_shape"
+                android:text="@string/join"
+                android:gravity="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                style="@style/SwitchTextCommonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_keeper"
+                app:layout_constraintBottom_toTopOf="@+id/keeper_join"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/operator"
+            android:layout_width="156dp"
+            android:layout_marginLeft="7.5dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="243dp"
+            android:layout_weight="1"
+            android:background="@mipmap/switchrole_bg">
+
+            <TextView
+                android:id="@+id/operator_join"
+                android:layout_width="85dp"
+                android:layout_height="24dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/login_switch_join_shape"
+                android:text="@string/join"
+                android:gravity="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                style="@style/SwitchTextCommonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_operator"
+                app:layout_constraintBottom_toTopOf="@+id/operator_join"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <data>
+
+    </data>
+</layout>
