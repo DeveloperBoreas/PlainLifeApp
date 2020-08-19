@@ -16,7 +16,7 @@
         android:name="com.boreas.plainlife.App"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/jz_network_security_config"
         android:requestLegacyExternalStorage="true"
@@ -50,11 +50,7 @@
         <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.SlapeActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.MessageActivity"
@@ -81,7 +77,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.SwitchRoleActivity"
             android:screenOrientation="portrait" />

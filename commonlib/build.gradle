@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -71,6 +70,9 @@ dependencies {
     api 'com.github.DymanZy:EasyShow3D:1.2'
     //时间选择器
     api 'com.contrarywind:Android-PickerView:4.1.9'
+
+    //未混淆
     //RabbitMQ
     api 'com.rabbitmq:amqp-client:5.6.0'
+
 }
