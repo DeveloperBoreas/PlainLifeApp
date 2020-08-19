@@ -81,7 +81,7 @@
             android:background="@color/light29_blue"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout
+        <com.boreas.plainlife.widget.mIndicator.IndicatorStayLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
@@ -90,7 +90,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_equip_position">
 
-            <com.xwzx.equipmanager.widget.mIndicator.IndicatorSeekBar
+            <com.boreas.plainlife.widget.mIndicator.IndicatorSeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:isb_indicator_content_layout="@layout/custom_layout"
@@ -109,7 +109,7 @@
                 app:isb_track_progress_size="2dp"
                 app:isb_user_seekable="false" />
 
-        </com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout>
+        </com.boreas.plainlife.widget.mIndicator.IndicatorStayLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

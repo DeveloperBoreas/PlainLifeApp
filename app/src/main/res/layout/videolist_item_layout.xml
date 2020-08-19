@@ -5,7 +5,7 @@
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.xwzx.equipmanager.framwork.MyJzvdStd
+    <com.boreas.plainlife.framwork.MyJzvdStd
         android:id="@+id/video"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"

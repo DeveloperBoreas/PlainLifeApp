@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/navigation" />
 
-        <com.xwzx.equipmanager.widget.viewpager.ViewPagerSlide
+        <com.boreas.plainlife.widget.viewpager.ViewPagerSlide
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

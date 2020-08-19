@@ -37,7 +37,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/deviceSimpleTitle"
                     app:layout_constraintLeft_toRightOf="@+id/deviceSimpleTitle"
                     app:layout_constraintTop_toTopOf="@+id/deviceSimpleTitle" />
-                <com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout
+                <com.boreas.plainlife.widget.mIndicator.IndicatorStayLayout
                     android:id="@+id/jindu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                     android:layout_marginTop="7dp"
                     app:layout_constraintTop_toBottomOf="@+id/deviceSimpleContent">
 
-                    <com.xwzx.equipmanager.widget.mIndicator.IndicatorSeekBar
+                    <com.boreas.plainlife.widget.mIndicator.IndicatorSeekBar
                         android:id="@+id/indicatorText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                         app:isb_tick_texts_size="7sp"
                         app:isb_ticks_count="6"
                         app:isb_thumb_drawable="@mipmap/e_step_circle_on"/>
-                </com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout>
+                </com.boreas.plainlife.widget.mIndicator.IndicatorStayLayout>
 
                 <View
                     app:layout_constraintTop_toBottomOf="@+id/jindu"

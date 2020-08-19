@@ -63,7 +63,7 @@
         android:text="检测"
         />
 
-    <com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout
+    <com.boreas.plainlife.widget.mIndicator.IndicatorStayLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
@@ -71,7 +71,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_equip_position"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.xwzx.equipmanager.widget.mIndicator.IndicatorSeekBar
+        <com.boreas.plainlife.widget.mIndicator.IndicatorSeekBar
             android:id="@+id/custom_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
             app:isb_ticks_count="6"
             app:isb_thumb_drawable="@mipmap/e_step_circle_on"/>
 
-        </com.xwzx.equipmanager.widget.mIndicator.IndicatorStayLayout>
+        </com.boreas.plainlife.widget.mIndicator.IndicatorStayLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

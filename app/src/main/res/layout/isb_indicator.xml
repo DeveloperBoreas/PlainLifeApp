@@ -26,7 +26,7 @@
 
     </LinearLayout>
 
-    <com.xwzx.equipmanager.widget.mIndicator.ArrowView
+    <com.boreas.plainlife.widget.mIndicator.ArrowView
         android:id="@+id/indicator_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

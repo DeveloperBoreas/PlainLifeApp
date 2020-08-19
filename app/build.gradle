@@ -7,7 +7,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.xwzx.equipmanager"
+        applicationId "com.boreas.plainlife"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
@@ -41,7 +41,7 @@ android {
 
     greendao {
         schemaVersion 1         //数据库升级要+1
-        daoPackage 'com.xwzx.equipmanager.db'
+        daoPackage 'com.boreas.plainlife.db'
         targetGenDir 'src/main/java'
     }
     dataBinding {

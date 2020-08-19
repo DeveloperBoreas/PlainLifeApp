@@ -7,7 +7,7 @@ import android.view.Window;
 import androidx.annotation.Nullable;
 
 import com.gyf.immersionbar.ImmersionBar;
-import com.xwzx.commonlib.swipebacklayout.lib.app.SwipeBackActivity;
+import com.boreas.commonlib.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
  * BaseActivity基类

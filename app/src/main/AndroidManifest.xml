@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
-    package="com.xwzx.equipmanager">
+    package="com.boreas.plainlife">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name=".App"
+        android:name="com.boreas.plainlife.App"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/logo"
@@ -26,29 +26,29 @@
         tool:ignore="LockedOrientationActivity"
         android:theme="@style/AppBaseTheme">
         <activity
-            android:name=".mvp.views.activitys.MainProcessingCaseActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.MainProcessingCaseActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".mvp.views.activitys.MainHistoryCaseActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.MainHistoryCaseActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.SettingsActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.OperatorTaskActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorTaskActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.OperatorMyRecordActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorMyRecordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.OperatorApplyActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorApplyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.OperatorTaskActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorTaskActivity"
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".mvp.views.activitys.SlapeActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.SlapeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,42 +57,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".mvp.views.activitys.MessageActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.MessageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.Show3DActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.Show3DActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".mvp.views.activitys.DeviceDescActivity" />
+        <activity android:name="com.boreas.plainlife.mvp.views.activitys.DeviceDescActivity" />
         <activity
-            android:name=".mvp.views.activitys.DisposeTodoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".mvp.views.activitys.KeeperUpComingActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.DisposeTodoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.KeeperApplingActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.KeeperUpComingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.SubmitApplyActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.KeeperApplingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.boreas.plainlife.mvp.views.activitys.SubmitApplyActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".mvp.views.activitys.SubmitApplyOperationActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.SubmitApplyOperationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.LoginActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.SwitchRoleActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.SwitchRoleActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.ShoppingActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.ShoppingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.KeeperMyOperationActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.KeeperMyOperationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.views.activitys.MainActivity"
+            android:name="com.boreas.plainlife.mvp.views.activitys.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" /> <!-- 适配华为（huawei）刘海屏 -->
