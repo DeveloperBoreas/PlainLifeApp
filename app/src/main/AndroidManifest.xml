@@ -21,60 +21,15 @@
         android:networkSecurityConfig="@xml/jz_network_security_config"
         android:requestLegacyExternalStorage="true"
         android:resizeableActivity="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         tool:ignore="LockedOrientationActivity"
         android:theme="@style/AppBaseTheme">
         <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.MainProcessingCaseActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.MainHistoryCaseActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.SettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorTaskActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorMyRecordActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorApplyActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.OperatorTaskActivity"
             android:screenOrientation="portrait"
             />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.SlapeActivity"
-            android:screenOrientation="portrait">
 
-        </activity>
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.MessageActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.Show3DActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name="com.boreas.plainlife.mvp.views.activitys.DeviceDescActivity" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.DisposeTodoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.KeeperUpComingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.KeeperApplingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.SubmitApplyActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.SubmitApplyOperationActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.LoginActivity"
             android:screenOrientation="portrait" >
@@ -84,15 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.SwitchRoleActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.ShoppingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.KeeperMyOperationActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

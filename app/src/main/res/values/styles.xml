@@ -33,13 +33,6 @@
         <!-- 指定消失的动画xml  -->
     </style>
 
-    <style name="ratingbar_style" parent="@android:style/Widget.RatingBar">
-        <item name="android:progressDrawable">@drawable/rating_bar_layer_list</item>
-        <item name="android:minHeight">10dip</item>
-        <item name="android:maxHeight">10dip</item>
-        <item name="android:maxWidth">69dip</item>
-        <item name="android:minWidth">69dip</item>
-    </style>
 
     <style name="tabLayoutText_Style" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">15sp</item>
@@ -79,5 +72,18 @@
         <item name="android:activityOpenExitAnimation">@anim/push_left_out</item>  
         <item name="android:activityCloseEnterAnimation">@anim/push_left_in</item>
         <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
+    </style>
+
+
+
+
+
+    <style name="InputStyle">
+        <!-- 底部线 默认颜色 -->
+        <item name="colorControlNormal">@color/white</item>
+        <!-- 底部线 EditText激活时颜色 -->
+        <item name="colorControlActivated">@color/white</item>
+        <!-- 设置光标 -->
+        <!--<item name="android:textCursorDrawable">@drawable/line</item>-->
     </style>
 </resources>

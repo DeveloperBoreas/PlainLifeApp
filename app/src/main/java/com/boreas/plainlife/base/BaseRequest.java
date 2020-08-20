@@ -3,17 +3,14 @@ package com.boreas.plainlife.base;
 import android.content.Context;
 
 import com.boreas.plainlife.App;
-import com.boreas.plainlife.db.LoginModelDao;
 import com.boreas.plainlife.utils.NetWorkUtil;
 
 
 public abstract class BaseRequest {
     private Context context;
-    public LoginModelDao loginModelDao;
 
     public BaseRequest() {
         this.context = App.getInstance().getApplicationContext();
-        this.loginModelDao = App.getInstance().getmDBComponent().getLoginModelDao();
     }
 
     /**

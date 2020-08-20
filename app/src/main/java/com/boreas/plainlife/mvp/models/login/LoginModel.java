@@ -3,10 +3,16 @@ package com.boreas.plainlife.mvp.models.login;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Keep;
+import org.greenrobot.greendao.annotation.Generated;
+
+@Entity
 public class LoginModel implements Parcelable {
     private String username;
     private String password;
 
+    @Keep
     public LoginModel(String username, String password) {
         this.username = username;
         this.password = password;
@@ -31,6 +37,10 @@ public class LoginModel implements Parcelable {
     protected LoginModel(Parcel in) {
         username = in.readString();
         password = in.readString();
+    }
+
+    @Generated(hash = 333234990)
+    public LoginModel() {
     }
 
     public static final Creator<LoginModel> CREATOR = new Creator<LoginModel>() {

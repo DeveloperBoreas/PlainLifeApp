@@ -31,6 +31,6 @@ public class DBHelper extends DaoMaster.OpenHelper {
             public void onDropAllTables(Database db, boolean ifExists) {
                 DaoMaster.dropAllTables(db, ifExists);
             }
-        },LoginModelDao.class);
+        });
     }
 }

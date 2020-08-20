@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">装备管理</string>
+    <string name="app_name">悦</string>
     <!--首页底部Tab-->
     <string name="main_index">首页</string>
     <string name="main_equip">装备库</string>
     <string name="main_personal_center">个人中心</string>
     <!--Login-->
-    <string name="login_title">欢迎进入装备管理</string>
+    <string name="login_title">欢迎进入悦忆</string>
     <string name="login_userName_hit">登录名</string>
     <string name="login_userPsd_hit">密码</string>
     <string name="login_regist">注册</string>
@@ -69,5 +69,8 @@
     <string name="task_name">任务名称</string>
     <string name="history_case">历史任务</string>
     <string name="processing_case">在办任务</string>
+    <string name="login_input_verificationcode_hint">请输入验证码</string>
+    <string name="login_input_psd_hint">请输入密码</string>
+    <string name="login_input_userName_hint">请输入用户名</string>
 
 </resources>

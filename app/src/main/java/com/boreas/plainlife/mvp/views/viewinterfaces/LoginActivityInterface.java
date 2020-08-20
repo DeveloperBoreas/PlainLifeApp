@@ -1,20 +1,19 @@
 package com.boreas.plainlife.mvp.views.viewinterfaces;
 
 import com.boreas.plainlife.mvp.ViewInterface;
-import com.boreas.plainlife.mvp.models.login.AccessModel;
-import com.boreas.plainlife.mvp.models.login.LoginReceModel;
+import com.boreas.plainlife.mvp.models.login.CaptchatModel;
 
 public interface LoginActivityInterface extends ViewInterface {
     /**
      * 数据请求成功回调
      * @param s
      */
-    void onSuccess(LoginReceModel s);
+    void onSuccess(String s);
 
     /**
-     * 查询权限成功回调
+     * 验证码图片成功回调
      */
-    void onAccessSuccess(AccessModel accessModel);
+    void onCaptchatSuccess(CaptchatModel captchatModel);
     /**
      * 数据请求失败回调
      */

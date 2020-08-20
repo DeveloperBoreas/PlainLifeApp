@@ -1,12 +1,13 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
 import com.boreas.plainlife.App;
-import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseActivity;
 import com.boreas.plainlife.databinding.ActivityLoginBinding;
@@ -14,8 +15,7 @@ import com.boreas.plainlife.framwork.ClickProxy;
 import com.boreas.plainlife.internal.components.DaggerLoginActivityComponent;
 import com.boreas.plainlife.internal.modules.LoginActivityModule;
 import com.boreas.plainlife.mq.RabbitMQConfiguration;
-import com.boreas.plainlife.mvp.models.login.AccessModel;
-import com.boreas.plainlife.mvp.models.login.LoginReceModel;
+import com.boreas.plainlife.mvp.models.login.CaptchatModel;
 import com.boreas.plainlife.mvp.presenters.presenterimpl.LoginActivityPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.LoginActivityInterface;
 import com.boreas.plainlife.utils.PreUtil;
@@ -30,7 +30,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
     @Inject
     LoginActivityPresenter loginActivityPresenter;
-
+    private CaptchatModel captchatModel;
 
     @Override
     public int setContentView() {
@@ -49,7 +49,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
             if (this.verParams()) {
                 String userName = this.binding.userName.getText().toString().trim();
                 String password = this.binding.userPsd.getText().toString().trim();
-                loginActivityPresenter.requestData(userName, password);
+                String verCode  = this.binding.verCode.getText().toString().trim();
+                loginActivityPresenter.requestLogin(userName, password,verCode,captchatModel.getUuid());
             }
         }));
         this.binding.logo.setOnClickListener(v -> {
@@ -67,6 +68,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
             SoftKeyboardUtil.hideSoftKeyboard(this);
             this.binding.ipContent.setVisibility(View.GONE);
             PreUtil.put("IP",this.binding.inputIp.getText().toString());
+        }));
+        this.binding.verCodeImg.setOnClickListener(new ClickProxy(v -> {
+            loginActivityPresenter.requestCaptchatImg();
         }));
     }
 
@@ -96,6 +100,10 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
             ToastUtil.show(this, "请输入密码");
             return false;
         }
+        if (TextUtils.isEmpty(this.binding.verCode.getText().toString().trim())) {
+            ToastUtil.show(this, "请输入验证码");
+            return false;
+        }
         return true;
     }
 
@@ -112,57 +120,22 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     protected void initData() {
         RabbitMQConfiguration rabbitMQConfiguration = RabbitMQConfiguration.getInstance();
         rabbitMQConfiguration.init(getApplicationContext());
+        loginActivityPresenter.requestCaptchatImg();
     }
 
     @Override
-    public void onSuccess(LoginReceModel s) {
+    public void onSuccess(String s) {
 
     }
 
-    /**
-     * 查询权限成功回调
-     *
-     * @param accessModel
-     */
     @Override
-    public void onAccessSuccess(AccessModel accessModel) {
-        if(true){
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            mainIntent.putExtra(Constant.ROLE, Constant.OPERATOR_ROLE);
-            startActivity(mainIntent);
-            App.getInstance().role = Constant.OPERATOR_ROLE;
-            finish();
-            return;
-        }
-        if (accessModel.getData().getLevel1() != null && accessModel.getData().getLevel2() != null) {
-            AccessModel.DataBean.Level1Bean level1 = accessModel.getData().getLevel1();
-            AccessModel.DataBean.Level2Bean level2 = accessModel.getData().getLevel2();
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            mainIntent.putExtra(Constant.ROLE, Constant.OPERATOR_ROLE);
-            startActivity(mainIntent);
-            App.getInstance().role = Constant.OPERATOR_ROLE;
-            finish();
-            return;
-//            if (level1.is操作终端()) {
-//                Intent mainIntent = new Intent(this, MainActivity.class);
-//                if (level2.is操作人员() && level2.is库管人员()) {
-//                    Intent intent = new Intent(this, SwitchRoleActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                } else if (level2.is库管人员()) {
-//                    mainIntent.putExtra(Constant.ROLE, Constant.KEEPER_ROLE);
-//                    startActivity(mainIntent);
-//                    App.getInstance().role = Constant.KEEPER_ROLE;
-//                    finish();
-//                } else if (level2.is操作人员()) {
-//                    mainIntent.putExtra(Constant.ROLE, Constant.OPERATOR_ROLE);
-//                    startActivity(mainIntent);
-//                    App.getInstance().role = Constant.OPERATOR_ROLE;
-//                    finish();
-//                }
-//            }
-        }
+    public void onCaptchatSuccess(CaptchatModel captchatModel) {
+        this.captchatModel = captchatModel;
+        byte[] decodedString = Base64.decode(captchatModel.getImg(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        this.binding.verCodeImg.setImageBitmap(decodedByte);
     }
+
 
 
     /**

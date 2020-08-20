@@ -1,25 +1,23 @@
 package com.boreas.plainlife.mvp.presenters.presenterimpl;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.boreas.plainlife.mvp.models.login.LoginParams;
 import com.orhanobut.logger.Logger;
 import com.boreas.plainlife.App;
 import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.api.ApiService;
 import com.boreas.plainlife.base.BaseRequest;
-import com.boreas.plainlife.mvp.models.login.AccessModel;
 import com.boreas.plainlife.mvp.models.login.LoginModel;
-import com.boreas.plainlife.mvp.models.login.LoginReceModel;
 import com.boreas.plainlife.mvp.presenters.ipresenter.ILoginActivityPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.LoginActivityInterface;
 import com.boreas.plainlife.utils.PreUtil;
 
 import javax.inject.Inject;
 
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivityPresenter extends BaseRequest implements ILoginActivityPresenter {
@@ -39,28 +37,43 @@ public class LoginActivityPresenter extends BaseRequest implements ILoginActivit
     }
 
     @Override
-    public void requestData(String userName, String password) {
-        if(true){
-            loginActivityInterface.onAccessSuccess(null);
-            return;
-        }
+    public void requestLogin(String userName, String password,String verCode,String uuid) {
         if (isNetWorkEnable()) {
             loginActivityInterface.onShowLoadingDialog();
-            loginSubscribe = apiService.login(new LoginModel(userName,password))
-                    .subscribeOn(Schedulers.io())
-                    .map(loginReceModel -> {
-                        PreUtil.put(Constant.TOKEN_KEY,loginReceModel.getToken_type() + " " + loginReceModel.getAccess_token());
-                        loginActivityInterface.onSuccess(loginReceModel);
-                        return loginReceModel;
-                    })
-                    .flatMap((Function<LoginReceModel, ObservableSource<AccessModel>>) loginReceModel -> apiService.findMyAccess())
+            loginSubscribe = apiService.login(ApiService.User_Agent,new LoginParams(userName,password,verCode,uuid))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(accessModel -> {
-                        if(accessModel.getStatus() == 200){
-                            loginActivityInterface.onAccessSuccess(accessModel);
+                    .subscribe(s -> {
+                        Logger.e(s);
+//                        if(accessModel.get() == 200){
+////                            loginActivityInterface.onAccessSuccess(accessModel);
+//                        }else{
+//                            loginActivityInterface.onFailed(accessModel.getMsg());
+//                        }
+                        loginActivityInterface.onDisLoadingDialog();
+                    }, throwable -> {
+                        Logger.e(throwable.getMessage());
+                        loginActivityInterface.onFailed(throwable.getMessage());
+                        loginActivityInterface.onDisLoadingDialog();
+                    });
+            return;
+        }
+        loginActivityInterface.noNetWork();
+    }
+
+    @Override
+    public void requestCaptchatImg() {
+        if (isNetWorkEnable()) {
+            loginActivityInterface.onShowLoadingDialog();
+            loginSubscribe = apiService.getCaptchaImage()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(captchatModel -> {
+                        Logger.e(captchatModel.toString());
+                        if(captchatModel.getCode() == 200){
+                            loginActivityInterface.onCaptchatSuccess(captchatModel);
                         }else{
-                            loginActivityInterface.onFailed(accessModel.getMsg());
+                            loginActivityInterface.onFailed(captchatModel.getMsg());
                         }
                         loginActivityInterface.onDisLoadingDialog();
                     }, throwable -> {

@@ -8,7 +8,7 @@ public class BaseResponse<T> {
      */
     private T data;
     private String msg;
-    private int status;
+    private int code;
 
     public T getData() {
         return data;
@@ -26,12 +26,12 @@ public class BaseResponse<T> {
         this.msg = msg;
     }
 
-    public int getStatus() {
-        return status;
+    public int getCode() {
+        return code;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class BaseResponse<T> {
         return "BaseResponse{" +
                 "data=" + data +
                 ", msg='" + msg + '\'' +
-                ", status='" + status + '\'' +
+                ", code=" + code +
                 '}';
     }
 }
