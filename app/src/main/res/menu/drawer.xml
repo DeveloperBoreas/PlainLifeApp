@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <item android:title="Main Item">
+        <menu>
+            <item
+                android:id="@+id/sub_palette"
+                android:title="Palette" />
+            <item
+                android:id="@+id/sub_nested_scrollview"
+                android:title="NestedScrollView" />
+            <item
+                android:id="@+id/sub_collapsing_toolbar_layout"
+                android:title="CollapsingToolbarLayout" />
+            <item
+                android:id="@+id/sub_tab_layout"
+                android:title="TabLayout" />
+            <item
+                android:id="@+id/sub_app_bar_layout"
+                android:title="AppBarLayout" />
+        </menu>
+    </item>
+    <item android:title="Social">
+        <menu>
+            <item
+                android:id="@+id/sub_github"
+                android:title="Github" />
+        </menu>
+    </item>
+
+</menu>

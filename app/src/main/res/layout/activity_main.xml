@@ -3,28 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/background"
-        tools:context=".mvp.views.activitys.MainActivity">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/navigationView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_bottomNavigtion_height"
-            android:background="@drawable/main_navigation_shape"
-            app:itemIconTint="@drawable/selector_bottom_navigation_icon"
-            app:itemTextColor="@drawable/selector_bottom_navigation_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/navigation" />
+        <include layout="@layout/app_toolbar"></include>
 
-        <com.boreas.plainlife.widget.viewpager.ViewPagerSlide
-            android:id="@+id/container"
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawerLayout"
+            android:fitsSystemWindows="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="@+id/navigationView" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:context=".mvp.views.activitys.MainActivity">
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toTopOf="@+id/navigationView" />
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navigationView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                app:headerLayout="@layout/drawer_header"
+                app:menu="@menu/drawer"
+                android:background="@color/light_blue"/>
+        </androidx.drawerlayout.widget.DrawerLayout>
+
+
+    </RelativeLayout>
 
     <data>
 

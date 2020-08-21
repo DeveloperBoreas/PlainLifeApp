@@ -1,6 +1,11 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import com.boreas.plainlife.App;
 import com.boreas.plainlife.Constant;
@@ -17,6 +22,8 @@ import com.boreas.plainlife.mvp.presenters.presenterimpl.MainActivityPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.MainActivityInterface;
 import com.boreas.plainlife.utils.RxTimer;
 import com.boreas.plainlife.utils.ToastUtil;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.lzf.easyfloat.EasyFloat;
 import com.orhanobut.logger.Logger;
 
@@ -25,6 +32,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> implements MainActivityInterface {
+
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Inject
     MainActivityPresenter presenter;
@@ -38,46 +47,41 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void initView() {
+        showBackIcon(true);
         super.setSwipeBackEnable(false);
-        int role = getIntent().getIntExtra(Constant.ROLE, Constant.OPERATOR_ROLE);
-        fragments = new ArrayList<>();
-
-        this.binding.container.setOffscreenPageLimit(3);
-//        this.binding.container.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
-        //初始化悬浮球
+        this.binding.drawerLayout.setClipToPadding(false);
+        mDrawerToggle = new ActionBarDrawerToggle(this, this.binding.drawerLayout, getToolbar(), R.string.drawer_open, R.string.drawer_close);
+        mDrawerToggle.syncState();
+        this.binding.drawerLayout.addDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         initFloatBall();
     }
 
-    private MenuItem lastMenuItem;
-
     @Override
     protected void initListener() {
-        this.binding.navigationView.setOnNavigationItemSelectedListener(menuItem -> {
-            this.lastMenuItem = menuItem;
+        this.binding.navigationView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
-                case R.id.main_index:
-                    this.binding.container.setCurrentItem(0);
-                    return true;
-                case R.id.main_equip:
-                    this.binding.container.setCurrentItem(1);
-                    return true;
-                case R.id.main_center:
-                    this.binding.container.setCurrentItem(2);
-                    return true;
+//                case R.id.menu_github:
+//                    openMyGitHub();
+//                    return true;
+                default:
+                    Snackbar.make(this.binding.container, "click menu:" + menuItem.getTitle(), Snackbar.LENGTH_SHORT).show();
+                    break;
             }
             return false;
         });
-//        this.binding.container.addOnPageChangeListener(new OnPageChangeListener() {
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (lastMenuItem != null) {
-//                    lastMenuItem.setChecked(false);
-//                } else {
-//                    binding.navigationView.getMenu().getItem(0).setChecked(false);
-//                }
-//                binding.navigationView.getMenu().getItem(position).setChecked(true);
-//            }
-//        });
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void initFloatBall() {
@@ -139,12 +143,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void initData() {
-        this.rabbitMQConfiguration = RabbitMQConfiguration.getInstance();
-        this.handlerReceiverPositionMessage();
-        RxTimer hbRxTimer = new RxTimer();
-        hbRxTimer.interval(5000, number -> {
-            this.rabbitMQConfiguration.basicPublish(() -> "测试内容");
-        });
+//        this.rabbitMQConfiguration = RabbitMQConfiguration.getInstance();
+//        this.handlerReceiverPositionMessage();
+//        RxTimer hbRxTimer = new RxTimer();
+//        hbRxTimer.interval(5000, number -> {
+//            this.rabbitMQConfiguration.basicPublish(() -> "测试内容");
+//        });
     }
     private void handlerReceiverPositionMessage(){
         rabbitMQConfiguration.basicConsumer(new ResqonCallBack() {

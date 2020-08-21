@@ -26,12 +26,14 @@
         tool:ignore="LockedOrientationActivity"
         android:theme="@style/AppBaseTheme">
         <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.OperatorTaskActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.LoginActivity"
+            android:screenOrientation="portrait" >
+
+        </activity>
+        <activity
+            android:name="com.boreas.plainlife.mvp.views.activitys.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,11 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.boreas.plainlife.mvp.views.activitys.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" /> <!-- 适配华为（huawei）刘海屏 -->
+        <!-- 适配华为（huawei）刘海屏 -->
         <!--        <meta-data-->
         <!--            android:name="notch.config"-->
         <!--            android:value="portrait|landscape" /> &lt;!&ndash; 适配小米（xiaomi）刘海屏 &ndash;&gt;-->

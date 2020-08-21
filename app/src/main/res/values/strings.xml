@@ -1,8 +1,12 @@
 <resources>
-    <string name="app_name">悦</string>
+    <string name="app_name">悦忆</string>
+
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+
     <!--首页底部Tab-->
     <string name="main_index">首页</string>
-    <string name="main_equip">装备库</string>
+    <string name="main_equip">位置</string>
     <string name="main_personal_center">个人中心</string>
     <!--Login-->
     <string name="login_title">欢迎进入悦忆</string>

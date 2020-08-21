@@ -1,5 +1,6 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import com.boreas.plainlife.internal.components.DaggerLoginActivityComponent;
 import com.boreas.plainlife.internal.modules.LoginActivityModule;
 import com.boreas.plainlife.mq.RabbitMQConfiguration;
 import com.boreas.plainlife.mvp.models.login.CaptchatModel;
+import com.boreas.plainlife.mvp.models.login.LoginReceModel;
 import com.boreas.plainlife.mvp.presenters.presenterimpl.LoginActivityPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.LoginActivityInterface;
 import com.boreas.plainlife.utils.PreUtil;
@@ -49,16 +51,16 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
             if (this.verParams()) {
                 String userName = this.binding.userName.getText().toString().trim();
                 String password = this.binding.userPsd.getText().toString().trim();
-                String verCode  = this.binding.verCode.getText().toString().trim();
-                loginActivityPresenter.requestLogin(userName, password,verCode,captchatModel.getUuid());
+                String verCode = this.binding.verCode.getText().toString().trim();
+                loginActivityPresenter.requestLogin(userName, password, verCode, captchatModel.getUuid());
             }
         }));
         this.binding.logo.setOnClickListener(v -> {
             this.continuousClick();
         });
         this.binding.saveIp.setOnClickListener(new ClickProxy(v -> {
-            if(TextUtils.isEmpty(this.binding.inputIp.getText().toString())){
-                ToastUtil.show(this,"输入的IP不能未空");
+            if (TextUtils.isEmpty(this.binding.inputIp.getText().toString())) {
+                ToastUtil.show(this, "输入的IP不能未空");
                 return;
             }
             if (!RegExpValidatorUtil.regExpIp(this.binding.inputIp.getText().toString())) {
@@ -67,7 +69,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
             }
             SoftKeyboardUtil.hideSoftKeyboard(this);
             this.binding.ipContent.setVisibility(View.GONE);
-            PreUtil.put("IP",this.binding.inputIp.getText().toString());
+            PreUtil.put("IP", this.binding.inputIp.getText().toString());
         }));
         this.binding.verCodeImg.setOnClickListener(new ClickProxy(v -> {
             loginActivityPresenter.requestCaptchatImg();
@@ -124,8 +126,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     }
 
     @Override
-    public void onSuccess(String s) {
-
+    public void onSuccess(LoginReceModel looginReceModel) {
+        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+        this.startActivity(mainIntent);
     }
 
     @Override
@@ -135,7 +138,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         this.binding.verCodeImg.setImageBitmap(decodedByte);
     }
-
 
 
     /**

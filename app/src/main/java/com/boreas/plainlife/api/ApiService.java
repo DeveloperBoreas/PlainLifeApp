@@ -3,6 +3,7 @@ package com.boreas.plainlife.api;
 
 import com.boreas.plainlife.mvp.models.login.CaptchatModel;
 import com.boreas.plainlife.mvp.models.login.LoginParams;
+import com.boreas.plainlife.mvp.models.login.LoginReceModel;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -25,6 +26,6 @@ public interface ApiService {
 
     //登录
     @POST("/login")
-    Observable<String> login(@Header("User-Agent") String userAgent, @Body LoginParams params);
+    Observable<LoginReceModel> login(@Header("User-Agent") String userAgent, @Body LoginParams params);
 
 }

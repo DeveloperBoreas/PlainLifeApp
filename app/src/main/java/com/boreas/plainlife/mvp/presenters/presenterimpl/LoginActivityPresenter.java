@@ -1,18 +1,16 @@
 package com.boreas.plainlife.mvp.presenters.presenterimpl;
 
-import android.content.Context;
-import android.util.Log;
 
-import com.boreas.plainlife.mvp.models.login.LoginParams;
-import com.orhanobut.logger.Logger;
+
+import android.content.Context;
+
 import com.boreas.plainlife.App;
-import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.api.ApiService;
 import com.boreas.plainlife.base.BaseRequest;
-import com.boreas.plainlife.mvp.models.login.LoginModel;
+import com.boreas.plainlife.mvp.models.login.LoginParams;
 import com.boreas.plainlife.mvp.presenters.ipresenter.ILoginActivityPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.LoginActivityInterface;
-import com.boreas.plainlife.utils.PreUtil;
+import com.orhanobut.logger.Logger;
 
 import javax.inject.Inject;
 
@@ -43,13 +41,13 @@ public class LoginActivityPresenter extends BaseRequest implements ILoginActivit
             loginSubscribe = apiService.login(ApiService.User_Agent,new LoginParams(userName,password,verCode,uuid))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(s -> {
-                        Logger.e(s);
-//                        if(accessModel.get() == 200){
-////                            loginActivityInterface.onAccessSuccess(accessModel);
-//                        }else{
-//                            loginActivityInterface.onFailed(accessModel.getMsg());
-//                        }
+                    .subscribe(looginReceModel -> {
+                        Logger.e(looginReceModel.toString());
+                        if(looginReceModel.getCode() == 200){
+                            loginActivityInterface.onSuccess(looginReceModel);
+                        }else{
+                            loginActivityInterface.onFailed(looginReceModel.getMsg());
+                        }
                         loginActivityInterface.onDisLoadingDialog();
                     }, throwable -> {
                         Logger.e(throwable.getMessage());

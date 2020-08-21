@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.Window;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
+import com.boreas.plainlife.R;
 import com.gyf.immersionbar.ImmersionBar;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.boreas.commonlib.swipebacklayout.lib.SwipeBackLayout;
@@ -28,6 +30,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackA
             Manifest.permission.CAMERA,
     };
     private SwipeBackLayout mSwipeBackLayout;
+    private Toolbar mToolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,12 +42,50 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackA
         if (isNeedCheck) {
             checkPermissions(needPermissions);
         }
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+        }
         this.initComponent();
         this.handlerJumpData(getIntent());
         this.handlerJumpBundle(savedInstanceState);
         this.initView();
         this.initListener();
         this.initData();
+    }
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    public void showBackIcon(boolean flag) {
+        if (mToolbar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(flag);
+        }
+    }
+
+    public void setToolbarTitle(int resId) {
+        if (mToolbar != null) {
+            getSupportActionBar().setTitle(resId);
+        }
+    }
+
+    public void setToolbarTitle(String res) {
+        if (mToolbar != null) {
+            getSupportActionBar().setTitle(res);
+        }
+    }
+
+
+    public void setToolbarSubTitle(int resId) {
+        if (mToolbar != null) {
+            getSupportActionBar().setSubtitle(resId);
+        }
+    }
+
+    public void setToolbarSubTitle(String res) {
+        if (mToolbar != null) {
+            getSupportActionBar().setSubtitle(res);
+        }
     }
 
     private void checkPermissions(String... permissions) {
