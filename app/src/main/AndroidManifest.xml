@@ -12,6 +12,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <application
         android:name="com.boreas.plainlife.App"
         android:allowBackup="true"
@@ -25,6 +29,7 @@
         android:supportsRtl="true"
         tool:ignore="LockedOrientationActivity"
         android:theme="@style/AppBaseTheme">
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="35e9fd0d2a8cff8c132c0dde8f6a5e84"/>
         <activity
             android:name="com.boreas.plainlife.mvp.views.activitys.LoginActivity"
             android:screenOrientation="portrait" >
@@ -41,13 +46,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 适配华为（huawei）刘海屏 -->
-        <!--        <meta-data-->
-        <!--            android:name="notch.config"-->
-        <!--            android:value="portrait|landscape" /> &lt;!&ndash; 适配小米（xiaomi）刘海屏 &ndash;&gt;-->
-        <!--        <meta-data-->
-        <!--            android:name="android.notch_support"-->
-        <!--            android:value="true" />-->
+        <!--初始化皮肤插件-->
+        <provider
+            android:name="com.boreas.commonlib.xskinloader.SkinLoaderInitializer"
+            android:authorities="${applicationId}.xskinloader-process"
+            android:exported="false"
+            android:multiprocess="true" />
+        <service android:name="com.amap.api.location.APSService"></service>
+        <service
+            android:name=".Location.LocationService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="高德地图定位" />
     </application>
 
 

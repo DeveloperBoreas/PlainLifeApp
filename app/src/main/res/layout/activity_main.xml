@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:skin="http://schemas.android.com/android/skin"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:orientation="vertical"
-        android:background="@color/colorPrimary"
+    <com.boreas.plainlife.widget.drawerlayout.DrawerLayout
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/app_toolbar"></include>
-
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/drawerLayout"
-            android:fitsSystemWindows="false"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:rightMargin="80dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".mvp.views.activitys.MainActivity">
+            android:orientation="horizontal">
+
+            <include android:id="@+id/headLayout" layout="@layout/drawer_header"/>
 
             <FrameLayout
+                skin:enable="true"
+                android:background="@color/white"
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toTopOf="@+id/navigationView" />
+                android:layout_height="match_parent" />
 
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/navigationView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                app:headerLayout="@layout/drawer_header"
-                app:menu="@menu/drawer"
-                android:background="@color/light_blue"/>
-        </androidx.drawerlayout.widget.DrawerLayout>
+        </LinearLayout>
 
-
-    </RelativeLayout>
+    </com.boreas.plainlife.widget.drawerlayout.DrawerLayout>
 
     <data>
 

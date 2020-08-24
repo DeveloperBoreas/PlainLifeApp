@@ -1,44 +1,43 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.view.MenuItem;
+import android.content.Intent;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.boreas.commonlib.xskinloader.SkinManager;
 import com.boreas.plainlife.App;
-import com.boreas.plainlife.Constant;
+import com.boreas.plainlife.Location.LocationService;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseActivity;
 import com.boreas.plainlife.base.BaseFragment;
 import com.boreas.plainlife.base.BaseResponse;
 import com.boreas.plainlife.databinding.ActivityMainBinding;
+import com.boreas.plainlife.framwork.ClickProxy;
 import com.boreas.plainlife.internal.components.DaggerMainActivityComponent;
 import com.boreas.plainlife.internal.modules.MainActivityModule;
 import com.boreas.plainlife.mq.RabbitMQConfiguration;
 import com.boreas.plainlife.mq.ResqonCallBack;
 import com.boreas.plainlife.mvp.presenters.presenterimpl.MainActivityPresenter;
+import com.boreas.plainlife.mvp.views.fragments.LocationFragment;
+import com.boreas.plainlife.mvp.views.fragments.PicNoteFragment;
 import com.boreas.plainlife.mvp.views.viewinterfaces.MainActivityInterface;
-import com.boreas.plainlife.utils.RxTimer;
+import com.boreas.plainlife.utils.PreUtil;
 import com.boreas.plainlife.utils.ToastUtil;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.lzf.easyfloat.EasyFloat;
 import com.orhanobut.logger.Logger;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> implements MainActivityInterface {
 
-    private ActionBarDrawerToggle mDrawerToggle;
-
+    private static final String FRAGMENT_LOCATION  = "位置";
+    private static final String FRAGMENT_PIC_NOTE  = "图片笔记";
+    private FragmentManager fragmentManager;
+    private String currentFragmentTag;
     @Inject
     MainActivityPresenter presenter;
-    private ArrayList<BaseFragment> fragments;
-    private RabbitMQConfiguration rabbitMQConfiguration;
 
     @Override
     public int setContentView() {
@@ -47,41 +46,36 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void initView() {
-        showBackIcon(true);
         super.setSwipeBackEnable(false);
-        this.binding.drawerLayout.setClipToPadding(false);
-        mDrawerToggle = new ActionBarDrawerToggle(this, this.binding.drawerLayout, getToolbar(), R.string.drawer_open, R.string.drawer_close);
-        mDrawerToggle.syncState();
-        this.binding.drawerLayout.addDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        this.startService(new Intent(this,LocationService.class));
+        this.fragmentManager = getSupportFragmentManager();
+        Boolean isFirstOpenApp = (Boolean) PreUtil.get("isFirstOpenApp", true);
+        if (isFirstOpenApp) {
+            this.binding.drawerLayout.open();
+            PreUtil.put("isFirstOpenApp", false);
+        }
+        this.binding.headLayout.menuLocation.setOnClickListener(new ClickProxy(v -> {
+            this.switchFragment(FRAGMENT_LOCATION);
+            this.binding.drawerLayout.close();
+        },100));
+        this.binding.headLayout.menuPicNote.setOnClickListener(new ClickProxy(v -> {
+            this.switchFragment(FRAGMENT_PIC_NOTE);
+            this.binding.drawerLayout.close();
+        },100));
         initFloatBall();
+    }
+
+    private void changeSkin() {
+        SkinManager.get().loadSkin(App.getInstance().skinPath);
+    }
+
+    private void restoreDefaultSkin() {
+        SkinManager.get().restoreToDefaultSkin();
     }
 
     @Override
     protected void initListener() {
-        this.binding.navigationView.setNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-//                case R.id.menu_github:
-//                    openMyGitHub();
-//                    return true;
-                default:
-                    Snackbar.make(this.binding.container, "click menu:" + menuItem.getTitle(), Snackbar.LENGTH_SHORT).show();
-                    break;
-            }
-            return false;
-        });
-    }
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void initFloatBall() {
@@ -143,65 +137,44 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void initData() {
-//        this.rabbitMQConfiguration = RabbitMQConfiguration.getInstance();
-//        this.handlerReceiverPositionMessage();
-//        RxTimer hbRxTimer = new RxTimer();
-//        hbRxTimer.interval(5000, number -> {
-//            this.rabbitMQConfiguration.basicPublish(() -> "测试内容");
-//        });
+
     }
-    private void handlerReceiverPositionMessage(){
-        rabbitMQConfiguration.basicConsumer(new ResqonCallBack() {
-            @Override
-            public void onSuccess(String jsonString) {
-                System.out.println("handlerReceiverPositionMessage : "+jsonString);
-            }
-        });
+    private boolean isFirstOpenApp = true;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(this.isFirstOpenApp){
+            this.switchFragment(FRAGMENT_PIC_NOTE);
+            this.isFirstOpenApp = false;
+        }
     }
 
     @Override
     protected void onDestroy() {
         presenter.onDestory();
-        //悬浮球销毁，需要重新实例化
         EasyFloat.dismissAppFloat("floatBall");
         super.onDestroy();
     }
 
-    /**
-     * 数据请求成功回调
-     */
     @Override
     public void onSuccess(BaseResponse<String> s) {
         Logger.e(s.toString());
     }
 
-    /**
-     * 数据请求失败回调
-     */
     @Override
     public void onFailed() {
 
     }
 
-    /**
-     * 没有网络状态回调
-     */
     @Override
     public void noNetWork() {
 
     }
 
-    /**
-     * 无数据状态回调
-     */
     @Override
     public void noData() {
 
     }
-
-    /**
-     * 消除LoadingDialog
-     */
     @Override
     public void onDisLoadingDialog() {
         this.dismissLoadingDialog();
@@ -224,5 +197,36 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
             finish();
         }
         super.onBackPressed();
+    }
+    public void switchFragment(String name) {
+        if (currentFragmentTag != null && currentFragmentTag.equals(name)) {
+            return;
+        }
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        Fragment currentFragment = fragmentManager.findFragmentByTag(currentFragmentTag);
+        if (currentFragment != null) {
+            ft.hide(currentFragment);
+        }
+
+        Fragment foundFragment = fragmentManager.findFragmentByTag(name);
+
+        if (foundFragment == null) {
+            if (name.equals(FRAGMENT_LOCATION)) {
+                foundFragment = new LocationFragment();
+            } else if (name.equals(FRAGMENT_PIC_NOTE)) {
+                foundFragment = new PicNoteFragment();
+            }
+        }
+
+        if (foundFragment == null) {
+
+        } else if (foundFragment.isAdded()) {
+            ft.show(foundFragment);
+        } else {
+            ft.add(R.id.container, foundFragment, name);
+        }
+        ft.commit();
+        currentFragmentTag = name;
     }
 }

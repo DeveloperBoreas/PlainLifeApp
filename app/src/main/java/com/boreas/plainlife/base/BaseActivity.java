@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
+import com.boreas.commonlib.xskinloader.SkinInflaterFactory;
 import com.boreas.plainlife.R;
 import com.gyf.immersionbar.ImmersionBar;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -34,6 +35,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackA
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        SkinInflaterFactory.setFactory(this);
         super.onCreate(savedInstanceState);
         this.doBeforeSetcontentView();
         this.binding = DataBindingUtil.setContentView(this, setContentView());
@@ -53,6 +55,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackA
         this.initListener();
         this.initData();
     }
+
     public Toolbar getToolbar() {
         return mToolbar;
     }

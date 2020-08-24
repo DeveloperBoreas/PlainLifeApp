@@ -12,7 +12,9 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
+        }
     }
     signingConfigs {
         release {
@@ -22,7 +24,10 @@ android {
             keyPassword MYAPP_RELEASE_KEY_PASSWORD
         }
         debug {
-
+            storeFile file(MYAPP_DEBUG_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
         }
     }
     buildTypes {
@@ -69,4 +74,8 @@ dependencies {
     //Dagger
     implementation 'com.google.dagger:dagger:2.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.12'
+
+
+    implementation 'com.amap.api:3dmap:latest.integration'//高德3D地图
+    implementation 'com.amap.api:location:latest.integration'//高德定位
 }

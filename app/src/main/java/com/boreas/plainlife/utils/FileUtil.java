@@ -41,9 +41,9 @@ public class FileUtil {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if ((boolean) aBoolean) {
-                        Logger.e("复制成功");
+                        Logger.e("复制成功" + fromName);
                     }else{
-                        Logger.e("复制失败");
+                        Logger.e("复制失败" + fromName);
                     }
                 });
     }
