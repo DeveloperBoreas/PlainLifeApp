@@ -1,14 +1,17 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
 import com.boreas.plainlife.App;
+import com.boreas.plainlife.Location.LocationService;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseActivity;
 import com.boreas.plainlife.databinding.ActivityLoginBinding;
@@ -18,21 +21,30 @@ import com.boreas.plainlife.internal.modules.LoginActivityModule;
 import com.boreas.plainlife.mq.RabbitMQConfiguration;
 import com.boreas.plainlife.mvp.models.login.CaptchatModel;
 import com.boreas.plainlife.mvp.models.login.LoginReceModel;
+import com.boreas.plainlife.mvp.models.login.UserRegisterParams;
 import com.boreas.plainlife.mvp.presenters.presenterimpl.LoginActivityPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.LoginActivityInterface;
+import com.boreas.plainlife.utils.FrontAndBackView;
 import com.boreas.plainlife.utils.PreUtil;
 import com.boreas.plainlife.utils.RegExpValidatorUtil;
+import com.boreas.plainlife.utils.RxTimer;
 import com.boreas.plainlife.utils.SoftKeyboardUtil;
 import com.boreas.plainlife.utils.ToastUtil;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements LoginActivityInterface {
+
+    private FrontAndBackView faceAndBackView;
 
     @Inject
     LoginActivityPresenter loginActivityPresenter;
     private CaptchatModel captchatModel;
+    private CountDownTimer timer;
 
     @Override
     public int setContentView() {
@@ -43,36 +55,94 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     protected void initView() {
         super.setSwipeBackEnable(false);
+        this.startService(new Intent(this, LocationService.class));
+        faceAndBackView = new FrontAndBackView(getApplicationContext(), this.binding.loginParent, this.binding.registerParent);
     }
 
     @Override
     protected void initListener() {
-        this.binding.login.setOnClickListener(new ClickProxy(v -> {
-            if (this.verParams()) {
+        //登陆界面
+        this.binding.loginBtn.setOnClickListener(new ClickProxy(v -> {
+            if (this.verLoginParams()) {
                 String userName = this.binding.userName.getText().toString().trim();
                 String password = this.binding.userPsd.getText().toString().trim();
                 String verCode = this.binding.verCode.getText().toString().trim();
                 loginActivityPresenter.requestLogin(userName, password, verCode, captchatModel.getUuid());
             }
         }));
-        this.binding.logo.setOnClickListener(v -> {
-            this.continuousClick();
-        });
-        this.binding.saveIp.setOnClickListener(new ClickProxy(v -> {
-            if (TextUtils.isEmpty(this.binding.inputIp.getText().toString())) {
-                ToastUtil.show(this, "输入的IP不能未空");
-                return;
-            }
-            if (!RegExpValidatorUtil.regExpIp(this.binding.inputIp.getText().toString())) {
-                Toast.makeText(this, "请输入正确格式的IP地址", Toast.LENGTH_LONG).show();
-                return;
-            }
-            SoftKeyboardUtil.hideSoftKeyboard(this);
-            this.binding.ipContent.setVisibility(View.GONE);
-            PreUtil.put("IP", this.binding.inputIp.getText().toString());
-        }));
+//        this.binding.logo.setOnClickListener(v -> {
+//            faceAndBackView.toggle();
+////            this.continuousClick();
+//        });
+//        this.binding.saveIp.setOnClickListener(new ClickProxy(v -> {
+//            if (TextUtils.isEmpty(this.binding.inputIp.getText().toString())) {
+//                ToastUtil.show(this, "输入的IP不能未空");
+//                return;
+//            }
+//            if (!RegExpValidatorUtil.regExpIp(this.binding.inputIp.getText().toString())) {
+//                Toast.makeText(this, "请输入正确格式的IP地址", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//            SoftKeyboardUtil.hideSoftKeyboard(this);
+//            this.binding.ipContent.setVisibility(View.GONE);
+//            PreUtil.put("IP", this.binding.inputIp.getText().toString());
+//        }));
         this.binding.verCodeImg.setOnClickListener(new ClickProxy(v -> {
             loginActivityPresenter.requestCaptchatImg();
+        }));
+
+        this.binding.regist.setOnClickListener(new ClickProxy(v -> {
+            faceAndBackView.toggle();
+        }));
+        this.binding.guset.setOnClickListener(new ClickProxy(v -> {
+
+        }));
+        //注册界面
+        this.binding.verCodeRegister.setOnClickListener(new ClickProxy(v -> {
+            if (TextUtils.isEmpty(this.binding.verPhoneRegister.getText().toString().trim())) {
+                ToastUtil.show(this, "请输入手机号");
+                return;
+            }
+            if (timer == null) {
+                this.timer = new CountDownTimer(1000 * 60, 1000) {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        binding.verCodeRegister.setEnabled(false);
+                        binding.verCodeRegister.setText(String.format("已发送(%d)", millisUntilFinished / 1000));
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        binding.verCodeRegister.setEnabled(true);
+                        binding.verCodeRegister.setText("重新获取");
+                    }
+                };
+            }
+            loginActivityPresenter.getApiService().sendSms(binding.verPhoneRegister.getText().toString().trim())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(baseResponse -> {
+                        this.onFailed(baseResponse.getMsg());
+                        if(baseResponse.getCode() == 200){
+                            ToastUtil.show(this,baseResponse.getMsg());
+                            timer.start();
+                        }
+                    }, throwable -> {
+                        ToastUtil.show(this,throwable.getMessage());
+                    });
+        }));
+        this.binding.back.setOnClickListener(new ClickProxy(v -> faceAndBackView.toggle()));
+        this.binding.login.setOnClickListener(new ClickProxy(v -> {
+            if (this.verRegisterParams()) {
+                loginActivityPresenter.requesrRegister(new UserRegisterParams(
+                        this.binding.userNameRegister.getText().toString().trim(),
+                        this.binding.userPsdRegister.getText().toString().trim(),
+                        this.binding.verPhoneRegister.getText().toString().trim(),
+                        this.binding.userCodeRegister.getText().toString().trim()
+
+                ));
+            }
         }));
     }
 
@@ -89,11 +159,11 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         if (mHits[0] >= (System.currentTimeMillis() - DURATION)) {
             mHits = new long[COUNTS];//重新初始化数组
 //            Toast.makeText(this, "连续点击了5次", Toast.LENGTH_LONG).show();
-            this.binding.ipContent.setVisibility(View.VISIBLE);
+//            this.binding.ipContent.setVisibility(View.VISIBLE);
         }
     }
 
-    private boolean verParams() {
+    private boolean verLoginParams() {
         if (TextUtils.isEmpty(this.binding.userName.getText().toString().trim())) {
             ToastUtil.show(this, "请输入用户名");
             return false;
@@ -104,6 +174,26 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         }
         if (TextUtils.isEmpty(this.binding.verCode.getText().toString().trim())) {
             ToastUtil.show(this, "请输入验证码");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean verRegisterParams() {
+        if (TextUtils.isEmpty(this.binding.userNameRegister.getText().toString().trim())) {
+            ToastUtil.show(this, "请输入用户名");
+            return false;
+        }
+        if (TextUtils.isEmpty(this.binding.userPsdRegister.getText().toString().trim())) {
+            ToastUtil.show(this, "请输入密码");
+            return false;
+        }
+        if (TextUtils.isEmpty(this.binding.verPhoneRegister.getText().toString().trim())) {
+            ToastUtil.show(this, "请输入手机号");
+            return false;
+        }
+        if (TextUtils.isEmpty(this.binding.userCodeRegister.getText().toString().trim())) {
+            ToastUtil.show(this, "请输入手机验证码");
             return false;
         }
         return true;
@@ -148,6 +238,17 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     public void onFailed(String message) {
         ToastUtil.show(this, message);
+    }
+
+    @Override
+    public void onRegisterSuccess(UserRegisterParams userRegisterParams) {
+        ToastUtil.show(this, "注册成功，请登陆");
+        RxTimer rxTimer = new RxTimer();
+        this.binding.userName.setText(userRegisterParams.getUserName());
+        this.binding.userPsd.setText(userRegisterParams.getUserName());
+        rxTimer.timer(1000,number -> {
+            faceAndBackView.toggle();
+        });
     }
 
     @Override

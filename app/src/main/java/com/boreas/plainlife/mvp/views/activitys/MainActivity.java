@@ -1,7 +1,10 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
 import android.content.Intent;
+import android.view.MenuItem;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,15 +28,18 @@ import com.boreas.plainlife.mvp.views.fragments.PicNoteFragment;
 import com.boreas.plainlife.mvp.views.viewinterfaces.MainActivityInterface;
 import com.boreas.plainlife.utils.PreUtil;
 import com.boreas.plainlife.utils.ToastUtil;
+import com.google.android.material.navigation.NavigationView;
 import com.lzf.easyfloat.EasyFloat;
 import com.orhanobut.logger.Logger;
+
+import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> implements MainActivityInterface {
 
     private static final String FRAGMENT_LOCATION  = "位置";
-    private static final String FRAGMENT_PIC_NOTE  = "图片笔记";
+    private static final String FRAGMENT_PIC_NOTE  = "卡片日记";
     private FragmentManager fragmentManager;
     private String currentFragmentTag;
     @Inject
@@ -49,19 +55,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         super.setSwipeBackEnable(false);
         this.startService(new Intent(this,LocationService.class));
         this.fragmentManager = getSupportFragmentManager();
-        Boolean isFirstOpenApp = (Boolean) PreUtil.get("isFirstOpenApp", true);
-        if (isFirstOpenApp) {
-            this.binding.drawerLayout.open();
-            PreUtil.put("isFirstOpenApp", false);
-        }
-        this.binding.headLayout.menuLocation.setOnClickListener(new ClickProxy(v -> {
-            this.switchFragment(FRAGMENT_LOCATION);
-            this.binding.drawerLayout.close();
-        },100));
-        this.binding.headLayout.menuPicNote.setOnClickListener(new ClickProxy(v -> {
-            this.switchFragment(FRAGMENT_PIC_NOTE);
-            this.binding.drawerLayout.close();
-        },100));
+        this.binding.drawerLayout.setStatusBarBackground(R.color.transparent);
         initFloatBall();
     }
 
@@ -75,7 +69,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void initListener() {
-
+        this.binding.mainNavigationView.setNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()){
+                case R.id.itemLocationService:
+                    this.switchFragment(FRAGMENT_LOCATION);
+                    this.binding.drawerLayout.closeDrawer(this.binding.mainNavigationView);
+                    break;
+                case R.id.itemCardNode:
+                    this.switchFragment(FRAGMENT_PIC_NOTE);
+                    this.binding.drawerLayout.closeDrawer(this.binding.mainNavigationView);
+                    break;
+            }
+            return false;
+        });
     }
 
     private void initFloatBall() {
@@ -143,6 +149,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     @Override
     protected void onResume() {
         super.onResume();
+        Boolean isFirstOpenApp = (Boolean) PreUtil.get("isFirstOpenApp", true);
+        if (isFirstOpenApp) {
+            this.binding.drawerLayout.openDrawer(this.binding.mainNavigationView);
+            PreUtil.put("isFirstOpenApp", false);
+        }
         if(this.isFirstOpenApp){
             this.switchFragment(FRAGMENT_PIC_NOTE);
             this.isFirstOpenApp = false;
@@ -157,7 +168,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     }
 
     @Override
-    public void onSuccess(BaseResponse<String> s) {
+    public void onSuccess(BaseResponse s) {
         Logger.e(s.toString());
     }
 

@@ -1,6 +1,7 @@
 package com.boreas.plainlife.mvp.presenters.ipresenter;
 
 import com.boreas.plainlife.mvp.Presenter;
+import com.boreas.plainlife.mvp.models.login.UserRegisterParams;
 
 public interface ILoginActivityPresenter extends Presenter {
     /**
@@ -8,4 +9,5 @@ public interface ILoginActivityPresenter extends Presenter {
      */
     void requestCaptchatImg();
     void requestLogin(String userName, String password,String verCode,String uuid);
+    void requesrRegister(UserRegisterParams userRegisterParams);
 }

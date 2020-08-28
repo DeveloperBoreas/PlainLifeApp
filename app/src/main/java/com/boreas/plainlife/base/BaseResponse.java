@@ -1,22 +1,9 @@
 package com.boreas.plainlife.base;
 
-public class BaseResponse<T> {
+public class BaseResponse{
 
-    /**
-     * msg : success
-     * code : 0
-     */
-    private T data;
     private String msg;
     private int code;
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
 
     public String getMsg() {
         return msg;
@@ -37,7 +24,6 @@ public class BaseResponse<T> {
     @Override
     public String toString() {
         return "BaseResponse{" +
-                "data=" + data +
                 ", msg='" + msg + '\'' +
                 ", code=" + code +
                 '}';

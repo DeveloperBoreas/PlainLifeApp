@@ -3,8 +3,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/activityBackgroundColor"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -14,7 +13,7 @@
             android:background="@mipmap/head_bg"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.boreas.plainlife.widget.CircleImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_vertical"
@@ -30,64 +29,6 @@
                 android:textColor="@color/white"
                 android:textSize="22dp" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/menuList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/layout1"
-            android:orientation="vertical"
-            android:paddingLeft="20dp">
-
-            <TextView
-                android:id="@+id/menuLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_marginTop="30dp"
-                android:text="位置"
-                android:textColor="#000"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/menuPicNote"
-                android:layout_marginTop="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="图片日记"
-                android:textColor="#000"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="设置"
-                android:textColor="#000"
-                android:textSize="18dp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="退出"
-                android:textColor="#000"
-                android:textSize="18dp" />
         </LinearLayout>
 
     </RelativeLayout>

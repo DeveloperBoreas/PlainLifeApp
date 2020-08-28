@@ -1,10 +1,5 @@
 package com.boreas.plainlife.mvp.views.fragments;
 
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
@@ -13,9 +8,13 @@ import com.boreas.plainlife.Location.LocationService;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseFragment;
 import com.boreas.plainlife.databinding.FragmentLocationParentlayoutBinding;
+import com.boreas.plainlife.framwork.ClickProxy;
 import com.boreas.plainlife.mq.RabbitMQConfiguration;
 import com.boreas.plainlife.mq.ResqonCallBack;
-import com.boreas.plainlife.utils.RxTimer;
+import com.boreas.plainlife.mvp.views.fragments.location.LocationLoveFragment;
+import com.boreas.plainlife.mvp.views.fragments.location.LocationMapFragment;
+import com.boreas.plainlife.mvp.views.fragments.location.LocationSettingFragment;
+import com.boreas.plainlife.mvp.views.fragments.location.ViewPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -23,6 +22,8 @@ public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutB
     private RabbitMQConfiguration rabbitMQConfiguration;
     private MapView mMapView = null;
     private AMap aMap;
+    private ArrayList<BaseFragment> fragments;
+
     @Override
     public void lazyFetchData() {
 
@@ -36,15 +37,29 @@ public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutB
     @Override
     public void initView() {
         LocationService.getInstance().registerLocationListener(this);
-        this.mMapView = this.binding.map;
-        if (aMap == null) {
-            aMap = this.mMapView.getMap();
-        }
+        this.binding.viewPager.setOffscreenPageLimit(3);
+        this.binding.viewPager.setAdapter(new ViewPagerAdapter(getActivity().getSupportFragmentManager(), this.addFragments()));
+
+    }
+    private ArrayList<BaseFragment> addFragments(){
+        this.fragments = new ArrayList<>();
+        this.fragments.add(new LocationLoveFragment());
+        this.fragments.add(new LocationMapFragment());
+        this.fragments.add(new LocationSettingFragment());
+        return this.fragments;
     }
 
     @Override
     public void initListener() {
-
+        this.binding.love.setOnClickListener(new ClickProxy(v -> {
+            this.binding.viewPager.setCurrentItem(0);
+        },100));
+        this.binding.location.setOnClickListener(new ClickProxy(v -> {
+            this.binding.viewPager.setCurrentItem(1);
+        },100));
+        this.binding.setting.setOnClickListener(new ClickProxy(v -> {
+            this.binding.viewPager.setCurrentItem(2);
+        },100));
     }
 
     @Override
@@ -72,50 +87,9 @@ public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutB
         });
     }
 
-    /**
-     * 定位成功
-     *
-     * @param location 百度定位回调的参数
-     */
     @Override
     public void onLocationSuccess(AMapLocation location) {
 
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        RxTimer rxTimer = new RxTimer();
-        rxTimer.interval(200, number -> {
-            if (mMapView != null) {
-                mMapView.onCreate(savedInstanceState);
-                rxTimer.cancel();
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        RxTimer rxTimer = new RxTimer();
-        rxTimer.interval(200, number -> {
-            if (mMapView != null) {
-                mMapView.onSaveInstanceState(outState);
-                rxTimer.cancel();
-            }
-        });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
     }
 
     @Override
@@ -123,9 +97,6 @@ public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutB
         super.onDestroy();
         if (LocationService.getInstance() != null) {
             LocationService.getInstance().unregisterLocationListener(this);
-        }
-        if (mMapView != null) {
-            mMapView.onDestroy();
         }
     }
 }

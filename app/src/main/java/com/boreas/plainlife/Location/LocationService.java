@@ -121,7 +121,7 @@ public class LocationService extends Service {
         public void onLocationChanged(AMapLocation aMapLocation) {
             if (null != aMapLocation && aMapLocation.getErrorCode() == 0) {
                 isLocationSuccess = true;
-                if (Constant.DEBUG) {
+                if (!Constant.DEBUG) {
                     StringBuffer sb = new StringBuffer(256);
                     sb.append("time : ");
                     sb.append(aMapLocation.getTime());

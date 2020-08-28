@@ -8,23 +8,27 @@
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="false"
         android:orientation="vertical"
         app:rightMargin="80dp">
-        <LinearLayout
+
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:background="@color/white"
+            skin:enable="true" />
 
-            <include android:id="@+id/headLayout" layout="@layout/drawer_header"/>
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/main_navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/drawer_header"
+            app:menu="@menu/drawer">
+        </com.google.android.material.navigation.NavigationView>
 
-            <FrameLayout
-                skin:enable="true"
-                android:background="@color/white"
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
 
     </com.boreas.plainlife.widget.drawerlayout.DrawerLayout>
 

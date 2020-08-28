@@ -3,30 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <item android:title="Main Item">
+    <item android:title="功能列表">
         <menu>
+            <item android:enabled="true"
+                android:id="@+id/itemLocationService"
+                android:title="位置服务" />
             <item
-                android:id="@+id/sub_palette"
-                android:title="Palette" />
+                android:id="@+id/itemCardNode"
+                android:title="卡片日记" />
             <item
-                android:id="@+id/sub_nested_scrollview"
-                android:title="NestedScrollView" />
+                android:id="@+id/itemTextTemplate"
+                android:title="文字模板" />
             <item
-                android:id="@+id/sub_collapsing_toolbar_layout"
-                android:title="CollapsingToolbarLayout" />
-            <item
-                android:id="@+id/sub_tab_layout"
-                android:title="TabLayout" />
-            <item
-                android:id="@+id/sub_app_bar_layout"
-                android:title="AppBarLayout" />
+                android:id="@+id/itemPicTemplate"
+                android:title="图片模板" />
         </menu>
     </item>
-    <item android:title="Social">
+    <item android:title="个人中心" android:enabled="true">
         <menu>
             <item
+                android:enabled="true"
                 android:id="@+id/sub_github"
-                android:title="Github" />
+                android:title="设置" />
         </menu>
     </item>
 

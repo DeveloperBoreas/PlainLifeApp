@@ -8,7 +8,7 @@ public interface MainActivityInterface extends ViewInterface {
      * 数据请求成功回调
      * @param s
      */
-    void onSuccess(BaseResponse<String> s);
+    void onSuccess(BaseResponse s);
     /**
      * 数据请求失败回调
      */
