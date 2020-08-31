@@ -1,10 +1,13 @@
 package com.boreas.plainlife.mvp.views.fragments.location;
 
+import android.content.Intent;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseFragment;
 import com.boreas.plainlife.databinding.FragmentLocationLovepeopleBinding;
+import com.boreas.plainlife.framwork.ClickProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,10 @@ public class LocationLoveFragment extends BaseFragment<FragmentLocationLovepeopl
 
     @Override
     public void initListener() {
+        this.binding.addLove.setOnClickListener(new ClickProxy(v -> {
+            Intent intent = new Intent(getActivity(),null);
+            startActivity(intent);
+        }));
 
     }
 
