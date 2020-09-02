@@ -35,7 +35,9 @@ public class PhoneInfoUtils {
     public static final int SLOT_1 = 0;
     public static final int SLOT_2 = 1;
 
-    /**\
+    /**
+     * \
+     *
      * @return
      */
     public static String getImeiNum(Context context) {
@@ -312,4 +314,18 @@ public class PhoneInfoUtils {
         return strNetworkType;
     }
 
+    public static String getPhoneNum(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        String phoneNum = telephonyManager.getLine1Number() != null ? telephonyManager.getLine1Number() : "";
+        if(TextUtils.isEmpty(phoneNum)){
+            return phoneNum;
+        }else{
+            return phoneNum.substring(3,14);
+        }
+    }
 }

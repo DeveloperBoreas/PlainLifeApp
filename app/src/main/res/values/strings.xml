@@ -31,6 +31,7 @@
     <string name="login_input_phonenum_hint">请输入手机号</string>
     <string name="login_input_psd_hint">请输入密码</string>
     <string name="login_input_userName_hint">请输入用户名</string>
+    <string name="login_input_phoneNum_hint">请输入查询的手机号</string>
     <string name="addLovePeople">添加关心的人</string>
     <string name="ilove_people">我关心的人</string>
 

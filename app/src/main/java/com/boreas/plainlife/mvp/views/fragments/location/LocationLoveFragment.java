@@ -8,6 +8,7 @@ import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseFragment;
 import com.boreas.plainlife.databinding.FragmentLocationLovepeopleBinding;
 import com.boreas.plainlife.framwork.ClickProxy;
+import com.boreas.plainlife.mvp.views.activitys.AddLoveActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,6 @@ public class LocationLoveFragment extends BaseFragment<FragmentLocationLovepeopl
     @Override
     public void initView() {
         this.binding.headLayout.headTitle.setText(getString(R.string.ilove_people));
-
         this.binding.list.setHasFixedSize(false);
         this.binding.list.setLayoutManager(new LinearLayoutManager(getContext()));
         this.binding.list.setAdapter(new LovePeopleAdapter(getContext(),stringList,R.layout.location_lovepeople_item).setIsShowFooter((int) getResources().getDimension(R.dimen.main_bottomNavigtion_height_50)));
@@ -41,7 +41,7 @@ public class LocationLoveFragment extends BaseFragment<FragmentLocationLovepeopl
     @Override
     public void initListener() {
         this.binding.addLove.setOnClickListener(new ClickProxy(v -> {
-            Intent intent = new Intent(getActivity(),null);
+            Intent intent = new Intent(getActivity(), AddLoveActivity.class);
             startActivity(intent);
         }));
 

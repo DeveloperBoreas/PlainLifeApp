@@ -13,6 +13,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * author: 王秀清
@@ -40,5 +41,9 @@ public interface ApiService {
     @POST("/sendSms")
     @FormUrlEncoded
     Observable<BaseResponse> sendSms(@Field("phoneNum") String phoneNum);
+
+    //根据手机号查询用户
+    @GET("/system/user/app/queryUserByPhone")
+    Observable<String> queryUserByPhone(@Query("phone") String phoneNum);
 
 }

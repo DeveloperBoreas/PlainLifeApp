@@ -1,16 +1,34 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
 import com.boreas.plainlife.R;
+import com.boreas.plainlife.base.BaseActivity;
+import com.boreas.plainlife.databinding.ActivityAddLoveBinding;
 
-public class AddLoveActivity extends AppCompatActivity {
+public class AddLoveActivity extends BaseActivity<ActivityAddLoveBinding> {
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_love);
+    public int setContentView() {
+        return R.layout.activity_add_love;
+    }
+
+    @Override
+    protected void initView() {
+        this.binding.headLayout.headTitle.setText(getString(R.string.addLovePeople));
+    }
+
+    @Override
+    protected void initListener() {
+
+    }
+
+    @Override
+    protected void initComponent() {
+
+    }
+
+    @Override
+    protected void initData() {
+
     }
 }
