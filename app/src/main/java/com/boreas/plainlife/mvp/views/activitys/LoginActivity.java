@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.boreas.plainlife.App;
+import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.Location.LocationService;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseActivity;
@@ -116,21 +117,12 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
                     public void onFinish() {
                         binding.verCodeRegister.setEnabled(true);
                         binding.verCodeRegister.setText("重新获取");
+                        timer.cancel();
+                        timer = null;
                     }
                 };
             }
-            loginActivityPresenter.getApiService().sendSms(binding.verPhoneRegister.getText().toString().trim())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(baseResponse -> {
-                        this.onFailed(baseResponse.getMsg());
-                        if(baseResponse.getCode() == 200){
-                            ToastUtil.show(this,baseResponse.getMsg());
-                            timer.start();
-                        }
-                    }, throwable -> {
-                        ToastUtil.show(this,throwable.getMessage());
-                    });
+            loginActivityPresenter.sendSms(this.binding.verPhoneRegister.getText().toString().trim());
         }));
         this.binding.back.setOnClickListener(new ClickProxy(v -> faceAndBackView.toggle()));
         this.binding.login.setOnClickListener(new ClickProxy(v -> {
@@ -217,6 +209,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
     @Override
     public void onSuccess(LoginReceModel looginReceModel) {
+        PreUtil.put(Constant.TOKEN_KEY,looginReceModel.getToken());
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         this.startActivity(mainIntent);
     }
@@ -229,6 +222,13 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         this.binding.verCodeImg.setImageBitmap(decodedByte);
     }
 
+    @Override
+    public void onSendSMSSuccess() {
+        if (timer != null) {
+            timer.start();
+        }
+    }
+
 
     /**
      * 数据请求失败回调
@@ -238,6 +238,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     public void onFailed(String message) {
         ToastUtil.show(this, message);
+        if("验证码已失效".equals(message)){
+            loginActivityPresenter.requestCaptchatImg();
+        }
     }
 
     @Override
@@ -246,7 +249,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         RxTimer rxTimer = new RxTimer();
         this.binding.userName.setText(userRegisterParams.getUserName());
         this.binding.userPsd.setText(userRegisterParams.getUserName());
-        rxTimer.timer(1000,number -> {
+        rxTimer.timer(1000, number -> {
             faceAndBackView.toggle();
         });
     }

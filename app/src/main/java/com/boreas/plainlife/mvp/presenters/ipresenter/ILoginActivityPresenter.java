@@ -10,4 +10,5 @@ public interface ILoginActivityPresenter extends Presenter {
     void requestCaptchatImg();
     void requestLogin(String userName, String password,String verCode,String uuid);
     void requesrRegister(UserRegisterParams userRegisterParams);
+    void sendSms(String phone);
 }

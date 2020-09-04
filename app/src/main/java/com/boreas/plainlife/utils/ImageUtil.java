@@ -9,16 +9,13 @@ import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.R;
 
 public class ImageUtil {
-    public static void loadImg(Context context, String url, ImageView imageView) {
-        Glide.with(context).load(handlerUrl(url)).into(imageView);
-    }
 
-    public static void loadImg(Context context, String url, ImageView imageView, boolean isLoadError) {
-        final RequestOptions options = new RequestOptions();
-//                .placeholder(R.mipmap.default_img_failed)// 正在加载中的图片
-//                .error(R.mipmap.default_img_failed); // 加载失败的图片
+    public static void loadImg(Context context, String url, ImageView imageView) {
+        final RequestOptions options = new RequestOptions()
+                .placeholder(R.mipmap.bg)// 正在加载中的图片
+                .error(R.mipmap.bg); // 加载失败的图片
         Glide.with(context)
-                .load(handlerUrl(url)) // 图片地址
+                .load(url) // 图片地址
                 .apply(options)
                 .into(imageView);
     }

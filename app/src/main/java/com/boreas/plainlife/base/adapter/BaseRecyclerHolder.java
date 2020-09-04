@@ -71,7 +71,7 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
 
     public BaseRecyclerHolder setImageByUrl(int viewId,String url){
 //        Glide.with(context).load(url).skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.ALL).into((ImageView) getView(viewId));
-        ImageUtil.loadImg(context,url,getView(viewId),true);
+        ImageUtil.loadImg(context,url,getView(viewId));
         return this;
     }
 

@@ -1,10 +1,13 @@
 package com.boreas.plainlife.api;
 
 import com.boreas.plainlife.base.BaseResponse;
+import com.boreas.plainlife.mvp.models.location.LocationUserModel;
 import com.boreas.plainlife.mvp.models.login.CaptchatModel;
 import com.boreas.plainlife.mvp.models.login.LoginParams;
 import com.boreas.plainlife.mvp.models.login.LoginReceModel;
 import com.boreas.plainlife.mvp.models.login.UserRegisterParams;
+
+import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -20,6 +23,12 @@ import retrofit2.http.Query;
  * des:   项目所用接口管理
  */
 public interface ApiService {
+    ArrayList<String> notAllowInterceptPath = new ArrayList<String>(){{
+        add("captchaImage");
+        add("login");
+        add("system/user/app/addUser");
+        add("sendSms");
+    }};
     String MULTIPART_DATA = "multipart/form-data";
     String FILE = "file";
                                                         //"手机厂商"                        "手机型号"                          "手机系统版本号"
@@ -43,7 +52,12 @@ public interface ApiService {
     Observable<BaseResponse> sendSms(@Field("phoneNum") String phoneNum);
 
     //根据手机号查询用户
-    @GET("/system/user/app/queryUserByPhone")
-    Observable<String> queryUserByPhone(@Query("phone") String phoneNum);
+    @GET("/app/location/queryUserByPhone")
+    Observable<LocationUserModel> queryUserByPhone(@Query("phone") String phoneNum);
+
+    //绑定用户
+    @POST("/app/location/bindUserForPhone")
+    @FormUrlEncoded
+    Observable<BaseResponse> bindUserForPhone(@Field("phone") String phone);
 
 }

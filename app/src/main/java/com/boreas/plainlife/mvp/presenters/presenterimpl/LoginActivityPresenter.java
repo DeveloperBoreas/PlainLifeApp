@@ -84,6 +84,30 @@ public class LoginActivityPresenter extends BaseRequest implements ILoginActivit
     }
 
     @Override
+    public void sendSms(String phone) {
+        if (isNetWorkEnable()) {
+            loginActivityInterface.onShowLoadingDialog();
+            loginSubscribe = apiService.sendSms(phone)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(baseResponse -> {
+                        loginActivityInterface.onDisLoadingDialog();
+                        if (baseResponse.getCode() == 200) {
+                            loginActivityInterface.onSendSMSSuccess();
+                            return;
+                        }
+                        loginActivityInterface.onFailed(baseResponse.getMsg());
+                    }, throwable -> {
+                        Logger.e(throwable.getMessage());
+                        loginActivityInterface.onFailed(throwable.getMessage());
+                        loginActivityInterface.onDisLoadingDialog();
+                    });
+            return;
+        }
+        loginActivityInterface.noNetWork();
+    }
+
+    @Override
     public void requestCaptchatImg() {
         if (isNetWorkEnable()) {
             loginActivityInterface.onShowLoadingDialog();

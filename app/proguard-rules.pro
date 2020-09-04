@@ -142,4 +142,6 @@ public static java.lang.String TABLENAME;
 #--------------------------------------------- 状态栏
  -keep class com.gyf.immersionbar.* {*;}
  -dontwarn com.gyf.immersionbar.**
-
+#--------------------------------------------- 加载图
+-keep class com.wang.avi.** { *; }
+-keep class com.wang.avi.indicators.** { *; }

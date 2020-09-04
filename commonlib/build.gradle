@@ -74,5 +74,6 @@ dependencies {
     //未混淆
     //RabbitMQ
     api 'com.rabbitmq:amqp-client:5.6.0'
-
+    //加载
+    api 'com.wang.avi:library:2.1.3'
 }

@@ -16,20 +16,6 @@
             android:clickable="true"
             app:layout_constraintTop_toBottomOf="@id/headLayout">
 
-            <Button
-                android:id="@+id/verCodeRegister"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/btn_bg"
-                android:elevation="10dp"
-                android:text="查询"
-                android:textColor="@color/text_color"
-                android:textSize="13sp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phoneHint"
                 android:layout_width="match_parent"
@@ -41,14 +27,28 @@
                     android:id="@+id/phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="13"
+                    android:maxLength="11"
                     android:textColorHint="@color/white"
                     android:textSize="16sp"
                     android:theme="@style/InputStyle" />
             </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/query"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/btn_bg"
+                android:elevation="10dp"
+                android:text="查询"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
         </RelativeLayout>
 
         <FrameLayout
+            android:id="@+id/bind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -93,20 +93,10 @@
                             android:textSize="20sp" />
                         <TextView
                             android:layout_marginTop="2dp"
-                            android:id="@+id/userAddress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/userSex"
-                            android:layout_centerHorizontal="true"
-                            android:text="北京市-海淀区-牡丹园"
-                            android:textColor="@color/text_color"
-                            android:textSize="20sp" />
-                        <TextView
-                            android:layout_marginTop="2dp"
                             android:id="@+id/userPhone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/userAddress"
+                            android:layout_below="@+id/userSex"
                             android:layout_centerHorizontal="true"
                             android:text="13051089921"
                             android:textColor="@color/text_color"

@@ -17,6 +17,12 @@ public interface LoginActivityInterface extends ViewInterface {
      * 验证码图片成功回调
      */
     void onCaptchatSuccess(CaptchatModel captchatModel);
+
+    /**
+     *
+     */
+    void onSendSMSSuccess();
+
     /**
      * 数据请求失败回调
      */

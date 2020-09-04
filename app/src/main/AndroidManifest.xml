@@ -16,7 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppBaseTheme"
         tool:ignore="LockedOrientationActivity">
-        <activity android:name=".mvp.views.activitys.AddLoveActivity"></activity>
+        <activity
+            android:name=".mvp.views.activitys.AddLoveActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
         <activity
             android:name=".mvp.views.activitys.LoginActivity"
@@ -33,6 +36,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="35e9fd0d2a8cff8c132c0dde8f6a5e84" /> <!-- 初始化皮肤插件 -->
@@ -49,6 +53,7 @@
             android:exported="true"
             android:label="高德地图定位" />
     </application>
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
