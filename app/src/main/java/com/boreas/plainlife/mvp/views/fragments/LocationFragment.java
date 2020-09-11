@@ -15,13 +15,12 @@ import com.boreas.plainlife.mvp.views.fragments.location.LocationLoveFragment;
 import com.boreas.plainlife.mvp.views.fragments.location.LocationMapFragment;
 import com.boreas.plainlife.mvp.views.fragments.location.LocationSettingFragment;
 import com.boreas.plainlife.mvp.views.fragments.location.ViewPagerAdapter;
+import com.boreas.plainlife.utils.RxTimer;
 
 import java.util.ArrayList;
 
 public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutBinding> implements LocationListener {
-    private RabbitMQConfiguration rabbitMQConfiguration;
-    private MapView mMapView = null;
-    private AMap aMap;
+
     private ArrayList<BaseFragment> fragments;
 
     @Override
@@ -41,7 +40,8 @@ public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutB
         this.binding.viewPager.setAdapter(new ViewPagerAdapter(getActivity().getSupportFragmentManager(), this.addFragments()));
 
     }
-    private ArrayList<BaseFragment> addFragments(){
+
+    private ArrayList<BaseFragment> addFragments() {
         this.fragments = new ArrayList<>();
         this.fragments.add(new LocationLoveFragment());
         this.fragments.add(new LocationMapFragment());
@@ -53,13 +53,13 @@ public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutB
     public void initListener() {
         this.binding.love.setOnClickListener(new ClickProxy(v -> {
             this.binding.viewPager.setCurrentItem(0);
-        },100));
+        }, 100));
         this.binding.location.setOnClickListener(new ClickProxy(v -> {
             this.binding.viewPager.setCurrentItem(1);
-        },100));
+        }, 100));
         this.binding.setting.setOnClickListener(new ClickProxy(v -> {
             this.binding.viewPager.setCurrentItem(2);
-        },100));
+        }, 100));
     }
 
     @Override
@@ -70,21 +70,6 @@ public class LocationFragment extends BaseFragment<FragmentLocationParentlayoutB
     @Override
     public boolean onBackPressed() {
         return false;
-    }
-
-    private void handlerReceiverPositionMessage() {
-        //        this.rabbitMQConfiguration = RabbitMQConfiguration.getInstance();
-//        this.handlerReceiverPositionMessage();
-//        RxTimer hbRxTimer = new RxTimer();
-//        hbRxTimer.interval(5000, number -> {
-//            this.rabbitMQConfiguration.basicPublish(() -> "测试内容");
-//        });
-        rabbitMQConfiguration.basicConsumer(new ResqonCallBack() {
-            @Override
-            public void onSuccess(String jsonString) {
-                System.out.println("handlerReceiverPositionMessage : " + jsonString);
-            }
-        });
     }
 
     @Override

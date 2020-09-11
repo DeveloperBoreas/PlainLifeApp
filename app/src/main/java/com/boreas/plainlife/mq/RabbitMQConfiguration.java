@@ -1,7 +1,15 @@
 package com.boreas.plainlife.mq;
 
 import android.content.Context;
+import android.renderscript.BaseObj;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+import com.amap.api.maps.model.LatLng;
+import com.boreas.plainlife.Location.LocationService;
+import com.boreas.plainlife.utils.TimeUtils;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -31,6 +39,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.boreas.plainlife.mq.CommonString.*;
 
 
 /**
@@ -475,115 +485,58 @@ public class RabbitMQConfiguration {
         }
     }
 
-//    /**
-//     * 发送心跳
-//     */
-//    public String hbService() {
-//        try {
-//            BaseObj obj = getBase(TYPE_HD, "");
-//            JSONObject jsonObject = baseObj(obj);
-//            jsonObject.put(MAC, PhoneInfoUtils.getMobileMAC(this.context));
-////            BatteryInfo batteryInfo = PhoneInfoUtils.getBatteryInfo();
-////            jsonObject.put(TEM, batteryInfo.getTemp());
-////            jsonObject.put(VOL, batteryInfo.getVoltage());
-////            jsonObject.put(SWR, "0");
-////            jsonObject.put(POWER, batteryInfo.getLevel());
-//            jsonObject.put(SIGNAL, PhoneInfoUtils.getSignalInfo(this.context));
-////            jsonObject.put(AMP, App.getInstance().getDbType().getType());
-//            return jsonObject.toString();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//
-//    private BaseObj getBase(String ty, String sty) {
-//        if (TextUtils.isEmpty(ty)) {
-//            throw new NullPointerException(" ty  不能为空 ！");
-//        }
-//        String ai = String.valueOf(receBean.getAi());
-//        String an = receBean.getAn();
-////        String tskGroupId = receBean.getTskGroupId();
-//        String tskId = String.valueOf(receBean.getTskId());
-//        String tskName = receBean.getTskName();
-////        String optPhoneId = receBean.getOptPhoneId();
-//        String deviceName = receBean.getDeviceGroup() == null ? "" : receBean.getDeviceGroup() + "_" + PhoneInfoUtils.GetNetworkType(this.context);
-//        String plate = receBean.getPlate();
-//        String imeiNum = PhoneInfoUtils.getImeiNum(this.context);
-//        String datasource = DATASOURCE_VALUE;
-//        BaseObj obj = new BaseObj(ty, sty, ai, an, tskId, deviceName, plate, imeiNum, tskName,datasource);
-//        return obj;
-//    }
-//
-//    /**
-//     * 添加请求公共字段
-//     *
-//     * @param obj
-//     * @return
-//     * @throws JSONException
-//     */
-//    private JSONObject baseObj(BaseObj obj) throws JSONException {
-//        JSONObject result = new JSONObject();
-//        result.put(TYPE, obj.getTy()); //"ty": "hb", 类型
-//        if (TYPE_EVT.equals(obj.getTy()) || TYPE_SCAN.equals(obj.getTy()) || TYPE_OTHER.equals(obj.getTy()) || DCELL.equals(obj.getTy())) {
-//            result.put(STY, obj.getSty());
-//        }
-//        result.put(AI, obj.getAi());
-//        result.put(AN, obj.getAn());
-////        result.put(TSKGROUP_ID, obj.getTskGroupId());
-//        result.put(TSK_ID, obj.getTskId());
-//        result.put(TSK_NAME, obj.getTskName());
-//        result.put(GPS, getGPS());
-////        result.put(OPT_PHONEID, obj.getOptPhoneId());
-//        result.put(FROM, APP);
-//        result.put(DTY, LOC);
-//        imei = obj.getImei();
-//        result.put(IMEI, imei);
-//        result.put(PLATE, obj.getPlate());
-//        result.put(DEVICE_NAME, obj.getDeivceName());
-//        result.put(TIME, TimeUtils.getUTCTimeDef());
-//        result.put(DEVICE_TYPE, PTS_3);
-//        result.put(DATASOURCE,obj.getDatasource());
-//        return result;
-//    }
-//
-//    private JSONObject getGPS() {
-//        try {
-//            JSONObject gps = new JSONObject();
-//            gps.put(GPSTIME, TimeUtils.getUTCTimeDef());
-//            // TODO: 2019/5/16  后续将替换成正式的GPS数据
-////            String[] gpsPoint = LocationService.getInstance().getGpsPoint();
-//            gps.put(GPSLNG, LocationService.getInstance().getLng());//gpsPoint[1];
-//            gps.put(GPSLAT, LocationService.getInstance().getLat());//gpsPoint[0];
-//
-////            String[] doubles = coord[coord_index++].split(",");
-////            gps.put(GPSLNG, doubles[0]);
-////            gps.put(GPSLAT, doubles[1]);
-//            gps.put(GPSLOCTYPE, GPSTYPE_BAIDU);
-//            return gps;
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    private JSONObject getGPS(LatLng latLng) {
-//        try {
-//            JSONObject gps = new JSONObject();
-//            gps.put(GPSTIME, TimeUtils.getUTCTimeDef());
-//            // TODO: 2019/5/16  后续将替换成正式的GPS数据
-//            String[] gpsPoint = LocationService.getInstance().getGpsPoint();
-//            gps.put(GPSLNG, latLng.latitude);//gpsPoint[1];
-//            gps.put(GPSLAT, latLng.longitude);//gpsPoint[0];
-//
-////            String[] doubles = coord[coord_index++].split(",");
-////            gps.put(GPSLNG, doubles[0]);
-////            gps.put(GPSLAT, doubles[1]);
-//            gps.put(GPSLOCTYPE, GPSTYPE_BAIDU);
-//            return gps;
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public String hbService() {
+        try {
+            JSONObject jsonObject = baseObj();
+            return jsonObject.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 添加请求公共字段
+     */
+    private JSONObject baseObj() throws JSONException {
+        JSONObject result = new JSONObject();
+        result.put(GPS, getGPS());//GPS
+        result.put(IMEI, PhoneInfoUtils.getImeiNum(this.context)); //手机IMEI
+//        result.put(PHONE_NUMBER, PhoneInfoUtils.getPhoneNum(this.context)); //手机号
+        result.put(PHONE_NUMBER, "13051089921"); //手机号
+        result.put(NETWORK_TYPE, PhoneInfoUtils.GetNetworkType(this.context)); //网络状态
+        result.put(TIME, TimeUtils.getUTCTimeDef());//时间
+        result.put(MAC, PhoneInfoUtils.getMobileMAC(this.context)); //MAC地址
+        result.put(POWER,App.getInstance().getBatteryInfo().getLevel());//手机电量
+        return result;
+    }
+
+    private JSONObject getGPS() {
+        try {
+            JSONObject gps = new JSONObject();
+            gps.put(GPSTIME, TimeUtils.getUTCTimeDef());
+            LatLng latLng = LocationService.getInstance().getLatLng();
+            gps.put(GPSLNG, latLng.longitude);
+            gps.put(GPSLAT, latLng.latitude);
+            gps.put(GPSLOCTYPE, GPSTYPE_GAODE);
+            return gps;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private JSONObject getGPS(LatLng latLng) {
+        try {
+            JSONObject gps = new JSONObject();
+            gps.put(GPSTIME, TimeUtils.getUTCTimeDef());
+            gps.put(GPSLNG, latLng.latitude);
+            gps.put(GPSLAT, latLng.longitude);
+            gps.put(GPSLOCTYPE, GPSTYPE_GAODE);
+            return gps;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -20,8 +20,8 @@ public class ImageUtil {
                 .into(imageView);
     }
 
-    private static String handlerUrl(String imgUrl) {
-        return Constant.BASE_ICON_URL + imgUrl;
-    }
+//    private static String handlerUrl(String imgUrl) {
+//        return Constant.BASE_ICON_URL + imgUrl;
+//    }
 
 }

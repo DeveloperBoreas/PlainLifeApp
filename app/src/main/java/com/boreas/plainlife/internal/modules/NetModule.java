@@ -1,5 +1,8 @@
 package com.boreas.plainlife.internal.modules;
 
+import com.boreas.plainlife.websocket.PlainWebSocketListener;
+import com.boreas.plainlife.websocket.WebSocketManger;
+import com.boreas.plainlife.mq.RabbitMQConfiguration;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.api.ApiService;
@@ -23,6 +26,8 @@ import javax.net.ssl.X509TrustManager;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.fastjson.FastJsonConverterFactory;
@@ -39,6 +44,7 @@ public class NetModule {
                 .readTimeout(Constant.READ_TIME, TimeUnit.SECONDS)
                 .writeTimeout(Constant.WRITE_TIME, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
+                .pingInterval(Constant.PING_TIME,TimeUnit.SECONDS)
                 .addNetworkInterceptor(new NetworkCacheInterceptor())
                 .addInterceptor(BaseUrlInterceptor.getInstance())
                 .addInterceptor(new TokenInterceptor())
@@ -70,10 +76,22 @@ public class NetModule {
         return retrofit.create(ApiService.class);
     }
 
+    @Provides
+    @Singleton
+    public WebSocketManger provideWebSocketManager(OkHttpClient client){
+        return WebSocketManger.getInstance(client);
+    }
+
+    @Provides
+    @Singleton
+    public RabbitMQConfiguration provideRabbitMQConfiguration(){
+        return RabbitMQConfiguration.getInstance();
+    }
+
     private SSLSocketFactory CreateSSLSocketFactory() {
         SSLSocketFactory ssfFactory = null;
         try {
-            SSLContext sc = SSLContext.getInstance("TLS");
+            SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, new TrustManager[]{
                     new X509TrustManager() {
                         @Override

@@ -1,6 +1,7 @@
 package com.boreas.plainlife.mvp.views.activitys;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -26,13 +27,11 @@ import com.boreas.plainlife.mvp.presenters.presenterimpl.MainActivityPresenter;
 import com.boreas.plainlife.mvp.views.fragments.LocationFragment;
 import com.boreas.plainlife.mvp.views.fragments.PicNoteFragment;
 import com.boreas.plainlife.mvp.views.viewinterfaces.MainActivityInterface;
+import com.boreas.plainlife.receiver.BatteryBroadCastReceive;
 import com.boreas.plainlife.utils.PreUtil;
 import com.boreas.plainlife.utils.ToastUtil;
-import com.google.android.material.navigation.NavigationView;
 import com.lzf.easyfloat.EasyFloat;
 import com.orhanobut.logger.Logger;
-
-import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Inject;
 
@@ -42,6 +41,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     private static final String FRAGMENT_PIC_NOTE  = "卡片日记";
     private FragmentManager fragmentManager;
     private String currentFragmentTag;
+    private BatteryBroadCastReceive receiver;
+    private boolean isFirstOpenApp = true;
     @Inject
     MainActivityPresenter presenter;
 
@@ -143,9 +144,25 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void initData() {
-
+        this.presenter.onInit();
+        this.registerBatterReceiver();
     }
-    private boolean isFirstOpenApp = true;
+
+
+
+    private void registerBatterReceiver(){
+        this.receiver = new BatteryBroadCastReceive();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(this.receiver, intentFilter);
+    }
+    private void unRegisterBatterReceiver(){
+        if(this.receiver != null){
+            unregisterReceiver(this.receiver);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -162,8 +179,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void onDestroy() {
-        presenter.onDestory();
+        this.presenter.onDestory();
+        this.unRegisterBatterReceiver();
         EasyFloat.dismissAppFloat("floatBall");
+        RabbitMQConfiguration.getInstance().onDestory();
         super.onDestroy();
     }
 

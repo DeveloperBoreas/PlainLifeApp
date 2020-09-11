@@ -9,6 +9,7 @@ import com.boreas.commonlib.xskinloader.ExtraAttrRegister;
 import com.boreas.commonlib.xskinloader.SkinInflaterFactory;
 import com.boreas.commonlib.xskinloader.util.AssetFileUtils;
 import com.boreas.plainlife.Location.GaoDeLocationClient;
+import com.boreas.plainlife.receiver.BatteryInfo;
 import com.lzf.easyfloat.EasyFloat;
 import com.boreas.plainlife.internal.components.AppComponent;
 import com.boreas.plainlife.internal.components.DBComponent;
@@ -29,8 +30,9 @@ public class App extends Application {
     private DBComponent mDBComponent;
     private boolean NetWorkState = true;
     private GaoDeLocationClient locationClient;
-
+    private BatteryInfo batteryInfo;
     public String skinPath;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -51,9 +53,9 @@ public class App extends Application {
     }
 
     private void initCopyObjToDataFile() {
-        FileUtil.copyFilesFromAssetsToData(this,"3dmodel.obj");
-        skinPath =  getFilesDir().getAbsolutePath() + File.separator +"mipmap.apk";
-        FileUtil.copyFilesFromAssetsToData(this,"mipmap.apk");
+        FileUtil.copyFilesFromAssetsToData(this, "3dmodel.obj");
+        skinPath = getFilesDir().getAbsolutePath() + File.separator + "mipmap.apk";
+        FileUtil.copyFilesFromAssetsToData(this, "mipmap.apk");
     }
 
     private void initFloatBall() {
@@ -68,9 +70,11 @@ public class App extends Application {
     private void initBugly() {
 
     }
+
     private void initGaoDeLocation() {
         locationClient = new GaoDeLocationClient(getApplicationContext());
     }
+
     public GaoDeLocationClient getLocationClient() {
         return this.locationClient;
     }
@@ -95,5 +99,16 @@ public class App extends Application {
 
     public boolean getNetWorkState() {
         return this.NetWorkState;
+    }
+
+    public BatteryInfo getBatteryInfo() {
+        if (this.batteryInfo == null) {
+            this.batteryInfo = new BatteryInfo();
+        }
+        return this.batteryInfo;
+    }
+
+    public void setBatteryInfo(BatteryInfo batteryInfo) {
+        this.batteryInfo = batteryInfo;
     }
 }

@@ -29,6 +29,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/nickName"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:layout_marginBottom="1dp"
@@ -38,6 +39,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/lastTime"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:layout_marginTop="1dp"
@@ -58,6 +60,7 @@
                 android:src="@mipmap/icon_location" />
 
             <TextView
+                android:id="@+id/location"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,6 +74,7 @@
             android:background="@color/line_color" />
 
         <com.boreas.plainlife.widget.CircleImageView
+            android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@mipmap/logo2" />

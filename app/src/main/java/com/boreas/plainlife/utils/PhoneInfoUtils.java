@@ -36,23 +36,13 @@ public class PhoneInfoUtils {
     public static final int SLOT_2 = 1;
 
     /**
-     * \
-     *
-     * @return
+     * 获取IMEI
      */
     public static String getImeiNum(Context context) {
         try {
             TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             Method method = manager.getClass().getMethod("getImei", int.class);
-
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return null;
             }
             String imei = manager.getDeviceId();
@@ -65,64 +55,11 @@ public class PhoneInfoUtils {
     }
 
     /**
-     * 获取imsi卡
-     *
-     * @param context
-     * @return
-     */
-    public static String getImsiNum(Context context) {
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            //获取IMSI号
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return null;
-            }
-            String imsi = telephonyManager.getSubscriberId();
-
-            if (null == imsi) {
-                imsi = "";
-            }
-            return imsi;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-
-    }
-
-    /**
-     * 获取手机的制式
-     *
-     * @param context
-     * @return
-     */
-    public static String getPhoneType(Context context) {
-        TelephonyManager telephoneManger = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-        int phoneType = telephoneManger.getPhoneType();
-        if (TelephonyManager.PHONE_TYPE_CDMA == phoneType) {
-            return "CDMA";
-        } else if (TelephonyManager.PHONE_TYPE_GSM == phoneType) {
-            return "GSM";
-        } else {
-            return "未知";
-        }
-
-    }
-
-
-    /**
      * 获取手机设备MAC地址
      * MAC地址：物理地址、硬件地址，用来定义网络设备的位置
-     * modify by heliquan at 2018年1月17日
-     *
-     * @param context
-     * @return
      */
     public static String getMobileMAC(Context context) {
-
         WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return getAndroidVersion7MAC();
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -133,34 +70,9 @@ public class PhoneInfoUtils {
     }
 
     /**
-     * 获取手机电池的电压 ，温度信息
-     *
-     * @return
-     */
-
-//    public static BatteryInfo getBatteryInfo() {
-//        return App.info;
-//    }
-
-
-    /**
-     * 获取信号强度
-     *
-     * @param context
-     * @return
-     */
-
-//    public static int getSignalInfo(Context context) {
-//        return ((App) context.getApplicationContext()).getmDbm();
-//
-//    }
-
-    /**
      * Android 6.0 设备兼容获取mac
      * 兼容原因：从Android 6.0之后，Android 移除了通过WiFi和蓝牙API来在应用程序中可编程的访问本地硬件标示符。
      * 现在WifiInfo.getMacAddress()和BluetoothAdapter.getAddress()方法都将返回：02:00:00:00:00:00
-     *
-     * @return
      */
     private static String getAndroidHighVersionMac() {
         String str = "";
@@ -195,9 +107,6 @@ public class PhoneInfoUtils {
 
     /**
      * Android 6.0 以下设备获取mac地址 获取失败默认返回：02:00:00:00:00:00
-     *
-     * @param wifiManager
-     * @return
      */
     @NonNull
     private static String getAndroidLowVersionMac(WifiManager wifiManager) {
@@ -218,8 +127,6 @@ public class PhoneInfoUtils {
 
     /**
      * 兼容7.0获取不到的问题
-     *
-     * @return
      */
     public static String getAndroidVersion7MAC() {
         try {
@@ -310,7 +217,7 @@ public class PhoneInfoUtils {
                 Logger.e("Network getSubtype : " + Integer.valueOf(networkType).toString());
             }
         }
-        Logger.e("Network Type : " + strNetworkType);
+//        Logger.e("Network Type : " + strNetworkType);
         return strNetworkType;
     }
 

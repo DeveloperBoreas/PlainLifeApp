@@ -1,6 +1,7 @@
 package com.boreas.plainlife.api;
 
 import com.boreas.plainlife.base.BaseResponse;
+import com.boreas.plainlife.mvp.models.location.LocationUserListModel;
 import com.boreas.plainlife.mvp.models.location.LocationUserModel;
 import com.boreas.plainlife.mvp.models.login.CaptchatModel;
 import com.boreas.plainlife.mvp.models.login.LoginParams;
@@ -59,5 +60,9 @@ public interface ApiService {
     @POST("/app/location/bindUserForPhone")
     @FormUrlEncoded
     Observable<BaseResponse> bindUserForPhone(@Field("phone") String phone);
+
+    //绑定用户列表
+    @GET("/app/location/queryBindUsers")
+    Observable<LocationUserListModel> queryBindUsers();
 
 }
