@@ -7,7 +7,7 @@ import com.boreas.plainlife.mvp.views.activitys.MainActivity;
 import dagger.Component;
 
 @ActivityScope
-@Component(modules = MainActivityModule.class,dependencies = {NetComponent.class,AppComponent.class})
+@Component(modules = MainActivityModule.class,dependencies = {NetComponent.class,AppComponent.class,BeansComponent.class})
 public interface MainActivityComponent {
     void inject(MainActivity mainActivity);
 }

@@ -35,14 +35,13 @@ public class WebSocketManger {
     public void init() {
         Request request = new Request.Builder()
                 .url(Constant.WEBSOCKET_URL)
-                .header("token", (String) PreUtil.get(Constant.TOKEN_KEY, ""))
+                .header("Authorization", (String) PreUtil.get(Constant.TOKEN_KEY, ""))
                 .build();
         this.webSocket = client.newWebSocket(request, new PlainWebSocketListener());
     }
 
     public void sendMessage(String message) {
         this.webSocket.send(message);
-
     }
 
 }

@@ -3,6 +3,7 @@ package com.boreas.plainlife.mvp.presenters.presenterimpl;
 import android.content.Context;
 
 import com.boreas.plainlife.App;
+import com.boreas.plainlife.websocket.PlainMessage;
 import com.boreas.plainlife.websocket.WebSocketManger;
 import com.boreas.plainlife.api.ApiService;
 import com.boreas.plainlife.base.BaseRequest;
@@ -21,29 +22,19 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
     private Context context;
     private App app;
     private WebSocketManger webSocketManger;
-    private Disposable testSubscribe;
-    private RabbitMQConfiguration rabbitMQConfiguration;
+    private PlainMessage plainMessage;
+    private Disposable subscribe;
 
     @Inject
-    public MainActivityPresenter(ApiService apiService, MainActivityInterface mainActivityInterface, Context context, App app, WebSocketManger webSocketManger, RabbitMQConfiguration rabbitMQConfiguration) {
+    public MainActivityPresenter(ApiService apiService, MainActivityInterface mainActivityInterface, Context context, App app, WebSocketManger webSocketManger, PlainMessage plainMessage) {
         this.apiService = apiService;
         this.mainActivityInterface = mainActivityInterface;
         this.context = context;
         this.app = app;
         this.webSocketManger = webSocketManger;
-        this.rabbitMQConfiguration = rabbitMQConfiguration;
+        this.plainMessage = plainMessage;
     }
 
-    private void handlerReceiverPositionMessage() {
-//        RxTimer hbRxTimer = new RxTimer();
-//        hbRxTimer.interval(5000, number -> {
-//            this.rabbitMQConfiguration.basicPublish(() -> rabbitMQConfiguration.hbService());
-//        });
-//        //处理接收内容
-//        rabbitMQConfiguration.basicConsumer(jsonString -> {
-////                System.out.println("handlerReceiverPositionMessage : " + jsonString);
-//        });
-    }
 
     @Override
     public void requestData() {
@@ -57,15 +48,14 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
     @Override
     public void onInit() {
         this.webSocketManger.init();
-        this.handlerReceiverPositionMessage();
-        this.sendMessage();
+        this.sendHBMessage();
     }
 
-    public void sendMessage() {
+    public void sendHBMessage() {
         RxTimer hbRxTimer = new RxTimer();
         hbRxTimer.interval(5000, number -> {
             if (this.webSocketManger.getWebSocket() != null) {
-                this.webSocketManger.sendMessage("测试内容");
+                this.webSocketManger.sendMessage(this.plainMessage.hbService());
             }
         });
     }
@@ -82,8 +72,8 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
 
     @Override
     public void onDestory() {
-        if (testSubscribe != null && !testSubscribe.isDisposed()) {
-            testSubscribe.dispose();
+        if (subscribe != null && !subscribe.isDisposed()) {
+            subscribe.dispose();
         }
     }
 }

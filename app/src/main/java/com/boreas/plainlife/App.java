@@ -9,6 +9,9 @@ import com.boreas.commonlib.xskinloader.ExtraAttrRegister;
 import com.boreas.commonlib.xskinloader.SkinInflaterFactory;
 import com.boreas.commonlib.xskinloader.util.AssetFileUtils;
 import com.boreas.plainlife.Location.GaoDeLocationClient;
+import com.boreas.plainlife.internal.components.BeansComponent;
+import com.boreas.plainlife.internal.components.DaggerBeansComponent;
+import com.boreas.plainlife.internal.modules.BeansModule;
 import com.boreas.plainlife.receiver.BatteryInfo;
 import com.lzf.easyfloat.EasyFloat;
 import com.boreas.plainlife.internal.components.AppComponent;
@@ -28,6 +31,7 @@ public class App extends Application {
     private AppComponent mAppComponent;
     private NetComponent mNetComponent;
     private DBComponent mDBComponent;
+    private BeansComponent mBeansComponent;
     private boolean NetWorkState = true;
     private GaoDeLocationClient locationClient;
     private BatteryInfo batteryInfo;
@@ -83,6 +87,7 @@ public class App extends Application {
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         mNetComponent = DaggerNetComponent.builder().appComponent(mAppComponent).build();
         mDBComponent = DaggerDBComponent.builder().build();
+        mBeansComponent = DaggerBeansComponent.builder().beansModule(new BeansModule(this)).build();
     }
 
     public AppComponent getmAppComponent() {
@@ -91,6 +96,10 @@ public class App extends Application {
 
     public NetComponent getmNetComponent() {
         return mNetComponent;
+    }
+
+    public BeansComponent getmBeansComponent() {
+        return mBeansComponent;
     }
 
     public DBComponent getmDBComponent() {

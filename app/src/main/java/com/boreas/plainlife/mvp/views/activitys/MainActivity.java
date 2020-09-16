@@ -138,6 +138,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
                 .netComponent(App.getInstance().getmNetComponent())
                 .mainActivityModule(new MainActivityModule(this))
                 .appComponent(App.getInstance().getmAppComponent())
+                .beansComponent(App.getInstance().getmBeansComponent())
                 .build()
                 .inject(this);
     }
