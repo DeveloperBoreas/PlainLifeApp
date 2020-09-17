@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.boreas.plainlife.mq.CommonString.ADDRESS;
 import static com.boreas.plainlife.mq.CommonString.GPS;
 import static com.boreas.plainlife.mq.CommonString.GPSLAT;
 import static com.boreas.plainlife.mq.CommonString.GPSLNG;
@@ -80,7 +81,6 @@ public class PlainMessage {
      */
     private JSONObject baseObj() throws JSONException {
         JSONObject result = new JSONObject();
-        result.put(GPS, getGPS());//GPS
         result.put(IMEI, PhoneInfoUtils.getImeiNum(this.context)); //手机IMEI
 //        result.put(PHONE_NUMBER, PhoneInfoUtils.getPhoneNum(this.context)); //手机号
         result.put(PHONE_NUMBER, "13051089921"); //手机号
@@ -88,35 +88,13 @@ public class PlainMessage {
         result.put(TIME, TimeUtils.getUTCTimeDef());//时间
         result.put(MAC, PhoneInfoUtils.getMobileMAC(this.context)); //MAC地址
         result.put(POWER,App.getInstance().getBatteryInfo().getLevel());//手机电量
+
+        result.put(GPSTIME, TimeUtils.getUTCTimeDef());
+        LatLng latLng = LocationService.getInstance().getLatLng();
+        result.put(GPSLNG, latLng.longitude);
+        result.put(GPSLAT, latLng.latitude);
+        result.put(ADDRESS,LocationService.getInstance().getCurrentAddress());
+        result.put(GPSLOCTYPE, GPSTYPE_GAODE);
         return result;
-    }
-
-    private JSONObject getGPS() {
-        try {
-            JSONObject gps = new JSONObject();
-            gps.put(GPSTIME, TimeUtils.getUTCTimeDef());
-            LatLng latLng = LocationService.getInstance().getLatLng();
-            gps.put(GPSLNG, latLng.longitude);
-            gps.put(GPSLAT, latLng.latitude);
-            gps.put(GPSLOCTYPE, GPSTYPE_GAODE);
-            return gps;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private JSONObject getGPS(LatLng latLng) {
-        try {
-            JSONObject gps = new JSONObject();
-            gps.put(GPSTIME, TimeUtils.getUTCTimeDef());
-            gps.put(GPSLNG, latLng.latitude);
-            gps.put(GPSLAT, latLng.longitude);
-            gps.put(GPSLOCTYPE, GPSTYPE_GAODE);
-            return gps;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

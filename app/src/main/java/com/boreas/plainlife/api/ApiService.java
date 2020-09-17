@@ -52,6 +52,10 @@ public interface ApiService {
     @FormUrlEncoded
     Observable<BaseResponse> sendSms(@Field("phoneNum") String phoneNum);
 
+    //获取用户信息
+    @GET("/getInfo")
+    Observable<BaseResponse> getInfo();
+
     //根据手机号查询用户
     @GET("/app/location/queryUserByPhone")
     Observable<LocationUserModel> queryUserByPhone(@Query("phone") String phoneNum);

@@ -1,6 +1,5 @@
 package com.boreas.plainlife.base;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
 import com.boreas.commonlib.xskinloader.SkinInflaterFactory;
+import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.R;
 import com.gyf.immersionbar.ImmersionBar;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -25,18 +25,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackA
     public T binding;
     private Dialog mDialog;
     public boolean isNeedCheck = true;
-    private String[] needPermissions = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.READ_PHONE_NUMBERS,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.CAMERA,
-            Manifest.permission.ACCESS_WIFI_STATE,
-            Manifest.permission.CHANGE_NETWORK_STATE,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_NETWORK_STATE,
-    };
+
     private SwipeBackLayout mSwipeBackLayout;
     private Toolbar mToolbar;
 
@@ -49,7 +38,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackA
         this.mSwipeBackLayout = getSwipeBackLayout();
         this.mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
         if (isNeedCheck) {
-            checkPermissions(needPermissions);
+            checkPermissions(Constant.Permissions);
         }
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {

@@ -180,12 +180,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         this.presenter.onDestory();
         this.unRegisterBatterReceiver();
         EasyFloat.dismissAppFloat("floatBall");
-        RabbitMQConfiguration.getInstance().onDestory();
-        super.onDestroy();
     }
+
 
     @Override
     public void onSuccess(BaseResponse s) {

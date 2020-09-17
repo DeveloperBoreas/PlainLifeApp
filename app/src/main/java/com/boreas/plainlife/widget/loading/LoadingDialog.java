@@ -44,7 +44,7 @@ public class LoadingDialog {
             if (mDialogUtils != null && mDialogUtils.isShowing()) {
                 mDialogUtils.dismiss();
             }
-        }, 3000);
+        }, 100);
     }
     private static class InnerLoadingDialog extends Dialog{
 

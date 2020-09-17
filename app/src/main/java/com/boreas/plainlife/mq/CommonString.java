@@ -12,6 +12,7 @@ public class CommonString {
     public static final String TIME = "time";
     //GPS信息
     public static final String GPS = "gps";
+    public static final String ADDRESS = "address";
     public static final String GPSTIME = "gpsTime";
     public static final String GPSLAT = "lat";
     public static final String GPSLNG = "lng";

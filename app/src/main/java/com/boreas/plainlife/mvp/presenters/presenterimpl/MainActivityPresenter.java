@@ -3,6 +3,7 @@ package com.boreas.plainlife.mvp.presenters.presenterimpl;
 import android.content.Context;
 
 import com.boreas.plainlife.App;
+import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.websocket.PlainMessage;
 import com.boreas.plainlife.websocket.WebSocketManger;
 import com.boreas.plainlife.api.ApiService;
@@ -14,7 +15,10 @@ import com.boreas.plainlife.utils.RxTimer;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivityPresenter extends BaseRequest implements IMainActivityPresenter {
     private ApiService apiService;
@@ -37,9 +41,13 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
 
 
     @Override
-    public void requestData() {
+    public void requestUserInfo() {
         if (isNetWorkEnable()) {
-
+            mainActivityInterface.onShowLoadingDialog();
+            this.apiService.getInfo()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
         } else {
             mainActivityInterface.noNetWork();
         }
@@ -53,7 +61,7 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
 
     public void sendHBMessage() {
         RxTimer hbRxTimer = new RxTimer();
-        hbRxTimer.interval(5000, number -> {
+        hbRxTimer.interval(Constant.HB_TIME, number -> {
             if (this.webSocketManger.getWebSocket() != null) {
                 this.webSocketManger.sendMessage(this.plainMessage.hbService());
             }
@@ -75,5 +83,12 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
         }
+        this.desotyMQ();
+    }
+    private void desotyMQ(){
+        Observable.create(emitter -> {
+            RabbitMQConfiguration.getInstance().onDestory();
+        }).subscribeOn(Schedulers.newThread())
+                .subscribe();
     }
 }

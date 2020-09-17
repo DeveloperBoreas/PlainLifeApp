@@ -3,6 +3,7 @@ package com.boreas.plainlife.Location;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -86,6 +87,10 @@ public class LocationService extends Service {
         }
         return latLng;
     }
+    private String currentAddress = "";
+    public String getCurrentAddress(){
+        return this.currentAddress;
+    }
 
     public synchronized void registerLocationListener(LocationListener locationListener) {
         if (locationListener != null) {
@@ -146,7 +151,7 @@ public class LocationService extends Service {
                     sb.append("\n设备当前GPS状态 getGpsAccuracyStatus() : ");// 设备当前 GPS 状态
                     sb.append(aMapLocation.getGpsAccuracyStatus());
                     sb.append("" + count++);
-                    Log.e("LocationService ----------------", sb.toString());
+//                    Log.e("LocationService ----------------", sb.toString());
                 }
                 if (isLocationSuccess) {
                     new RxTimer().timer(2 * 1000, number -> {
@@ -154,6 +159,7 @@ public class LocationService extends Service {
                     });
                     location = aMapLocation;
                     latLng = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
+                    currentAddress = aMapLocation.getAddress();
                 }
             } else {
                 isLocationSuccess = false;
