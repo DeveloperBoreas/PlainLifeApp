@@ -13,17 +13,20 @@ import com.boreas.plainlife.mvp.models.location.LocationUserListModel;
 import com.boreas.plainlife.mvp.presenters.presenterimpl.LocationLoveFragmentPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.LocationLoveFragmentInterface;
 import com.boreas.plainlife.utils.ToastUtil;
+import com.boreas.plainlife.websocket.WebSocketListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class LocationLoveFragment extends BaseFragment<FragmentLocationLovepeopleBinding> implements LocationLoveFragmentInterface {
+public class LocationLoveFragment extends BaseFragment<FragmentLocationLovepeopleBinding> implements LocationLoveFragmentInterface, WebSocketListener {
+
     private List<LocationUserListModel.Data> userList = new ArrayList<>();
+    private LovePeopleAdapter adapter;
+
     @Inject
     LocationLoveFragmentPresenter presenter;
-    private LovePeopleAdapter adapter;
 
     @Override
     public void lazyFetchData() {
@@ -95,5 +98,10 @@ public class LocationLoveFragment extends BaseFragment<FragmentLocationLovepeopl
     @Override
     public void onShowLoadingDialog() {
         super.showLoadingDialog();
+    }
+
+    @Override
+    public void onMessage(String message) {
+
     }
 }

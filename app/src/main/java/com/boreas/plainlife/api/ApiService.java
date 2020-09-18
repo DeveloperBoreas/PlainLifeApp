@@ -7,6 +7,7 @@ import com.boreas.plainlife.mvp.models.login.CaptchatModel;
 import com.boreas.plainlife.mvp.models.login.LoginParams;
 import com.boreas.plainlife.mvp.models.login.LoginReceModel;
 import com.boreas.plainlife.mvp.models.login.UserRegisterParams;
+import com.boreas.plainlife.mvp.models.main.UserInfo;
 
 import java.util.ArrayList;
 
@@ -53,8 +54,8 @@ public interface ApiService {
     Observable<BaseResponse> sendSms(@Field("phoneNum") String phoneNum);
 
     //获取用户信息
-    @GET("/getInfo")
-    Observable<BaseResponse> getInfo();
+    @GET("/app/getInfo")
+    Observable<UserInfo> appGetInfo();
 
     //根据手机号查询用户
     @GET("/app/location/queryUserByPhone")

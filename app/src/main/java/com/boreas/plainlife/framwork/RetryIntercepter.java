@@ -21,11 +21,10 @@ public class RetryIntercepter implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-//        Logger.e("-----out-----retryNum=" + retryNum);
         Response response = chain.proceed(request);
         while (!response.isSuccessful() && retryNum < maxRetry) {
             retryNum++;
-            Logger.e("-----in-----retryNum=" + retryNum);
+//            Logger.e("-----in-----retryNum=" + retryNum);
             response = chain.proceed(request);
         }
         return response;

@@ -18,6 +18,7 @@ public class CommonString {
     public static final String GPSLNG = "lng";
     public static final String GPSLOCTYPE = "locType";
     public static final String GPSTYPE_GAODE = "GAODE";
+    public static final String USERID = "uid";
 
     //MAC
     public static final String MAC = "mac";

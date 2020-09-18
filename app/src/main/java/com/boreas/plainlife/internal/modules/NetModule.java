@@ -1,6 +1,6 @@
 package com.boreas.plainlife.internal.modules;
 
-import com.boreas.plainlife.websocket.PlainWebSocketListener;
+import com.boreas.plainlife.framwork.SSLSocketFactory;
 import com.boreas.plainlife.websocket.WebSocketManger;
 import com.boreas.plainlife.mq.RabbitMQConfiguration;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -12,22 +12,13 @@ import com.boreas.plainlife.framwork.NetworkCacheInterceptor;
 import com.boreas.plainlife.framwork.RetryIntercepter;
 import com.boreas.plainlife.framwork.TokenInterceptor;
 
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.WebSocket;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.fastjson.FastJsonConverterFactory;
@@ -46,13 +37,13 @@ public class NetModule {
                 .retryOnConnectionFailure(true)
                 .pingInterval(Constant.PING_TIME,TimeUnit.SECONDS)
                 .addNetworkInterceptor(new NetworkCacheInterceptor())
-                .addInterceptor(BaseUrlInterceptor.getInstance())
+//                .addInterceptor(BaseUrlInterceptor.getInstance())
                 .addInterceptor(new TokenInterceptor())
                 .addInterceptor(new RetryIntercepter(Constant.RETRY_COUNT))
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(Constant.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
                 .addInterceptor(new DownloadProgressInterceptor())
                 .cache(NetworkCacheInterceptor.getCache())
-                .sslSocketFactory(CreateSSLSocketFactory())
+                .sslSocketFactory(new SSLSocketFactory().CreateSSLSocketFactory())
                 .hostnameVerifier((hostname, session) -> true)
                 .build();
         return okhttpClient;
@@ -78,8 +69,8 @@ public class NetModule {
 
     @Provides
     @Singleton
-    public WebSocketManger provideWebSocketManager(OkHttpClient client){
-        return WebSocketManger.getInstance(client);
+    public WebSocketManger provideWebSocketManager(){
+        return WebSocketManger.getInstance();
     }
 
     @Provides
@@ -88,46 +79,5 @@ public class NetModule {
         return RabbitMQConfiguration.getInstance();
     }
 
-    private SSLSocketFactory CreateSSLSocketFactory() {
-        SSLSocketFactory ssfFactory = null;
-        try {
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
 
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return new java.security.cert.X509Certificate[]{};
-                        }
-                    }
-            }, new java.security.SecureRandom());
-            sc.init(null, new TrustManager[]{new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                }
-
-                @Override
-                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                }
-
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                }
-            }}, new SecureRandom());
-            ssfFactory = sc.getSocketFactory();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ssfFactory;
-    }
 }

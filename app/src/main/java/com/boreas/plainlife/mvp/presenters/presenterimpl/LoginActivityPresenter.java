@@ -115,7 +115,6 @@ public class LoginActivityPresenter extends BaseRequest implements ILoginActivit
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(captchatModel -> {
-                        Logger.e(captchatModel.toString());
                         if (captchatModel.getCode() == 200) {
                             loginActivityInterface.onCaptchatSuccess(captchatModel);
                         } else {

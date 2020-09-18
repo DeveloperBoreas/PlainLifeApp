@@ -22,8 +22,5 @@ public class ClickProxy implements View.OnClickListener {
             origin.onClick(v);
             lastclick = System.currentTimeMillis();
         }
-//        else {
-//            Logger.e("重复点击");
-//        }
     }
 }

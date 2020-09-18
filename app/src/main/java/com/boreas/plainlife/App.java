@@ -57,7 +57,7 @@ public class App extends Application {
     }
 
     private void initCopyObjToDataFile() {
-        FileUtil.copyFilesFromAssetsToData(this, "3dmodel.obj");
+//        FileUtil.copyFilesFromAssetsToData(this, "3dmodel.obj");
         skinPath = getFilesDir().getAbsolutePath() + File.separator + "mipmap.apk";
         FileUtil.copyFilesFromAssetsToData(this, "mipmap.apk");
     }

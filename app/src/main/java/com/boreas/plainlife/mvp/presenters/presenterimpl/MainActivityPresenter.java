@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.boreas.plainlife.App;
 import com.boreas.plainlife.Constant;
+import com.boreas.plainlife.ObjectPool;
 import com.boreas.plainlife.websocket.PlainMessage;
 import com.boreas.plainlife.websocket.WebSocketManger;
 import com.boreas.plainlife.api.ApiService;
@@ -27,16 +28,19 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
     private App app;
     private WebSocketManger webSocketManger;
     private PlainMessage plainMessage;
+    private ObjectPool objectPool;
+
     private Disposable subscribe;
 
     @Inject
-    public MainActivityPresenter(ApiService apiService, MainActivityInterface mainActivityInterface, Context context, App app, WebSocketManger webSocketManger, PlainMessage plainMessage) {
+    public MainActivityPresenter(ApiService apiService, MainActivityInterface mainActivityInterface, Context context, App app, WebSocketManger webSocketManger, PlainMessage plainMessage, ObjectPool objectPool) {
         this.apiService = apiService;
         this.mainActivityInterface = mainActivityInterface;
         this.context = context;
         this.app = app;
         this.webSocketManger = webSocketManger;
         this.plainMessage = plainMessage;
+        this.objectPool = objectPool;
     }
 
 
@@ -44,10 +48,20 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
     public void requestUserInfo() {
         if (isNetWorkEnable()) {
             mainActivityInterface.onShowLoadingDialog();
-            this.apiService.getInfo()
+            this.apiService.appGetInfo()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe();
+                    .subscribe(userInfo -> {
+                        mainActivityInterface.onDisLoadingDialog();
+                        if (userInfo.getCode() == 200) {
+                            this.objectPool.setUserInfo(userInfo);
+                            return;
+                        }
+                        mainActivityInterface.onFailed(userInfo.getMsg());
+                    }, throwable -> {
+                        mainActivityInterface.onDisLoadingDialog();
+                        mainActivityInterface.onFailed("请求数据发生错误");
+                    });
         } else {
             mainActivityInterface.noNetWork();
         }
@@ -62,9 +76,7 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
     public void sendHBMessage() {
         RxTimer hbRxTimer = new RxTimer();
         hbRxTimer.interval(Constant.HB_TIME, number -> {
-            if (this.webSocketManger.getWebSocket() != null) {
-                this.webSocketManger.sendMessage(this.plainMessage.hbService());
-            }
+            this.webSocketManger.sendMessage(this.plainMessage.hbService(String.valueOf(this.objectPool.getUserInfo().getUser().getUserId())));
         });
     }
 
@@ -84,8 +96,10 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
             subscribe.dispose();
         }
         this.desotyMQ();
+        this.webSocketManger.destroy();
     }
-    private void desotyMQ(){
+
+    private void desotyMQ() {
         Observable.create(emitter -> {
             RabbitMQConfiguration.getInstance().onDestory();
         }).subscribeOn(Schedulers.newThread())

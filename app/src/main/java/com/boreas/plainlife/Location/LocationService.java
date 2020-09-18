@@ -163,7 +163,7 @@ public class LocationService extends Service {
                 }
             } else {
                 isLocationSuccess = false;
-                Logger.e(location.toString());
+//                Logger.e(location.toString());
             }
         }
     }

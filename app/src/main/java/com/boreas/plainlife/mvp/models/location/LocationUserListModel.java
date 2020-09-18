@@ -24,6 +24,7 @@ public class LocationUserListModel extends BaseResponse {
         private String phonenumber = "";
         private String sex = "";
         private String location ="";
+        private boolean isOnline = false;
         public Data() {
         }
 
@@ -91,6 +92,14 @@ public class LocationUserListModel extends BaseResponse {
             this.location = location;
         }
 
+        public boolean isOnline() {
+            return isOnline;
+        }
+
+        public void setOnline(boolean online) {
+            isOnline = online;
+        }
+
         @Override
         public String toString() {
             return "Data{" +
@@ -102,6 +111,7 @@ public class LocationUserListModel extends BaseResponse {
                     ", phonenumber='" + phonenumber + '\'' +
                     ", sex='" + sex + '\'' +
                     ", location='" + location + '\'' +
+                    ", isOnline=" + isOnline +
                     '}';
         }
     }

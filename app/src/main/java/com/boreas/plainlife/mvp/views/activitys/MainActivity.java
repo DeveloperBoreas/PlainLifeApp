@@ -2,10 +2,7 @@ package com.boreas.plainlife.mvp.views.activitys;
 
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.view.MenuItem;
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,14 +12,9 @@ import com.boreas.plainlife.App;
 import com.boreas.plainlife.Location.LocationService;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseActivity;
-import com.boreas.plainlife.base.BaseFragment;
-import com.boreas.plainlife.base.BaseResponse;
 import com.boreas.plainlife.databinding.ActivityMainBinding;
-import com.boreas.plainlife.framwork.ClickProxy;
 import com.boreas.plainlife.internal.components.DaggerMainActivityComponent;
 import com.boreas.plainlife.internal.modules.MainActivityModule;
-import com.boreas.plainlife.mq.RabbitMQConfiguration;
-import com.boreas.plainlife.mq.ResqonCallBack;
 import com.boreas.plainlife.mvp.presenters.presenterimpl.MainActivityPresenter;
 import com.boreas.plainlife.mvp.views.fragments.LocationFragment;
 import com.boreas.plainlife.mvp.views.fragments.PicNoteFragment;
@@ -145,6 +137,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     protected void initData() {
+        this.presenter.requestUserInfo();
         this.presenter.onInit();
         this.registerBatterReceiver();
     }
@@ -184,16 +177,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         this.presenter.onDestory();
         this.unRegisterBatterReceiver();
         EasyFloat.dismissAppFloat("floatBall");
-    }
-
-
-    @Override
-    public void onSuccess(BaseResponse s) {
-        Logger.e(s.toString());
+        Logger.e("程序退出");
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String msg) {
 
     }
 
