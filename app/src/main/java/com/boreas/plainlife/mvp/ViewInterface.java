@@ -23,4 +23,9 @@ public interface ViewInterface {
      * 显示LoadingDialog
      */
     void onShowLoadingDialog();
+
+    /**
+     * Token过期
+     */
+    void onReStart();
 }

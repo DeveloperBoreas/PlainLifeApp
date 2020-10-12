@@ -22,6 +22,6 @@ public class BeansModule {
     }
     @Provides
     public ObjectPool provideObjectPool() {
-        return new ObjectPool();
+        return ObjectPool.getInstance();
     }
 }

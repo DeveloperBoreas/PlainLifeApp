@@ -1,11 +1,16 @@
 package com.boreas.plainlife.mvp.presenters.presenterimpl;
 
 
+import com.boreas.plainlife.ObjectPool;
 import com.boreas.plainlife.api.ApiService;
 import com.boreas.plainlife.base.BaseRequest;
+import com.boreas.plainlife.mvp.models.location.LocationUserListModel;
 import com.boreas.plainlife.mvp.presenters.ipresenter.ILocationLoveFragmentPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.LocationLoveFragmentInterface;
 import com.orhanobut.logger.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -17,11 +22,12 @@ public class LocationLoveFragmentPresenter extends BaseRequest implements ILocat
     private ApiService apiService;
     private LocationLoveFragmentInterface locationLoveFragmentInterface;
     private Disposable subscribe;
-
+    private ObjectPool objectPool;
     @Inject
-    public LocationLoveFragmentPresenter(ApiService apiService, LocationLoveFragmentInterface locationLoveFragmentInterface) {
+    public LocationLoveFragmentPresenter(ApiService apiService, LocationLoveFragmentInterface locationLoveFragmentInterface, ObjectPool objectPool) {
         this.apiService = apiService;
         this.locationLoveFragmentInterface = locationLoveFragmentInterface;
+        this.objectPool = objectPool;
     }
 
     @Override
@@ -34,7 +40,7 @@ public class LocationLoveFragmentPresenter extends BaseRequest implements ILocat
                     .subscribe(locationUserListModel -> {
                         locationLoveFragmentInterface.onDisLoadingDialog();
                         if(locationUserListModel.getCode() == 200){
-                            locationLoveFragmentInterface.onQueryBindUserSuccess(locationUserListModel.getData());
+                            locationLoveFragmentInterface.onQueryBindUserSuccess(this.handlerListData(locationUserListModel.getData()));
                             return;
                         }
                         locationLoveFragmentInterface.onFailed(locationUserListModel.getMsg());
@@ -46,6 +52,16 @@ public class LocationLoveFragmentPresenter extends BaseRequest implements ILocat
         }else {
             locationLoveFragmentInterface.noNetWork();
         }
+    }
+
+    private ArrayList<LocationUserListModel.Data> handlerListData(ArrayList<LocationUserListModel.Data> data){
+        for (LocationUserListModel.Data tempData: data) {
+            if(tempData.getUserId() == this.objectPool.getUserInfo().getUser().getUserId()){
+                tempData.setNickName("自己");
+                break;
+            }
+        }
+        return data;
     }
 
     @Override
@@ -68,5 +84,9 @@ public class LocationLoveFragmentPresenter extends BaseRequest implements ILocat
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
         }
+    }
+
+    public Long getUserid(){
+        return this.objectPool.getUserInfo().getUser().getUserId();
     }
 }

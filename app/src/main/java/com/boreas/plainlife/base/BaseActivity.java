@@ -1,6 +1,5 @@
 package com.boreas.plainlife.base;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
@@ -13,17 +12,17 @@ import androidx.databinding.ViewDataBinding;
 import com.boreas.commonlib.xskinloader.SkinInflaterFactory;
 import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.R;
+import com.boreas.plainlife.widget.loading.LoadingView;
 import com.gyf.immersionbar.ImmersionBar;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.boreas.commonlib.swipebacklayout.lib.SwipeBackLayout;
 import com.boreas.commonlib.swipebacklayout.lib.app.SwipeBackActivity;
 import com.boreas.plainlife.utils.ToastUtil;
-import com.boreas.plainlife.widget.loading.LoadingDialog;
 
 
 public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackActivity {
     public T binding;
-    private Dialog mDialog;
+    private LoadingView mDialog;
     public boolean isNeedCheck = true;
 
     private SwipeBackLayout mSwipeBackLayout;
@@ -111,27 +110,32 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends SwipeBackA
     }
 
     public void showLoadingDialog() {
-        if (mDialog == null) {
-            mDialog = LoadingDialog.createLoadingDialog(this, "加载中...");
+        if (mDialog == null && !isFinishing()) {
+            mDialog = new LoadingView(this,R.style.CustomDialog);
+            mDialog.show();
         }
     }
 
     public void showLoadingDialog(boolean onTouchOutside) {
-        if (mDialog == null) {
-            mDialog = LoadingDialog.createLoadingDialog(this, "加载中...");
+        if (mDialog == null && !isFinishing()) {
+            mDialog = new LoadingView(this,R.style.CustomDialog);
             mDialog.setCanceledOnTouchOutside(onTouchOutside);
             mDialog.setCancelable(onTouchOutside);
+            mDialog.show();
         }
     }
 
     public void showLoadingDialog(String msg) {
         if (mDialog == null && msg != null) {
-            mDialog = LoadingDialog.createLoadingDialog(this, msg);
+            mDialog = new LoadingView(this,R.style.CustomDialog);
+            mDialog.show();
         }
     }
 
     public void dismissLoadingDialog() {
-        LoadingDialog.closeDialog(mDialog);
+        if (mDialog != null && !isFinishing()) {
+            mDialog.dismiss();
+        }
         mDialog = null;
     }
 

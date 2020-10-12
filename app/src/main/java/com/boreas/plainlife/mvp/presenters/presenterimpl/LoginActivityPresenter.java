@@ -42,13 +42,12 @@ public class LoginActivityPresenter extends BaseRequest implements ILoginActivit
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(looginReceModel -> {
-                        Logger.e(looginReceModel.toString());
+                        loginActivityInterface.onDisLoadingDialog();
                         if (looginReceModel.getCode() == 200) {
                             loginActivityInterface.onSuccess(looginReceModel);
                         } else {
                             loginActivityInterface.onFailed(looginReceModel.getMsg());
                         }
-                        loginActivityInterface.onDisLoadingDialog();
                     }, throwable -> {
                         Logger.e(throwable.getMessage());
                         loginActivityInterface.onFailed(throwable.getMessage());

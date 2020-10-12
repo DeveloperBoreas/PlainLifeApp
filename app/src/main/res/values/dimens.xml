@@ -7,4 +7,5 @@
     <dimen name="video_title_textsize">5sp</dimen>
     <dimen name="video_start_size">25dp</dimen>
 
+    <dimen name="loading_size_50">150dp</dimen>
 </resources>

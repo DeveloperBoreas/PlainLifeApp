@@ -23,10 +23,18 @@ public class LovePeopleAdapter extends BaseRecyclerAdapter<LocationUserListModel
         TextView nickName = holder.getView(R.id.nickName);
         TextView lastTime = holder.getView(R.id.lastTime);
         TextView location = holder.getView(R.id.location);
+        TextView isOnline = holder.getView(R.id.isOnline);
         CircleImageView avatar = holder.getView(R.id.avatar);
         nickName.setText(item.getNickName());
         lastTime.setText(item.getNickName());
         location.setText(item.getLocation());
         ImageUtil.loadImg(super.getContext(), item.getAvatar(), avatar);
+        if(item.isOnline()){
+            isOnline.setText("在线");
+            isOnline.setTextColor(getContext().getResources().getColor(R.color.light23_blue));
+        }else{
+            isOnline.setText("离线");
+            isOnline.setTextColor(getContext().getResources().getColor(R.color.light3_gray));
+        }
     }
 }

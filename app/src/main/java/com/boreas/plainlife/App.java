@@ -84,10 +84,10 @@ public class App extends Application {
     }
 
     private void initComponent() {
+        mBeansComponent = DaggerBeansComponent.builder().beansModule(new BeansModule(this)).build();
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         mNetComponent = DaggerNetComponent.builder().appComponent(mAppComponent).build();
         mDBComponent = DaggerDBComponent.builder().build();
-        mBeansComponent = DaggerBeansComponent.builder().beansModule(new BeansModule(this)).build();
     }
 
     public AppComponent getmAppComponent() {

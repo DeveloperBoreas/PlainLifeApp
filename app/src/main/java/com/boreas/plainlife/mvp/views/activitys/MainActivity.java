@@ -2,6 +2,7 @@ package com.boreas.plainlife.mvp.views.activitys;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.text.TextUtils;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,7 +10,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.boreas.commonlib.xskinloader.SkinManager;
 import com.boreas.plainlife.App;
+import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.Location.LocationService;
+import com.boreas.plainlife.ObjectPool;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseActivity;
 import com.boreas.plainlife.databinding.ActivityMainBinding;
@@ -21,6 +24,7 @@ import com.boreas.plainlife.mvp.views.fragments.PicNoteFragment;
 import com.boreas.plainlife.mvp.views.viewinterfaces.MainActivityInterface;
 import com.boreas.plainlife.receiver.BatteryBroadCastReceive;
 import com.boreas.plainlife.utils.PreUtil;
+import com.boreas.plainlife.utils.RxTimer;
 import com.boreas.plainlife.utils.ToastUtil;
 import com.lzf.easyfloat.EasyFloat;
 import com.orhanobut.logger.Logger;
@@ -37,7 +41,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     private boolean isFirstOpenApp = true;
     @Inject
     MainActivityPresenter presenter;
-
     @Override
     public int setContentView() {
         return R.layout.activity_main;
@@ -160,6 +163,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     @Override
     protected void onResume() {
         super.onResume();
+        if(TextUtils.isEmpty((String)PreUtil.get(Constant.TOKEN_KEY,""))){
+            ToastUtil.show(this,"请先登陆");
+            this.onReStart();
+            return;
+        }
         Boolean isFirstOpenApp = (Boolean) PreUtil.get("isFirstOpenApp", true);
         if (isFirstOpenApp) {
             this.binding.drawerLayout.openDrawer(this.binding.mainNavigationView);
@@ -170,6 +178,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
             this.isFirstOpenApp = false;
         }
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.dismissLoadingDialog();
+    }
 
     @Override
     protected void onDestroy() {
@@ -177,12 +190,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         this.presenter.onDestory();
         this.unRegisterBatterReceiver();
         EasyFloat.dismissAppFloat("floatBall");
-        Logger.e("程序退出");
     }
 
     @Override
     public void onFailed(String msg) {
-
+        ToastUtil.show(this,msg);
     }
 
     @Override
@@ -202,6 +214,21 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     @Override
     public void onShowLoadingDialog() {
         this.showLoadingDialog();
+    }
+
+    private RxTimer startTimer = null;
+    @Override
+    public void onReStart() {
+        if(startTimer == null){
+            startTimer = new RxTimer();
+        }
+        startTimer.timer(1000,number -> {
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
+            startTimer.cancel();
+            startTimer = null;
+            finish();
+        });
     }
 
     private long exitTime = 0;

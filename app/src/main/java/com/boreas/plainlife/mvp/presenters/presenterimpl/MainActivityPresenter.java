@@ -13,6 +13,7 @@ import com.boreas.plainlife.mq.RabbitMQConfiguration;
 import com.boreas.plainlife.mvp.presenters.ipresenter.IMainActivityPresenter;
 import com.boreas.plainlife.mvp.views.viewinterfaces.MainActivityInterface;
 import com.boreas.plainlife.utils.RxTimer;
+import com.orhanobut.logger.Logger;
 
 import javax.inject.Inject;
 
@@ -55,6 +56,13 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
                         mainActivityInterface.onDisLoadingDialog();
                         if (userInfo.getCode() == 200) {
                             this.objectPool.setUserInfo(userInfo);
+                            this.webSocketManger.init();
+                            this.sendHBMessage();
+                            return;
+                        }else if(userInfo.getCode() == 401){
+                            this.deleteToken();
+                            mainActivityInterface.onFailed("请重新登陆");
+                            mainActivityInterface.onReStart();
                             return;
                         }
                         mainActivityInterface.onFailed(userInfo.getMsg());
@@ -69,14 +77,17 @@ public class MainActivityPresenter extends BaseRequest implements IMainActivityP
 
     @Override
     public void onInit() {
-        this.webSocketManger.init();
-        this.sendHBMessage();
+
     }
 
-    public void sendHBMessage() {
+    private void sendHBMessage() {
         RxTimer hbRxTimer = new RxTimer();
         hbRxTimer.interval(Constant.HB_TIME, number -> {
-            this.webSocketManger.sendMessage(this.plainMessage.hbService(String.valueOf(this.objectPool.getUserInfo().getUser().getUserId())));
+            try {
+                this.webSocketManger.sendMessage(this.plainMessage.hbService(String.valueOf(this.objectPool.getUserInfo().getUser().getUserId())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

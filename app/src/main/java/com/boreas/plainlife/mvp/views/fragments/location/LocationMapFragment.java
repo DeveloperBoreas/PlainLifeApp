@@ -10,11 +10,25 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.boreas.plainlife.R;
 import com.boreas.plainlife.base.BaseFragment;
+import com.boreas.plainlife.mvp.models.location.LocationUserListModel;
+import com.boreas.plainlife.utils.RxTimer;
+import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class LocationMapFragment extends BaseFragment {
+
     private AMap mMap;
     private UiSettings uiSettings;
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void a(LocationUserListModel.Data data){
+        RxTimer rxTimer = new RxTimer();
+        rxTimer.timer(1000,number -> {
+
+        });
+    }
     @Override
     public void lazyFetchData() {
 
@@ -33,6 +47,7 @@ public class LocationMapFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Logger.e("地图页面状态 onResume：");
         setUpMapIfNeeded();
     }
 
@@ -50,6 +65,12 @@ public class LocationMapFragment extends BaseFragment {
     public boolean onBackPressed() {
         return false;
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
+
 
     /**
      * 获取Amap 对象

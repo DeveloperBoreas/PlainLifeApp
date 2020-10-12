@@ -71,23 +71,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
                 loginActivityPresenter.requestLogin(userName, password, verCode, captchatModel.getUuid());
             }
         }));
-//        this.binding.logo.setOnClickListener(v -> {
-//            faceAndBackView.toggle();
-////            this.continuousClick();
-//        });
-//        this.binding.saveIp.setOnClickListener(new ClickProxy(v -> {
-//            if (TextUtils.isEmpty(this.binding.inputIp.getText().toString())) {
-//                ToastUtil.show(this, "输入的IP不能未空");
-//                return;
-//            }
-//            if (!RegExpValidatorUtil.regExpIp(this.binding.inputIp.getText().toString())) {
-//                Toast.makeText(this, "请输入正确格式的IP地址", Toast.LENGTH_LONG).show();
-//                return;
-//            }
-//            SoftKeyboardUtil.hideSoftKeyboard(this);
-//            this.binding.ipContent.setVisibility(View.GONE);
-//            PreUtil.put("IP", this.binding.inputIp.getText().toString());
-//        }));
         this.binding.verCodeImg.setOnClickListener(new ClickProxy(v -> {
             loginActivityPresenter.requestCaptchatImg();
         }));
@@ -138,23 +121,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         }));
     }
 
-    final static int COUNTS = 7;// 点击次数
-    final static long DURATION = 1000;// 规定有效时间
-    long[] mHits = new long[COUNTS];
-
-    private void continuousClick() {
-        //每次点击时，数组向前移动一位
-        System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
-        //为数组最后一位赋值
-        mHits[mHits.length - 1] = System.currentTimeMillis();
-//        Logger.e("mHits[0] :" + mHits[0] + "\t\t" + (System.currentTimeMillis() - DURATION));
-        if (mHits[0] >= (System.currentTimeMillis() - DURATION)) {
-            mHits = new long[COUNTS];//重新初始化数组
-//            Toast.makeText(this, "连续点击了5次", Toast.LENGTH_LONG).show();
-//            this.binding.ipContent.setVisibility(View.VISIBLE);
-        }
-    }
-
     private boolean verLoginParams() {
         if (TextUtils.isEmpty(this.binding.userName.getText().toString().trim())) {
             ToastUtil.show(this, "请输入用户名");
@@ -202,6 +168,12 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
     @Override
     protected void initData() {
+        String token = (String) PreUtil.get(Constant.TOKEN_KEY, "");
+        if (!token.isEmpty()) {
+            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+            this.startActivity(mainIntent);
+            return;
+        }
         RabbitMQConfiguration rabbitMQConfiguration = RabbitMQConfiguration.getInstance();
         rabbitMQConfiguration.init(getApplicationContext());
         loginActivityPresenter.requestCaptchatImg();
@@ -209,9 +181,13 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
     @Override
     public void onSuccess(LoginReceModel looginReceModel) {
-        PreUtil.put(Constant.TOKEN_KEY,looginReceModel.getToken());
-        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-        this.startActivity(mainIntent);
+        PreUtil.put(Constant.TOKEN_KEY, looginReceModel.getToken());
+        RxTimer rxTimer = new RxTimer();
+        rxTimer.timer(500, number -> {
+            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+            finish();
+            this.startActivity(mainIntent);
+        });
     }
 
     @Override
@@ -238,7 +214,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     public void onFailed(String message) {
         ToastUtil.show(this, message);
-        if("验证码已失效".equals(message)){
+        if ("验证码已失效".equals(message)) {
             loginActivityPresenter.requestCaptchatImg();
         }
     }
@@ -275,6 +251,17 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     public void onShowLoadingDialog() {
         this.showLoadingDialog();
+    }
+
+    @Override
+    public void onReStart() {
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.dismissLoadingDialog();
     }
 
     @Override

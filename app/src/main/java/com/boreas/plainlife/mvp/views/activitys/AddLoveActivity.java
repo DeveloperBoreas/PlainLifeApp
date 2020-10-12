@@ -92,4 +92,9 @@ public class AddLoveActivity extends BaseActivity<ActivityAddLoveBinding> implem
     public void onShowLoadingDialog() {
         super.showLoadingDialog();
     }
+
+    @Override
+    public void onReStart() {
+
+    }
 }

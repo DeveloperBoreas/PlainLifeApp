@@ -3,16 +3,18 @@ package com.boreas.plainlife.websocket;
 
 import android.util.Log;
 
+import com.boreas.plainlife.App;
 import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.ObjectPool;
 import com.boreas.plainlife.utils.PreUtil;
 import com.boreas.plainlife.utils.RxTimer;
+import com.orhanobut.logger.Logger;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.inject.Inject;
+import io.reactivex.Observable;
 
 public class WebSocketManger {
 
@@ -22,9 +24,6 @@ public class WebSocketManger {
     private ArrayList<WebSocketListener> socketListeners = new ArrayList<>();
     private static final int HEART_BEAT_RATE = 10 * 1000;
     private RxTimer testConnectionRxTimer;
-
-    @Inject
-    ObjectPool objectPool;
 
     private WebSocketManger() {
     }
@@ -41,6 +40,7 @@ public class WebSocketManger {
     }
 
     public void init() {
+        ObjectPool objectPool = App.getInstance().getmBeansComponent().getObjectPool();
         this.webSocket = new PlainWebSocketClient(URI.create(Constant.WEBSOCKET_URL), new HashMap<String, String>() {{
             put("Authorization", (String) PreUtil.get(Constant.TOKEN_KEY, ""));
             put("uid", String.valueOf(objectPool.getUserInfo().getUser().getUserId()));
@@ -89,7 +89,7 @@ public class WebSocketManger {
      * 断开连接
      */
     public void destroy() {
-        if(!this.socketListeners.isEmpty()){
+        if (!this.socketListeners.isEmpty()) {
             this.socketListeners.clear();
         }
         if (this.testConnectionRxTimer != null) {

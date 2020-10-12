@@ -1,6 +1,7 @@
 package com.boreas.plainlife.api;
 
 import com.boreas.plainlife.base.BaseResponse;
+import com.boreas.plainlife.mvp.models.location.LocationTrackModel;
 import com.boreas.plainlife.mvp.models.location.LocationUserListModel;
 import com.boreas.plainlife.mvp.models.location.LocationUserModel;
 import com.boreas.plainlife.mvp.models.login.CaptchatModel;
@@ -69,5 +70,10 @@ public interface ApiService {
     //绑定用户列表
     @GET("/app/location/queryBindUsers")
     Observable<LocationUserListModel> queryBindUsers();
+
+    //查询用户一天的路线经纬度
+    @POST("/app/location/querySameDayLatlngByUid")
+    @FormUrlEncoded
+    Observable<LocationTrackModel> querySameDayLatlngByUid(@Field("uid") Long uid);
 
 }

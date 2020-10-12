@@ -3,7 +3,9 @@ package com.boreas.plainlife.base;
 import android.content.Context;
 
 import com.boreas.plainlife.App;
+import com.boreas.plainlife.Constant;
 import com.boreas.plainlife.utils.NetWorkUtil;
+import com.boreas.plainlife.utils.PreUtil;
 
 
 public abstract class BaseRequest {
@@ -25,5 +27,12 @@ public abstract class BaseRequest {
             throw new NullPointerException("---------BaseRequest  context is not NULL !!!!!!!!!!!!!");
         }
         return NetWorkUtil.isNetWorkEnable(context);
+    }
+
+    public void deleteToken() {
+        if (context == null) {
+            throw new NullPointerException("---------BaseRequest  context is not NULL !!!!!!!!!!!!!");
+        }
+        PreUtil.removeKey(Constant.TOKEN_KEY);
     }
 }

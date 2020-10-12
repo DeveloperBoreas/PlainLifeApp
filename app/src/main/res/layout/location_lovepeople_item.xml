@@ -55,6 +55,7 @@
             android:layout_width="wrap_content"
             android:text="离线"
             android:textSize="11sp"
+            android:textColor="@color/light3_gray"
             android:layout_height="40dp"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,6 +73,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="11sp"
                 android:text="@string/login_title" />
         </LinearLayout>
 

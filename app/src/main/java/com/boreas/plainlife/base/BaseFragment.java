@@ -12,7 +12,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 
-import com.boreas.plainlife.widget.loading.LoadingDialog;
+import com.boreas.plainlife.R;
+import com.boreas.plainlife.widget.loading.LoadingView;
 
 
 /**
@@ -36,7 +37,7 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment {
     public T binding;
     private View view;
 
-    public Dialog mDialog;
+    public LoadingView mDialog;
     private String name;
 
     public BaseFragment() {
@@ -122,12 +123,15 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment {
 
     public void showLoadingDialog() {
         if (mDialog == null) {
-            mDialog = LoadingDialog.createLoadingDialog(getActivity(), "加载中...");
+            mDialog = new LoadingView(getActivity(), R.style.CustomDialog);
+            mDialog.show();
         }
     }
 
     public void dismissLoadingDialog() {
-        LoadingDialog.closeDialog(mDialog);
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
         mDialog = null;
     }
 

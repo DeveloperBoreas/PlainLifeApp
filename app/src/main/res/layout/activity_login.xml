@@ -137,6 +137,7 @@
                                 android:maxLength="4"
                                 android:textColorHint="@color/white"
                                 android:textSize="16sp"
+                                android:text="1234"
                                 android:theme="@style/InputStyle" />
                         </com.google.android.material.textfield.TextInputLayout>
                         <ImageView
